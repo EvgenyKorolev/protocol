@@ -1,0 +1,11 @@
+src/.directory
+protocol.pro.user
+.directory
+data/app.db3
+data/const.dat
+data/lab.dat
+data/prt.logtest_protocol/test_protocol.qbs.user.610dee2
+test_protocol/test_protocol.qbs.user
+test_protocol/.directory
+*.user
+test_protocol/*.user

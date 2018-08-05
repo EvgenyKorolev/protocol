@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/hlp">
+        <file>help/main.html</file>
+        <file>help/varname_lab.html</file>
+        <file>help/varname_pather.html</file>
+    </qresource>
+</RCC>
