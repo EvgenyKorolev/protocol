@@ -9,3 +9,5 @@ test_protocol/test_protocol.qbs.user
 test_protocol/.directory
 *.user
 test_protocol/*.user
+build-test_protocol-Desktop_Qt_5_11_1_GCC_64bit-Debug/
+test_protocol/test_protocol.qbs.user.ca4baf2
