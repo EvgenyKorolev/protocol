@@ -175,9 +175,8 @@ void protocol_constructor::slot_test()
     tmpw->setHtml(html_text);
     tmpw->show();
 
-
-    QTextDocument tdd;
-    tdd.setHtml(get_html());
+  //  QTextDocument tdd;
+  //  tdd.setHtml(get_html());
    // int f = tdd.blockCount();
 
   //  varad;     // Адаптер для получения данных у родителей протокола
