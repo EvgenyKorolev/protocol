@@ -69,10 +69,9 @@ address laboratory::get_adr()
 {
     return this->adr;
 }
-QString laboratory::set_det(details *arg)
+void laboratory::set_det(details *arg)
 {
     this->det = *arg;
-    return 0;
 }
 details laboratory::get_det()
 {
@@ -139,6 +138,22 @@ void laboratory::set_tel_list(QList<QString> arg)
 void laboratory::set_fax_list(QList<QString> arg)
 {
     this->det.set_fax_list(arg);
+}
+void laboratory::set_email(const QString &arg)
+{
+    det.set_email(arg);
+}
+QString laboratory::get_email() const
+{
+    return det.get_email();
+}
+void laboratory::set_full_name(const QString& arg)
+{
+    det.set_name(arg);
+}
+QString laboratory::get_full_name() const
+{
+    return det.get_name();
 }
 QDomDocument laboratory::make_xml()
 {

@@ -36,15 +36,20 @@ public:
     void set_att_date(QDate arg);  // Установить дату аттестата акредитации перегруженная
     QDate get_att_date();         // Возвращает дату аттестата акредитации
 
-    int set_adr(address *arg);
-    address get_adr();
-    QString set_det(details *arg);
-    details get_det();
+    int set_adr(address *arg);    // Установить адрес
+    address get_adr();            // Получить адрес
+    void set_det(details *arg);   // Установить реквизиты
+    details get_det();            // Получить реквизиты
 
     int set_uadr(address *arg);             // Установить юридический адрес
     address get_uadr();                     // Получить юридичсекий адрес
     int set_padr(address *arg);             // Установить почтовый адрес
     address get_padr();                     // Получить почтовы адрес
+
+    void set_email(const QString &arg);         // Задать email
+    QString get_email() const;                  // Получить email
+    void set_full_name(const QString& arg);    // Задать полное наименование
+    QString get_full_name() const;             // Получить полное наименование
 
     int set_inn(unsigned long long int arg);    // Устанавливает ИНН
     int set_dir(QPair<QString, QString> arg);   // Устанавливает руководителя

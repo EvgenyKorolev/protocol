@@ -186,6 +186,22 @@ QPair<QString, QString> details::get_dir() const
 {
     return this->dir;
 }
+void details::set_email(const QString& arg)
+{
+    email = arg;
+}
+QString details::get_email() const
+{
+    return email;
+}
+void details::set_name(const QString& arg)
+{
+    name = arg;
+}
+QString details::get_name() const
+{
+    return name;
+}
 QDomElement details::make_xml()
 {
     QDomDocument ret_xml;
@@ -232,7 +248,16 @@ QDomElement details::make_xml()
     QDomElement xml_inn = ret_xml.createElement("inn");
         QDomText inn_text = ret_xml.createTextNode(QString::number(this->inn));
             root.appendChild(xml_inn);
-                xml_inn.appendChild(inn_text);
+            xml_inn.appendChild(inn_text);
+
+    QDomElement xml_email = ret_xml.createElement("email");
+        QDomText email_text = ret_xml.createTextNode(email);
+             root.appendChild(xml_email);
+             xml_email.appendChild(email_text);
+    QDomElement xml_name = ret_xml.createElement("name");
+        QDomText name_text = ret_xml.createTextNode(name);
+             root.appendChild(xml_name);
+             xml_name.appendChild(name_text);
 
     QDomElement main_dir = ret_xml.createElement("dir");
       QDomElement dol_dir = ret_xml.createElement("dol_dir");
@@ -251,7 +276,7 @@ int details::load_xml(QDomNode* arg)
     QDomNode lst = *arg;
     //QList<QString> list_tel;
     QDomElement lst_temp = lst.firstChildElement("tel_list");
-    int i = 0;
+    int i{0};
     while (!lst_temp.firstChildElement("tel" + QString::number(i)).isNull()) {
         this->list_tel.append(lst_temp.firstChildElement("tel" + QString::number(i)).text());
         i++;
@@ -269,7 +294,9 @@ int details::load_xml(QDomNode* arg)
     auto ret2 = lst.firstChildElement("post").firstChildElement("ur_post").firstChildElement("address");
         this->post.second.load_xml(&ret2);
 
-   this->inn = lst.firstChildElement("inn").text().toULongLong();
+   inn = lst.firstChildElement("inn").text().toULongLong();
+   email = lst.firstChildElement("email").text();
+   name = lst.firstChildElement("name").text();
    QDomElement t_dir = lst.firstChildElement("dir");
         this->dir.first = t_dir.firstChildElement("dol_dir").text();
         this->dir.second = t_dir.firstChildElement("name_dir").text();

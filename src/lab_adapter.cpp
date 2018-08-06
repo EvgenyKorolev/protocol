@@ -6,6 +6,8 @@ QString lab_adapter::get_var(const QString &arg) const
     laboratory &tmpl = laboratory::getInstance();
     if (arg == "_lab_name"){return  tmpl.get_name();}
     if (arg == "_lab_att"){return tmpl.get_attestat();}
+    if (arg == "_lab_full_name"){return  tmpl.get_full_name();}
+    if (arg == "_lab_email"){return tmpl.get_email();}
  // Дата
     if (arg == "_lab_att_date"){return tmpl.get_att_date().toString();}
     if (arg == "_lab_att_date1"){return tmpl.get_att_date().toString("dd.MM.yyyy");}

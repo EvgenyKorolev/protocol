@@ -47,12 +47,15 @@ public slots:
     void dir_edit();             // Слот вызывающий редактор директора :)
     void save_lab();             // Слот для кнопки ОК
     void att_data_edit();        // Дата
-
+    void slot_full_name_edit(); // Слот редактирования полного наименования
+    void slot_email_edit();     // Слот редактирования 'полного наименования электронной почты
 private:
     laboratory *main_obj;
     bool edited;
     QLabel *name_label;
     QLabel *att_label;
+    QLabel *full_name_label;
+    QLabel *email_label;
     QLabel *adr_lab;
     details *det;
     QLabel *inn_label;

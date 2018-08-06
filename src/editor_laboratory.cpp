@@ -7,6 +7,8 @@ editor_laboratory::~editor_laboratory()
     delete inn_label;
     delete dir_n_label;
     delete dir_p_label;
+    delete full_name_label;
+    delete email_label;
     delete fadr_label;
     delete fadr_scroll;
     delete padr_label;
@@ -23,7 +25,7 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
     this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
     this->setWindowTitle("Лаборатория");
     this->setMinimumWidth(825);
-    // Название
+// Название
     this->name_label = new QLabel();
     name_label->setText(main_obj->get_name());
     QLabel *name_kl = new QLabel();
@@ -36,7 +38,33 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
     name_lay->addWidget(name_kl);
     name_lay->addWidget(name_label);
     name_lay->addWidget(name_ed);
-    // Аттестат акредитации
+// Полное наименование
+    full_name_label = new QLabel();
+    full_name_label->setText(main_obj->get_full_name());
+    QLabel *full_name_kl = new QLabel();
+    full_name_kl->setText("Краткое наименование: ");
+    QPushButton *full_name_ed = new QPushButton("Изменить...");
+    full_name_ed->setMaximumWidth(100);
+    full_name_ed->setMinimumWidth(100);
+    QObject::connect(full_name_ed, SIGNAL(clicked()), this, SLOT(slot_full_name_edit()));
+    QBoxLayout *full_name_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    full_name_lay->addWidget(full_name_kl);
+    full_name_lay->addWidget(full_name_label);
+    full_name_lay->addWidget(full_name_ed);
+// Email
+        email_label = new QLabel();
+        email_label->setText(main_obj->get_email());
+        QLabel *email_kl = new QLabel();
+        email_kl->setText("Email: ");
+        QPushButton *email_ed = new QPushButton("Изменить...");
+        email_ed->setMaximumWidth(100);
+        email_ed->setMinimumWidth(100);
+        QObject::connect(email_ed, SIGNAL(clicked()), this, SLOT(slot_email_edit()));
+        QBoxLayout *email_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+        email_lay->addWidget(email_kl);
+        email_lay->addWidget(email_label);
+        email_lay->addWidget(email_ed);
+// Аттестат акредитации
     this->att_label = new QLabel();
     att_label->setText(main_obj->get_attestat());
     QLabel *name_att = new QLabel();
@@ -49,7 +77,7 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
     att_lay->addWidget(name_att);
     att_lay->addWidget(att_label);
     att_lay->addWidget(att_ed);
-    //    QDate Дата выдачи сертификата
+//    QDate Дата выдачи сертификата
     this->att_data_label = new QLabel();
     att_data_label->setText(main_obj->get_att_date().toString("dd.MM.yy"));
     QLabel *att_data_app = new QLabel();
@@ -62,7 +90,7 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
     att_data_lay->addWidget(att_data_app);
     att_data_lay->addWidget(att_data_label);
     att_data_lay->addWidget(att_data_ed);
-    // ИНН
+// ИНН
     QString tmpst;
     this->inn_label = new QLabel();
     inn_label->setText(tmpst.setNum(main_obj->get_det().get_inn()));
@@ -76,7 +104,7 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
     inn_lay->addWidget(inn_kl);
     inn_lay->addWidget(inn_label);
     inn_lay->addWidget(inn_ed);
-    // Директор - должность + ФИО
+// Директор - должность + ФИО
     this->dir_n_label = new QLabel();
     dir_n_label->setText(main_obj->get_det().get_dir().second);
     this->dir_p_label = new QLabel();
@@ -93,9 +121,9 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
     dir_lay->addWidget(dir_p_label);
     dir_lay->addWidget(dir_n_label);
     dir_lay->addWidget(dir_ed);
-        // Реквизиты организации
+// Реквизиты организации
     QBoxLayout *det_layout = new QBoxLayout(QBoxLayout::TopToBottom);
-    // адреса
+// адреса
     QLabel *uadr_txt = new QLabel();
     QLabel *padr_txt = new QLabel();
     uadr_txt->setText("<H4><CENTER>Юридический адрес: <CENTER></H4>");
@@ -142,7 +170,7 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
     det_layout->addLayout(det_paddress_all);
     det_layout->addWidget(uadr_txt);
     det_layout->addLayout(det_uaddress_all); 
-    // Поле для фактического адреса
+// Поле для фактического адреса
         QLabel *fadr_txt = new QLabel();
         fadr_txt->setText("<H4><CENTER>Фактический адрес: <CENTER></H4>");
         QBoxLayout *adr_l = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -165,7 +193,7 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
         adr_l->addWidget(adr_ed);
         QObject::connect(adr_ed, SIGNAL(clicked()), this, SLOT(f_address_edit()));
 
-    // Области списков (телефоны и факсы)
+// Области списков (телефоны и факсы)
         QBoxLayout *main_list_lay = new QBoxLayout(QBoxLayout::LeftToRight);
             QBoxLayout *telfax_lay = new QBoxLayout(QBoxLayout::LeftToRight);
             main_list_lay->addLayout(telfax_lay);
@@ -179,7 +207,7 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
           telfax_lay->addLayout(fax_list);
             tel_list->addWidget(tel_lab);
             fax_list->addWidget(fax_lab);
-    //    QList<QString> list_tel;        // Список телефонов
+//    QList<QString> list_tel;        // Список телефонов
       this->tellist = new QList<QString>(this->main_obj->get_det().get_tel_list());
       my_list_model *listmodtel = new my_list_model(this->tellist);
       my_list_view *viewtel = new my_list_view(&this->edited, this);
@@ -188,7 +216,7 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
       tel_list->addWidget(viewtel);
       viewtel->setModel(listmodtel);
       viewtel->setMaximumHeight(60);
-    //    QList<QString> list_fax;        // Список факсов
+//    QList<QString> list_fax;        // Список факсов
       this->faxlist = new QList<QString>(this->main_obj->get_det().get_fax_list());
       my_list_model *listmodfax = new my_list_model(this->faxlist);
       my_list_view *viewfax = new my_list_view(&this->edited, this);
@@ -198,7 +226,7 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
       viewfax->setModel(listmodfax);
       viewfax->setMaximumHeight(60);
 
- //   QList<worker> workers_list Список работников
+//   QList<worker> workers_list Список работников
       this->workers_list = this->main_obj->get_workers_list();
       workers_data *work_model = new workers_data(&this->workers_list);
       workers_view *work_view = new workers_view(&this->edited, this);
@@ -210,7 +238,7 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
       work_view->horizontalHeader()->setStretchLastSection(true);
       work_view->setMinimumHeight(180);
 
-        // Финальные кнопки
+// Финальные кнопки
             QBoxLayout *push_list = new QBoxLayout(QBoxLayout::LeftToRight);
             QPushButton *push_ok = new QPushButton("Сохранить");
             QPushButton *push_cancel = new QPushButton("Не сохранять");
@@ -218,14 +246,16 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
             QObject::connect(push_ok, SIGNAL(clicked()), this, SLOT(save_lab()));
             push_list->addWidget(push_ok);
             push_list->addWidget(push_cancel);            
-        // Расставляем виджеты
+// Расставляем виджеты
             QBoxLayout *edit_layout = new QBoxLayout(QBoxLayout::TopToBottom);
 
             edit_layout->addLayout(name_lay);
+            edit_layout->addLayout(full_name_lay);
             edit_layout->addLayout(att_lay);
             edit_layout->addLayout(att_data_lay);
             edit_layout->addLayout(inn_lay);
             edit_layout->addLayout(dir_lay);
+            edit_layout->addLayout(email_lay);
             edit_layout->addLayout(main_list_lay);
             edit_layout->addLayout(det_layout);
             edit_layout->addWidget(fadr_txt);
@@ -291,7 +321,7 @@ void editor_laboratory::slot_att_edit()
 {
     QString tmp1 = "Аттестат акредитации: ";
     QString tmp2 = this->main_obj->get_attestat();
-    string_edit *stred = new string_edit(&tmp2, &tmp1, 300);
+    string_edit *stred = new string_edit(&tmp2, &tmp1, 500);
     if (stred->exec() == QDialog::Accepted){
         this->main_obj->set_attestat(stred->result());
         this->att_label->setText(main_obj->get_attestat());
@@ -304,11 +334,37 @@ void editor_laboratory::slot_name_edit()
 {
     QString tmp1 = "Наименование: ";
     QString tmp2 = this->main_obj->get_name();
-    string_edit *stred = new string_edit(&tmp2, &tmp1, 300);
+    string_edit *stred = new string_edit(&tmp2, &tmp1, 600);
     if (stred->exec() == QDialog::Accepted){
         this->main_obj->set_name(stred->result());
         this->name_label->setText(main_obj->get_name());
         this->name_label->adjustSize();
+        edited = true;
+    }
+    delete stred;
+}
+void editor_laboratory::slot_full_name_edit()
+{
+    QString tmp1 = "Полное наименование: ";
+    QString tmp2 = main_obj->get_full_name();
+    string_edit *stred = new string_edit(&tmp2, &tmp1, 500);
+    if (stred->exec() == QDialog::Accepted){
+        this->main_obj->set_full_name(stred->result());
+        this->full_name_label->setText(main_obj->get_full_name());
+        this->full_name_label->adjustSize();
+        edited = true;
+    }
+    delete stred;
+}
+void editor_laboratory::slot_email_edit()
+{
+    QString tmp1 = "Email: ";
+    QString tmp2 = main_obj->get_email();
+    string_edit *stred = new string_edit(&tmp2, &tmp1, 300);
+    if (stred->exec() == QDialog::Accepted){
+        this->main_obj->set_email(stred->result());
+        this->email_label->setText(main_obj->get_email());
+        this->email_label->adjustSize();
         edited = true;
     }
     delete stred;
