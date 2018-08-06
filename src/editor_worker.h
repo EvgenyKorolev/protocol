@@ -8,6 +8,7 @@
 #include <QDialog>
 #include <QBoxLayout>
 #include <QMessageBox>
+#include <QCheckBox>
 #include "string_edit.h"
 #include "worker.h"
 #include "address.h"
@@ -17,7 +18,7 @@ class editor_worker : public QDialog
 {
     Q_OBJECT
 public:
-    explicit editor_worker(worker *data, QWidget *parent = 0);
+    explicit editor_worker(worker *data, QWidget *parent = nullptr);
     ~editor_worker();
     bool is_edit();
     worker result();
@@ -43,6 +44,7 @@ private:
     QLabel *login_label;
     QLabel *pass_label;
     QLabel *adr_label;
+    QCheckBox *menege_box;
     bool flag_edit;
 };
 

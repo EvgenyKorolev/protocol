@@ -14,12 +14,12 @@ editor_worker::~editor_worker()
 }
 editor_worker::editor_worker(worker *data, QWidget *parent) : QDialog(parent)
 {
-    this->main_data = data;
-    this->flag_edit = false;
+    main_data = data;
+    flag_edit = false;
     this->setWindowTitle("Сотрудник");
     this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
 //    QString name;
-    this->name_label = new QLabel();
+    name_label = new QLabel();
     name_label->setText(main_data->get_name());
     QLabel *name_ord = new QLabel();
     name_ord->setText("Имя: ");
@@ -32,7 +32,7 @@ editor_worker::editor_worker(worker *data, QWidget *parent) : QDialog(parent)
     name_lay->addWidget(name_label);
     name_lay->addWidget(name_ed);
 //    QString surname;
-    this->surname_label = new QLabel();
+    surname_label = new QLabel();
     surname_label->setText(main_data->get_surname());
     QLabel *surname_ord = new QLabel();
     surname_ord->setText("Фамилия: ");
@@ -45,7 +45,7 @@ editor_worker::editor_worker(worker *data, QWidget *parent) : QDialog(parent)
     surname_lay->addWidget(surname_label);
     surname_lay->addWidget(surname_ed);
 //    QString fname;
-    this->fname_label = new QLabel();
+    fname_label = new QLabel();
     fname_label->setText(main_data->get_fname());
     QLabel *fname_ord = new QLabel();
     fname_ord->setText("Отчество: ");
@@ -58,7 +58,7 @@ editor_worker::editor_worker(worker *data, QWidget *parent) : QDialog(parent)
     fname_lay->addWidget(fname_label);
     fname_lay->addWidget(fname_ed);
 //    QString position;
-    this->position_label = new QLabel();
+    position_label = new QLabel();
     position_label->setText(main_data->get_position());
     QLabel *position_ord = new QLabel();
     position_ord->setText("Должность: ");
@@ -71,7 +71,7 @@ editor_worker::editor_worker(worker *data, QWidget *parent) : QDialog(parent)
     position_lay->addWidget(position_label);
     position_lay->addWidget(position_ed);
 //    QString tel;
-    this->tel_label = new QLabel();
+    tel_label = new QLabel();
     tel_label->setText(main_data->get_tel());
     QLabel *tel_ord = new QLabel();
     tel_ord->setText("Телефон: ");
@@ -84,7 +84,7 @@ editor_worker::editor_worker(worker *data, QWidget *parent) : QDialog(parent)
     tel_lay->addWidget(tel_label);
     tel_lay->addWidget(tel_ed);
 //    QString post;
-    this->post_label = new QLabel();
+    post_label = new QLabel();
     post_label->setText(main_data->get_post());
     QLabel *post_ord = new QLabel();
     post_ord->setText("Email: ");
@@ -96,6 +96,14 @@ editor_worker::editor_worker(worker *data, QWidget *parent) : QDialog(parent)
     post_lay->addWidget(post_ord);
     post_lay->addWidget(post_label);
     post_lay->addWidget(post_ed);
+// Это начальник лаборатории?
+    QLabel *men_label = new QLabel();
+    men_label->setText("Начальник лаборатории: ");
+    menege_box = new QCheckBox();
+    menege_box->setChecked(data->tets_meneger());
+    QBoxLayout *men_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    men_lay->addWidget(men_label);
+    men_lay->addWidget(menege_box);
 //    QString login;
 //    QString pass;
 //    address adr;
@@ -114,7 +122,7 @@ editor_worker::editor_worker(worker *data, QWidget *parent) : QDialog(parent)
     main_lay->addLayout(fname_lay);
     main_lay->addLayout(position_lay);
     main_lay->addLayout(post_lay);
-
+    main_lay->addLayout(men_lay);
     main_lay->addLayout(push_list);
     this->setLayout(main_lay);
     this->setParent(parent);
@@ -206,22 +214,25 @@ void editor_worker::post_edit()
     delete stred;
 }
 void editor_worker::login_edit()
-{
-
-}
+{}
 void editor_worker::pass_edit()
-{
-
-}
+{}
 void editor_worker::adr_edit()
-{
-
-}
+{}
 void editor_worker::save_worker()
 {
     if (main_data->get_name() != ""){
         if (main_data->get_surname() != ""){
             if (main_data->get_position() != ""){
+                if (menege_box->isChecked()){
+                    if (!main_data->tets_meneger()){
+                        main_data->inv_meneger();
+                    }
+                } else {
+                    if (main_data->tets_meneger()){
+                        main_data->inv_meneger();
+                    }
+                }
                 emit accept();
             } else {
                 QMessageBox *trem = new QMessageBox();

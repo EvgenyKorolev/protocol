@@ -43,23 +43,26 @@ public:
     int set_adr(address *arg);                  // Установить адрес
     int set_adr(address arg);                   // Установить адрес (перегруженная)
     address get_adr();                          // Возвращает адрес
+    void inv_meneger();                 // Сменить статус начальника лаборатории
+    bool tets_meneger() const;          // Проверить является ли начальником маборатории
 
     int load_xml(QDomNode *arg);            // Заполняет объект их xml
-    QDomElement make_xml();                     // Создаёт xml из объекта
+    QDomElement make_xml();                 // Создаёт xml из объекта
     int load_db();
     int save_db();
 
     worker null_worker();
 
 private:
-    QString name;
-    QString surname;
-    QString fname;
-    QString position;
-    QString tel;
-    QString post;
-    QString login;
-    QString pass;
+    QString name{""};
+    QString surname{""};
+    QString fname{""};
+    QString position{""};
+    QString tel{""};
+    QString post{""};
+    QString login{""};
+    QString pass{""};
+    bool manager{false};
     address adr;
 };
 Q_DECLARE_METATYPE(worker)

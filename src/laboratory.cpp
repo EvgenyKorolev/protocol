@@ -77,10 +77,20 @@ details laboratory::get_det()
 {
     return this->det;
 }
-
 int laboratory::add_workers(worker* arg)
 {
+    if (arg->tets_meneger()){
+        if (this->test_manager()){return -1;}
+    }
     this->workers.append(*arg);
+    return 0;
+}
+int laboratory::add_workers(worker arg)
+{
+    if (arg.tets_meneger()){
+        if (this->test_manager()){return -1;}
+    }
+    this->workers.append(arg);
     return 0;
 }
 int laboratory::set_workers_list(QList<worker> *arg)
@@ -154,6 +164,26 @@ void laboratory::set_full_name(const QString& arg)
 QString laboratory::get_full_name() const
 {
     return det.get_name();
+}
+worker laboratory::get_manager()
+{
+    if (workers.empty()){
+        auto ret = std::find_if(workers.begin(), workers.end(), [](const worker& pred)->bool{return pred.tets_meneger();});
+        if (ret == workers.end()){
+            return worker();
+        } else return *ret;
+    }
+    return worker();
+}
+bool laboratory::test_manager()
+{
+    if (workers.empty()){
+        auto ret = std::find_if(workers.begin(), workers.end(), [](const worker& pred)->bool{return pred.tets_meneger();});
+        if (ret == workers.end()){
+            return false;
+        } else return true;
+    }
+    return false;
 }
 QDomDocument laboratory::make_xml()
 {

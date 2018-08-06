@@ -153,10 +153,14 @@ void MainWindow::slot_about()
 {
     QMessageBox *tmoer = new QMessageBox();
     tmoer->setWindowTitle("О Программе");
-    tmoer->setText("<HTML>Программу разработал Евгений Королев <br>"
-                   "сайт: kyrych.ru <br>"
-                   "E-mail: root@kyrych.ru <br>"
-                   "XMPP: kyrych@xmpp.ru </HTML>");
+    tmoer->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
+    tmoer->setText("<table><tr><th>"
+                   "<img src=\":pic/images/KlogoSS.png\"> </th> <th>Протокол 0.1 <br>"
+                   "<HTML>Программу разработал Евгений Королев <br>"
+                   "Cайт: <a href = 'http://kyrych.ru'>kyrych.ru</a><br> "
+                   "E-mail: <a href = 'mailto:root@kyrych.ru'>root@kyrych.ru</a> <br> "
+                   "XMPP: kyrych@xmpp.ru"
+                   "</th></tr></table>");
     tmoer->exec();
     delete tmoer;
 }

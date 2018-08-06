@@ -29,7 +29,7 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
     this->name_label = new QLabel();
     name_label->setText(main_obj->get_name());
     QLabel *name_kl = new QLabel();
-    name_kl->setText("Название: ");
+    name_kl->setText("Краткое название: ");
     QPushButton *name_ed = new QPushButton("Изменить...");
     name_ed->setMaximumWidth(100);
     name_ed->setMinimumWidth(100);
@@ -42,7 +42,7 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
     full_name_label = new QLabel();
     full_name_label->setText(main_obj->get_full_name());
     QLabel *full_name_kl = new QLabel();
-    full_name_kl->setText("Краткое наименование: ");
+    full_name_kl->setText("Полное название: ");
     QPushButton *full_name_ed = new QPushButton("Изменить...");
     full_name_ed->setMaximumWidth(100);
     full_name_ed->setMinimumWidth(100);
@@ -332,7 +332,7 @@ void editor_laboratory::slot_att_edit()
 }
 void editor_laboratory::slot_name_edit()
 {
-    QString tmp1 = "Наименование: ";
+    QString tmp1 = "Краткое название: ";
     QString tmp2 = this->main_obj->get_name();
     string_edit *stred = new string_edit(&tmp2, &tmp1, 600);
     if (stred->exec() == QDialog::Accepted){
@@ -345,7 +345,7 @@ void editor_laboratory::slot_name_edit()
 }
 void editor_laboratory::slot_full_name_edit()
 {
-    QString tmp1 = "Полное наименование: ";
+    QString tmp1 = "Полное название: ";
     QString tmp2 = main_obj->get_full_name();
     string_edit *stred = new string_edit(&tmp2, &tmp1, 500);
     if (stred->exec() == QDialog::Accepted){

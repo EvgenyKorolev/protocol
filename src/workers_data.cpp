@@ -23,16 +23,12 @@ QVariant workers_data::data(const QModelIndex &index, int role) const
             switch (index.column()) {
             case 0:
                 return QVariant(this->work_list->at(index.row()).get_surname());
-                break;
             case 1:
                 return QVariant(this->work_list->at(index.row()).get_name());
-                break;
             case 2:
                 return QVariant(this->work_list->at(index.row()).get_fname());
-                break;
             case 3:
                 return QVariant(this->work_list->at(index.row()).get_position());
-                break;
             default:
                 return QVariant();
             }
@@ -69,16 +65,12 @@ QVariant workers_data::headerData(int section, Qt::Orientation orientation, int 
         switch (section){
             case 0:
                     return QVariant("Фамилия");
-            break;
             case 1:
                      return QVariant("Имя");
-            break;
             case 2:
                     return QVariant("Отчество");
-            break;
             case 3:
                     return QVariant("Должность");
-            break;
         }
     }
     return QVariant();

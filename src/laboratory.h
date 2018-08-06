@@ -1,6 +1,10 @@
 #ifndef LABORATORY_H
 #define LABORATORY_H
 
+#include "address.h"
+#include "details.h"
+#include "worker.h"
+#include "my_function.h"
 #include <QString>
 #include <QFile>
 #include <QTextStream>
@@ -10,10 +14,8 @@
 #include <QDomText>
 #include <QDate>
 #include <QMessageBox>
-#include "address.h"
-#include "details.h"
-#include "worker.h"
-#include "my_function.h"
+#include <algorithm>
+
 // Класс лаборатории
 class laboratory
 {
@@ -57,11 +59,14 @@ public:
     void set_fax_list(QList<QString> arg);   // Установить список факсов
 
     int add_workers(worker *arg);             // Добавляет работника
+    int add_workers(worker arg);             // Добавляет работника
     int set_workers_list(QList<worker>* arg); // Устанавливает список работников
     int set_workers_list(QList<worker> arg);  // Устанавливает список работников (перегруженная)
     QList<worker> get_workers_list();         // Возвращает список работников
     int clear_workers();                      // Очистить список работников
 
+    worker get_manager();       // Возвращает объект работника для начальника лаборатории
+    bool test_manager();       // Проверяет есть ли уже начальник лаборатории
     QDomDocument make_xml();
     void laod_xml(QDomDocument *arg);
 

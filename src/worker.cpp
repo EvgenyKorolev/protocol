@@ -2,15 +2,6 @@
 
 worker::worker()
 {
-    this->name = "";
-    this->surname = "";
-    this->fname = "";
-    this->position = "";
-    // laboratory job;
-    this->tel = "";
-    this->post = "";
-    this->login = "";
-    this->pass = "";
     this->adr = address();
 }
 worker worker::null_worker()
@@ -198,19 +189,30 @@ address worker::get_adr()
 {
     return this->adr;
 }
-
+void worker::inv_meneger()
+{
+    manager = !manager;
+}
+bool worker::tets_meneger() const
+{
+    return manager;
+}
 int worker::load_xml(QDomNode *arg)
 {
     QDomNode lst = *arg;
-
-    this->name = lst.firstChildElement("name").text();
-    this->surname = lst.firstChildElement("surname").text();
-    this->fname = lst.firstChildElement("fname").text();
-    this->position = lst.firstChildElement("position").text();
-    this->tel = lst.firstChildElement("tel").text();
-    this->post = lst.firstChildElement("post").text();
-    this->login = lst.firstChildElement("login").text();
-    this->pass = lst.firstChildElement("pass").text();
+    if (lst.firstChildElement("manage").text() == "true"){
+        manager = true;
+    } else {
+        manager = false;
+    }
+    name = lst.firstChildElement("name").text();
+    surname = lst.firstChildElement("surname").text();
+    fname = lst.firstChildElement("fname").text();
+    position = lst.firstChildElement("position").text();
+    tel = lst.firstChildElement("tel").text();
+    post = lst.firstChildElement("post").text();
+    login = lst.firstChildElement("login").text();
+    pass = lst.firstChildElement("pass").text();
 
     QDomDocument* tmpd = new QDomDocument;
      tmpd->appendChild(lst.firstChildElement("address"));
@@ -224,7 +226,15 @@ QDomElement worker::make_xml()
 
     QDomElement root = ret_xml.createElement("worker");
         ret_xml.appendChild(root);
-
+    QDomElement xml_manage = ret_xml.createElement("manage");
+        QDomText xml_manage_text;
+        if (manager){
+            xml_manage_text = ret_xml.createTextNode("true");
+        } else {
+            xml_manage_text = ret_xml.createTextNode("false");
+        }
+        root.appendChild(xml_manage);
+        xml_manage.appendChild(xml_manage_text);
     QDomElement xml_name = ret_xml.createElement("name");
          QDomText xml_name_text = ret_xml.createTextNode(this->name);
             root.appendChild(xml_name);
@@ -258,15 +268,9 @@ QDomElement worker::make_xml()
             root.appendChild(xml_pass);
             xml_pass.appendChild(xml_pass_text);
 
-            root.appendChild(this->adr.make_xml());
-
+    root.appendChild(this->adr.make_xml());
     return root;
-
 }
-
-
-
-
 int worker::load_db()
 {
  return 0;
