@@ -4,173 +4,169 @@ worker::worker()
 {
     this->adr = address();
 }
+bool worker::operator==(worker& arg)
+{
+    return (name == arg.name &&
+        surname == arg.surname &&
+        fname == arg.fname &&
+        position == arg.position &&
+        tel == arg.tel &&
+        post == arg.post &&
+        login == arg.login &&
+        pass == arg.pass &&
+        manager == arg.manager &&
+        adr == arg.adr);
+}
+bool worker::operator!=(worker& arg)
+{
+    return !(*this == arg);
+}
 worker worker::null_worker()
 {
     worker();
     return *this;
 }
-int worker::set_name(QString *arg)
+int worker::set_name(const QString &arg)
 {
-    if (arg->size() < 1000) {
-        this->name = *arg;
+    if (arg.size() < 1000) {
+        name = arg;
         return 0;
     }
     return 1;
 }
-int worker::set_name(QString arg)
+int worker::set_name(QString &&arg)
 {
     if (arg.size() < 1000) {
-        this->name = arg;
+        name = std::move(arg);
         return 0;
     }
     return 1;
 }
 QString worker::get_name() const
 {
-    return this->name;
+    return name;
 }
-int worker::set_surname(QString *arg)
+int worker::set_surname(const QString& arg)
 {
-    if (arg->size() < 1000) {
-        this->surname = *arg;
+    if (arg.size() < 1000) {
+        surname = arg;
         return 0;
     }
     return 1;
 }
-int worker::set_surname(QString arg)
+int worker::set_surname(QString &&arg)
 {
     if (arg.size() < 1000) {
-        this->surname = arg;
+        surname = std::move(arg);
         return 0;
     }
     return 1;
 }
 QString worker::get_surname() const
 {
-    return this->surname;
+    return surname;
 }
-int worker::set_fname(QString *arg)
+int worker::set_fname(const QString &arg)
 {
-    if (arg->size() < 1000) {
-        this->fname = *arg;
+    if (arg.size() < 1000) {
+        fname = arg;
         return 0;
     }
     return 1;
 }
-int worker::set_fname(QString arg)
+int worker::set_fname(QString &&arg)
 {
     if (arg.size() < 1000) {
-        this->fname = arg;
+        fname = std::move(arg);
         return 0;
     }
     return 1;
 }
 QString worker::get_fname() const
 {
-    return this->fname;
+    return fname;
 }
-int worker::set_position(QString *arg)
+int worker::set_position(const QString& arg)
 {
-    if (arg->size() < 1000) {
-        this->position = *arg;
+    if (arg.size() < 1000) {
+        position = arg;
         return 0;
     }
     return 1;
 }
-int worker::set_position(QString arg)
+int worker::set_position(QString &&arg)
 {
     if (arg.size() < 1000) {
-        this->position = arg;
+        position = std::move(arg);
         return 0;
     }
     return 1;
 }
 QString worker::get_position() const
 {
-    return this->position;
+    return position;
 }
-int worker::set_tel(QString *arg)
+int worker::set_tel(const QString &arg)
 {
-    if (arg->size() < 1000) {
-        this->tel = *arg;
+    if (arg.size() < 1000) {
+        tel = arg;
         return 0;
     }
     return 1;
 }
-int worker::set_tel(QString arg)
+int worker::set_tel(QString &&arg)
 {
     if (arg.size() < 1000) {
-        this->tel = arg;
+        tel = std::move(arg);
         return 0;
     }
     return 1;
 }
 QString worker::get_tel() const
 {
-    return this->tel;
+    return tel;
 }
-int worker::set_post(QString *arg)
+int worker::set_post(const QString &arg)
 {
-    if (arg->size() < 1000) {
-        this->post = *arg;
+    if (arg.size() < 1000) {
+        post = arg;
         return 0;
     }
     return 1;
 }
-int worker::set_post(QString arg)
+int worker::set_post(QString &&arg)
 {
     if (arg.size() < 1000) {
-        this->post = arg;
+        post = std::move(arg);
         return 0;
     }
     return 1;
 }
 QString worker::get_post() const
 {
-    return this->post;
+    return post;
 }
-int worker::set_login(QString *arg, QString *arg2)
-{
-    if ((arg->size() < 1000) && (this->test_pass(arg2))) {
-        this->login = *arg;
-        return 0;
-    }
-    return 1;
-}
-int worker::set_login(QString arg, QString arg2)
+int worker::set_login(const QString &arg, const QString &arg2)
 {
     if ((arg.size() < 1000) && (this->test_pass(arg2))) {
-        this->login = arg;
+        login = arg;
         return 0;
     }
     return 1;
 }
 QString worker::get_login() const
 {
-    return this->login;
+    return login;
 }
-int worker::set_pass(QString *arg, QString *arg2)
-{
-    if ((arg->size() < 1000) && (this->test_pass(arg2))) {
-        this->pass = *arg;
-        return 0;
-    }
-    return 1;
-}
-int worker::set_pass(QString arg, QString arg2)
+int worker::set_pass(const QString &arg, const QString &arg2)
 {
     if ((arg.size() < 1000) && (this->test_pass(arg2))) {
-        this->pass = arg;
+        pass = arg;
         return 0;
     }
     return 1;
 }
-bool worker::test_pass(QString *arg)
-{
-    if (*arg == this->pass) {return true;}
-    return false;
-}
-bool worker::test_pass(QString arg)
+bool worker::test_pass(const QString &arg)
 {
     if (arg == this->pass) {return true;}
     return false;
@@ -193,7 +189,7 @@ void worker::inv_meneger()
 {
     manager = !manager;
 }
-bool worker::tets_meneger() const
+bool worker::test_meneger() const
 {
     return manager;
 }

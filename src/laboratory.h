@@ -43,10 +43,11 @@ public:
     void set_det(details *arg);   // Установить реквизиты
     details get_det();            // Получить реквизиты
 
-    int set_uadr(address *arg);             // Установить юридический адрес
-    address get_uadr();                     // Получить юридичсекий адрес
-    int set_padr(address *arg);             // Установить почтовый адрес
-    address get_padr();                     // Получить почтовы адрес
+    int set_uadr(address *arg);   // Установить юридический адрес
+    address get_uadr();           // Получить юридичсекий адрес
+    int set_padr(address *arg);   // Установить почтовый адрес
+    address get_padr();           // Получить почтовы адрес
+    worker get_labdir();          // Вернуть начальника лаборатории
 
     void set_email(const QString &arg);         // Задать email
     QString get_email() const;                  // Получить email
@@ -65,7 +66,7 @@ public:
     QList<worker> get_workers_list();         // Возвращает список работников
     int clear_workers();                      // Очистить список работников
 
-    worker get_manager();       // Возвращает объект работника для начальника лаборатории
+    worker get_manager();      // Возвращает объект работника для начальника лаборатории
     bool test_manager();       // Проверяет есть ли уже начальник лаборатории
     QDomDocument make_xml();
     void laod_xml(QDomDocument *arg);

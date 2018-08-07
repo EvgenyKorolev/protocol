@@ -3,34 +3,31 @@
 details::details()
 {
     QList<QString> tmpl;
-    this->list_tel = tmpl;
-    this->list_fax = tmpl;
-    this->post.first = address();;
-    this->post.second = address();
-    this->inn = 0;
-    this->dir.first = "";
-    this->dir.second = "";
+    list_tel = tmpl;
+    list_fax = tmpl;
+    post.first = address();;
+    post.second = address();
 }
 details::details(const details &arg)
 {
-   this->list_tel = arg.list_tel;
-   this->list_fax = arg.list_fax;
-   this->post.first = arg.post.first;
-   this->post.second = arg.post.second;
-   this->inn = arg.inn;
-   this->dir.first = arg.dir.first;
-   this->dir.second = arg.dir.second;
+   list_tel = arg.list_tel;
+   list_fax = arg.list_fax;
+   post.first = arg.post.first;
+   post.second = arg.post.second;
+   inn = arg.inn;
+   dir.first = arg.dir.first;
+   dir.second = arg.dir.second;
 }
 bool details::operator == (const details &arg)
 {
     if (
-    this->list_tel == arg.list_tel &&
-    this->list_fax == arg.list_fax &&
-    this->post.first == arg.post.first &&
-    this->post.second == arg.post.second &&
-    this->inn == arg.inn &&
-    this->dir.first == arg.dir.first &&
-    this->dir.second == arg.dir.second
+    list_tel == arg.list_tel &&
+    list_fax == arg.list_fax &&
+    post.first == arg.post.first &&
+    post.second == arg.post.second &&
+    inn == arg.inn &&
+    dir.first == arg.dir.first &&
+    dir.second == arg.dir.second
             ) {return true;}
     return false;
 }
@@ -40,13 +37,13 @@ bool details::operator != (const details &arg)
 }
 details& details::operator = (const details &arg)
 {
-    this->list_tel = arg.list_tel;
-    this->list_fax = arg.list_fax;
-    this->post.first = arg.post.first;
-    this->post.second = arg.post.second;
-    this->inn = arg.inn;
-    this->dir.first = arg.dir.first;
-    this->dir.second = arg.dir.second;
+    list_tel = arg.list_tel;
+    list_fax = arg.list_fax;
+    post.first = arg.post.first;
+    post.second = arg.post.second;
+    inn = arg.inn;
+    dir.first = arg.dir.first;
+    dir.second = arg.dir.second;
     return *this;
 }
 details details::null_details()
@@ -151,6 +148,26 @@ int details::set_re_post(address* arg)
 int details::set_ur_post(address* arg)
 {
     this->post.second = *arg;
+    return 0;
+}
+int details::set_re_post(address arg)
+{
+    this->post.first = arg;
+    return 0;
+}
+int details::set_ur_post(address arg)
+{
+    this->post.second = arg;
+    return 0;
+}
+int details::set_re_post(address& arg)
+{
+    this->post.first = arg;
+    return 0;
+}
+int details::set_ur_post(address& arg)
+{
+    this->post.second = arg;
     return 0;
 }
 address details::get_re_post() const

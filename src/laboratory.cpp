@@ -12,7 +12,7 @@ laboratory::laboratory()
         openlab.setContent(&labf);
         labf.close();
     } else {
-        QMessageBox::information(0, "Отладка", "Не открывается файл с информацией о лаборатории");
+        QMessageBox::information(nullptr, "Отладка", "Не открывается файл с информацией о лаборатории");
     }
     this->laod_xml(&openlab);
 }
@@ -79,7 +79,7 @@ details laboratory::get_det()
 }
 int laboratory::add_workers(worker* arg)
 {
-    if (arg->tets_meneger()){
+    if (arg->test_meneger()){
         if (this->test_manager()){return -1;}
     }
     this->workers.append(*arg);
@@ -87,20 +87,28 @@ int laboratory::add_workers(worker* arg)
 }
 int laboratory::add_workers(worker arg)
 {
-    if (arg.tets_meneger()){
-        if (this->test_manager()){return -1;}
+    if (arg.test_meneger()){
+        if (this->test_manager()){
+            QMessageBox::information(nullptr, "Внимание!", "У вас более одного руководителя лаборатори.<br> В протокол попадёт только один из них.");
+        }
     }
     this->workers.append(arg);
     return 0;
 }
 int laboratory::set_workers_list(QList<worker> *arg)
 {
+    if(std::count_if(arg->begin(), arg->end(), [](const worker& pred)->bool{return pred.test_meneger();}) > 1){
+        QMessageBox::information(nullptr, "Внимание!", "У вас более одного руководителя лаборатори.<br> В протокол попадёт только один из них.");
+    }
     this->clear_workers();
     this->workers.append(*arg);
     return 0;
 }
 int laboratory::set_workers_list(QList<worker> arg)
 {
+    if(std::count_if(arg.begin(), arg.end(), [](const worker& pred)->bool{return pred.test_meneger();}) > 1){
+        QMessageBox::information(nullptr, "Внимание!", "У вас более одного руководителя лаборатори.<br> В протокол попадёт только один из них.");
+    }
     this->clear_workers();
     this->workers.append(arg);
     return 0;
@@ -168,7 +176,7 @@ QString laboratory::get_full_name() const
 worker laboratory::get_manager()
 {
     if (workers.empty()){
-        auto ret = std::find_if(workers.begin(), workers.end(), [](const worker& pred)->bool{return pred.tets_meneger();});
+        auto ret = std::find_if(workers.begin(), workers.end(), [](const worker& pred)->bool{return pred.test_meneger();});
         if (ret == workers.end()){
             return worker();
         } else return *ret;
@@ -178,12 +186,20 @@ worker laboratory::get_manager()
 bool laboratory::test_manager()
 {
     if (workers.empty()){
-        auto ret = std::find_if(workers.begin(), workers.end(), [](const worker& pred)->bool{return pred.tets_meneger();});
+        auto ret = std::find_if(workers.begin(), workers.end(), [](const worker& pred)->bool{return pred.test_meneger();});
         if (ret == workers.end()){
             return false;
         } else return true;
     }
     return false;
+}
+worker laboratory::get_labdir()
+{
+    auto ret = std::find_if(workers.begin(), workers.end(), [](const worker& pred)->bool{return pred.test_meneger();});
+    if (ret != workers.end()){
+        return *ret;
+    }
+    return worker();
 }
 QDomDocument laboratory::make_xml()
 {

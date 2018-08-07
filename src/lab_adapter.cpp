@@ -8,6 +8,19 @@ QString lab_adapter::get_var(const QString &arg) const
     if (arg == "_lab_att"){return tmpl.get_attestat();}
     if (arg == "_lab_full_name"){return  tmpl.get_full_name();}
     if (arg == "_lab_email"){return tmpl.get_email();}
+    if (arg == "_lab_labdir"){
+        QString ret;
+        if (tmpl.get_labdir().get_name() != ""){
+            ret += tmpl.get_labdir().get_name() + ". ";
+        }
+        if (tmpl.get_labdir().get_fname() != ""){
+            ret += tmpl.get_labdir().get_fname() + ". ";
+        }
+        if (tmpl.get_labdir().get_surname() != ""){
+            ret += tmpl.get_labdir().get_fname();
+        }
+        return  ret;
+    }
  // Дата
     if (arg == "_lab_att_date"){return tmpl.get_att_date().toString();}
     if (arg == "_lab_att_date1"){return tmpl.get_att_date().toString("dd.MM.yyyy");}

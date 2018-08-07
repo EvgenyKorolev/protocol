@@ -14,7 +14,13 @@ class address
 {
 public:
     address();                                  // Конструктор по умолчанию
-    address(const address &arg);                // Конструктор копировщик
+    address(const address& arg);                // Конструктор копировщик
+    address(address&& arg) = default;           // Конструктор перемещающий
+    address& operator = (const address &arg);   // Присваивание
+    address& operator=(address&& arg) = default;
+    // Переопределение операций которые возможны с адресом
+    bool operator == (const address &arg);      // Равенство
+    bool operator != (const address &arg);      // Неравенство
     ~address();                                 // Деструктор
     int clear_address();                        // Функция очищающая объект "адрес"
 
@@ -58,10 +64,6 @@ public:
     QDomElement make_xml() const;                     // Возвращает XML объект QDomElement с именем "address" содержащий данные объекта
     int load_db();                         // Должен выполнить подготовку к получению из базы данных. Надо реализовать
     int save_db() const;                         // Должен выполнить подготовку к загрузке в базу данных. Надо реализовать
-// Переопределение операций которые возможны с адресом
-    bool operator == (const address &arg);      // Равенство
-    bool operator != (const address &arg);      // Неравенство
-    address& operator = (const address &arg);   // Присваивание
 // Перегрузка функций устанавливающих различные значения
     int set_country(QString str);              // Установить название страны
     int set_state(QString str);                // Установить Регион (субъект РФ)
@@ -87,8 +89,8 @@ private:
     QString district{""};                // Район
     QString street{""};                  // Улица
     QString street_class{""};            // Вид улицы (улица, проспект...)
-    QPair<int, QString> building;    // Номер дома и литер если есть
-    QPair<int, QString> office;      // Номер офиса (и литер если есть)
+    QPair<int, QString> building{0, ""};    // Номер дома и литер если есть
+    QPair<int, QString> office{0, ""};      // Номер офиса (и литер если есть)
     unsigned int post_index{0};         // Почтовый индекс
 
 };

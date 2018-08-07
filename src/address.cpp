@@ -1,49 +1,39 @@
 #include "address.h"
 
-address::address()
-{
-    this->building.first = 0;
-    this->building.second = "";
-    this->office.first = 0;
-    this->office.second = "";
-}
+address::address(){}
 address::address(const address &arg)
 {
-    this->country = arg.get_country();
-    this->state = arg.get_state();
-    this->state_class = arg.get_state_class();
-    this->state_district = arg.get_state_distr();
-    this->city = arg.get_city();
-    this->city_class = arg.get_city_class();
-    this->district = arg.get_district();
-    this->street = arg.get_street();
-    this->street_class = arg.get_street_class();
-    this->building.first = arg.get_building_num();
-    this->building.second = arg.get_building_lit();
-    this->office.first = arg.get_office_num();
-    this->office.second = arg.get_office_lit();
-    this->post_index = arg.get_post_index();
+    country = arg.country;
+    state = arg.state;
+    state_class = arg.state_class;
+    state_district = arg.state_district;
+    city = arg.city;
+    city_class = arg.city_class;
+    district = arg.district;
+    street = arg.street;
+    street_class = arg.street_class;
+    building = arg.building;
+    office = arg.office;
+    post_index = arg.post_index;
 }
-address::~address()
-{
-}
+address::~address(){}
 bool address::operator == (const address &arg)
 {
     if (
-            this->country == arg.get_country() &&
-            this->state == arg.get_state()  &&
-            this->state_class == arg.get_state_class() &&
-            this->state_district == arg.get_state_distr() &&
-            this->city == arg.get_city() &&
-            this->city_class == arg.get_city_class() &&
-            this->district == arg.get_district() &&
-            this->street == arg.get_street() &&
-            this->street_class == arg.get_street_class() &&
-            this->building.first == arg.get_building_num() &&
-            this->building.second == arg.get_building_lit() &&
-            this->office.first == arg.get_office_num() &&
-            this->office.second == arg.get_office_lit() &&
-            this->post_index == arg.get_post_index()
+            country == arg.country &&
+            state == arg.state  &&
+            state_class == arg.state_class &&
+            state_district == arg.state_district &&
+            city == arg.city &&
+            city_class == arg.city_class &&
+            district == arg.district &&
+            street == arg.street &&
+            street_class == arg.street_class &&
+            building.first == arg.building.first &&
+            building.second == arg.building.second &&
+            office.first == arg.office.first &&
+            office.second == arg.office.second &&
+            post_index == arg.post_index
             ) {return true;}
     return false;
 }
@@ -51,7 +41,7 @@ bool address::operator != (const address &arg)
 {
      return !(*this == arg);
 }
-address& address::operator = (const address &arg)
+address& address::operator= (const address &arg)
 {
     this->country = arg.country;
     this->state = arg.state;

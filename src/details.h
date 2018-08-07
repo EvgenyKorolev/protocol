@@ -15,11 +15,13 @@ class details
 {
 public:
     details();                                      // Конструктор по умолчанию
-    details(const details &arg);                    // Конструктор копировщик
+    details(const details& arg);                    // Конструктор копировщик
+    details(details&& arg) = default;              // Конструктор копировщик
 // Переопределение операций которые возможны с реквезитами
-    bool operator == (const details &arg);          // Равенство
-    bool operator != (const details &arg);          // Неравенство
-    details& operator = (const details &arg);       // Присваивание
+    bool operator == (const details& arg);          // Равенство
+    bool operator != (const details& arg);          // Неравенство
+    details& operator = (const details& arg);       // Присваивание
+    details& operator = (details&& arg) = default;  // Присваивание
 
     int add_tel(QString* arg);                     // Добавить телефон в список
     int add_fax(QString* arg);                     // Добавить факс в список
@@ -41,6 +43,10 @@ public:
 
     int set_re_post(address* arg);                 // Задать фактический адрес
     int set_ur_post(address* arg);                 // Задать юридический адрес
+    int set_re_post(address arg);                 // Задать фактический адрес перегруженная
+    int set_ur_post(address arg);                 // Задать юридический адрес перегруженная
+    int set_re_post(address& arg);                 // Задать фактический адрес перегруженная
+    int set_ur_post(address& arg);                 // Задать юридический адрес перегруженная
     address get_re_post() const;                   // Получить фактический адрес
     address get_ur_post()const;                    // Получить юридический адрес
     int set_inn(unsigned long long int in);        // Задать ИНН
@@ -65,8 +71,8 @@ private:
     QList<QString> list_tel;        // Список телефонов
     QList<QString> list_fax;        // Список факсов
     QPair<address, address> post;   // Адреса - юридический и почтовый
-    unsigned long long inn;         // ИНН
-    QPair<QString, QString> dir;    // Директор - должность + ФИО
+    unsigned long long inn{0};         // ИНН
+    QPair<QString, QString> dir{"", ""};    // Директор - должность + ФИО
     QString email{""};                  // Электронная почта
     QString name{""};                   // Полное наименование
 };

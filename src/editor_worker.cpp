@@ -100,7 +100,7 @@ editor_worker::editor_worker(worker *data, QWidget *parent) : QDialog(parent)
     QLabel *men_label = new QLabel();
     men_label->setText("Начальник лаборатории: ");
     menege_box = new QCheckBox();
-    menege_box->setChecked(data->tets_meneger());
+    menege_box->setChecked(data->test_meneger());
     QBoxLayout *men_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     men_lay->addWidget(men_label);
     men_lay->addWidget(menege_box);
@@ -225,11 +225,11 @@ void editor_worker::save_worker()
         if (main_data->get_surname() != ""){
             if (main_data->get_position() != ""){
                 if (menege_box->isChecked()){
-                    if (!main_data->tets_meneger()){
+                    if (!main_data->test_meneger()){
                         main_data->inv_meneger();
                     }
                 } else {
-                    if (main_data->tets_meneger()){
+                    if (main_data->test_meneger()){
                         main_data->inv_meneger();
                     }
                 }
