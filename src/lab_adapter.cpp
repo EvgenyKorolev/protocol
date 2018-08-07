@@ -11,13 +11,13 @@ QString lab_adapter::get_var(const QString &arg) const
     if (arg == "_lab_labdir"){
         QString ret;
         if (tmpl.get_labdir().get_name() != ""){
-            ret += tmpl.get_labdir().get_name() + ". ";
+            ret += tmpl.get_labdir().get_name().left(1) + ". ";
         }
         if (tmpl.get_labdir().get_fname() != ""){
-            ret += tmpl.get_labdir().get_fname() + ". ";
+            ret += tmpl.get_labdir().get_fname().left(1) + ". ";
         }
         if (tmpl.get_labdir().get_surname() != ""){
-            ret += tmpl.get_labdir().get_fname();
+            ret += tmpl.get_labdir().get_surname();
         }
         return  ret;
     }

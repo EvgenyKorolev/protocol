@@ -171,6 +171,7 @@ void protocol_constructor::slot_test()
 
     QWebEngineView* tmpw = new QWebEngineView(nullptr);
     tmpw->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
+    tmpw->setMinimumWidth(700);
     tmpw->setWindowTitle("Тестовый вывод протокола");
     tmpw->setHtml(html_text);
     tmpw->show();

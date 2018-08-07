@@ -19,6 +19,7 @@ edit_html::edit_html(QString& set_var, QString &set_name, QWidget *par) : QDialo
     }
     main_doc = new QTextEdit();
     main_doc->setMinimumWidth(800);
+    main_doc->setMinimumHeight(500);
     main_doc->setPlainText(QString(open_html));
     QBoxLayout* main_lay = new QBoxLayout(QBoxLayout::TopToBottom);
     QBoxLayout* push_lay = new QBoxLayout(QBoxLayout::LeftToRight);
