@@ -2,6 +2,8 @@
 
 editor_klient::~editor_klient()
 {
+    delete full_name_label;
+    delete email_label;
     delete name_label;
     delete inn_label;
     delete dir_n_label;
@@ -34,6 +36,32 @@ editor_klient::editor_klient(klient *arg, QWidget *parent) : QDialog(parent)
     name_lay->addWidget(name_kl);
     name_lay->addWidget(name_label);
     name_lay->addWidget(name_ed);
+// Полное наименование
+    full_name_label = new QLabel();
+    full_name_label->setText(main_obj->get_full_name());
+    QLabel *full_name_kl = new QLabel();
+    full_name_kl->setText("Полное название: ");
+    QPushButton *full_name_ed = new QPushButton("Изменить...");
+    full_name_ed->setMaximumWidth(100);
+    full_name_ed->setMinimumWidth(100);
+    QObject::connect(full_name_ed, SIGNAL(clicked()), this, SLOT(slot_full_name_edit()));
+    QBoxLayout *full_name_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    full_name_lay->addWidget(full_name_kl);
+    full_name_lay->addWidget(full_name_label);
+    full_name_lay->addWidget(full_name_ed);
+// Email
+    email_label = new QLabel();
+    email_label->setText(main_obj->get_email());
+    QLabel *email_kl = new QLabel();
+    email_kl->setText("Email: ");
+    QPushButton *email_ed = new QPushButton("Изменить...");
+    email_ed->setMaximumWidth(100);
+    email_ed->setMinimumWidth(100);
+    QObject::connect(email_ed, SIGNAL(clicked()), this, SLOT(slot_email_edit()));
+    QBoxLayout *email_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    email_lay->addWidget(email_kl);
+    email_lay->addWidget(email_label);
+    email_lay->addWidget(email_ed);
 // ИНН
     QString tmpst;
     this->inn_label = new QLabel();
@@ -175,13 +203,12 @@ editor_klient::editor_klient(klient *arg, QWidget *parent) : QDialog(parent)
     push_list->addWidget(push_cancel);
 // Расставляем виджеты
     QBoxLayout *edit_layout = new QBoxLayout(QBoxLayout::TopToBottom);
-
     edit_layout->addLayout(name_lay);
+    edit_layout->addLayout(full_name_lay);
     edit_layout->addLayout(inn_lay);
     edit_layout->addLayout(dir_lay);
-
+    edit_layout->addLayout(email_lay);
     edit_layout->addLayout(det_layout);
-
     edit_layout->addWidget(fadr_txt);
     edit_layout->addLayout(adr_l);
     edit_layout->addLayout(main_list_lay);
@@ -259,12 +286,38 @@ void editor_klient::name_edit()
     }
     delete stred;
 }
+void editor_klient::slot_full_name_edit()
+{
+    QString tmp1 = "Полное название: ";
+    QString tmp2 = main_obj->get_full_name();
+    string_edit *stred = new string_edit(&tmp2, &tmp1, 500);
+    if (stred->exec() == QDialog::Accepted){
+        this->main_obj->set_full_name(stred->result());
+        this->full_name_label->setText(main_obj->get_full_name());
+        this->full_name_label->adjustSize();
+        flag_edit = true;
+    }
+    delete stred;
+}
+void editor_klient::slot_email_edit()
+{
+    QString tmp1 = "Email: ";
+    QString tmp2 = main_obj->get_email();
+    string_edit *stred = new string_edit(&tmp2, &tmp1, 300);
+    if (stred->exec() == QDialog::Accepted){
+        this->main_obj->set_email(stred->result());
+        this->email_label->setText(main_obj->get_email());
+        this->email_label->adjustSize();
+        flag_edit = true;
+    }
+    delete stred;
+}
 void editor_klient::dir_edit()
 {
     QString tmp1 = "Руководитель: ";
     QString tmp2 = "Должность: ";
     QString tmp3 = "Имя (Ф.И.О): ";
-    pair_editor *dired = new pair_editor(this->main_obj->get_det().get_dir(), &tmp1, &tmp2, &tmp3, 300, 300);
+    pair_editor *dired = new pair_editor(this->main_obj->get_det().get_dir(), &tmp1, &tmp2, &tmp3, 300, 300, 100, 100);
     if (dired->exec() == QDialog::Accepted){
         this->main_obj->set_dir(dired->result());
         dir_n_label->setText(main_obj->get_det().get_dir().second);

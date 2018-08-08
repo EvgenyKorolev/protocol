@@ -52,18 +52,18 @@ editor_laboratory::editor_laboratory(QWidget *parent) : QDialog(parent)
     full_name_lay->addWidget(full_name_label);
     full_name_lay->addWidget(full_name_ed);
 // Email
-        email_label = new QLabel();
-        email_label->setText(main_obj->get_email());
-        QLabel *email_kl = new QLabel();
-        email_kl->setText("Email: ");
-        QPushButton *email_ed = new QPushButton("Изменить...");
-        email_ed->setMaximumWidth(100);
-        email_ed->setMinimumWidth(100);
-        QObject::connect(email_ed, SIGNAL(clicked()), this, SLOT(slot_email_edit()));
-        QBoxLayout *email_lay = new QBoxLayout(QBoxLayout::LeftToRight);
-        email_lay->addWidget(email_kl);
-        email_lay->addWidget(email_label);
-        email_lay->addWidget(email_ed);
+    email_label = new QLabel();
+    email_label->setText(main_obj->get_email());
+    QLabel *email_kl = new QLabel();
+    email_kl->setText("Email: ");
+    QPushButton *email_ed = new QPushButton("Изменить...");
+    email_ed->setMaximumWidth(100);
+    email_ed->setMinimumWidth(100);
+    QObject::connect(email_ed, SIGNAL(clicked()), this, SLOT(slot_email_edit()));
+    QBoxLayout *email_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    email_lay->addWidget(email_kl);
+    email_lay->addWidget(email_label);
+    email_lay->addWidget(email_ed);
 // Аттестат акредитации
     this->att_label = new QLabel();
     att_label->setText(main_obj->get_attestat());

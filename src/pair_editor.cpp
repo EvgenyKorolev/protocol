@@ -1,5 +1,5 @@
 #include "pair_editor.h"
-pair_editor::pair_editor(QPair<QString, QString> arg, QString *lbl, QString *lbl1, QString *lbl2, int mw, int mw2)
+pair_editor::pair_editor(QPair<QString, QString> arg, QString *lbl, QString *lbl1, QString *lbl2, int mw, int mw2, int tw, int tw2)
 {
     this->main_obj = arg;
     this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
@@ -11,13 +11,15 @@ pair_editor::pair_editor(QPair<QString, QString> arg, QString *lbl, QString *lbl
     QLabel *my_lbl2 = new QLabel();
     my_lbl1->setText(*lbl1);
     my_lbl2->setText(*lbl2);
+    my_lbl1->setMinimumWidth(tw);
+    my_lbl2->setMinimumWidth(tw2);
     QBoxLayout *but_lay =new QBoxLayout(QBoxLayout::LeftToRight);
-    this->my_line1 = new QLineEdit();
-    this->my_line2 = new QLineEdit();
-    this->my_line1->setMaximumWidth(mw);
-    this->my_line2->setMaximumWidth(mw2);
-    this->my_line1->setText(this->main_obj.first);
-    this->my_line2->setText(this->main_obj.second);
+    my_line1 = new QLineEdit();
+    my_line2 = new QLineEdit();
+    my_line1->setMinimumWidth(mw);
+    my_line2->setMinimumWidth(mw2);
+    my_line1->setText(this->main_obj.first);
+    my_line2->setText(this->main_obj.second);
     QPushButton *my_ok = new QPushButton("Готово");
     QPushButton *my_cancel = new QPushButton("Отмена");
     QObject::connect(my_ok, SIGNAL(clicked()), this, SLOT(save_pair()));

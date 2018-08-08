@@ -39,6 +39,11 @@ public:
     void set_padr(address *arg);             // Установить почтовый адрес
     address get_padr() const;                     // Получить почтовы адрес
 
+    void set_email(const QString &arg);         // Задать email
+    QString get_email() const;                  // Получить email
+    void set_full_name(const QString& arg);    // Задать полное наименование
+    QString get_full_name() const;             // Получить полное наименование
+
     void add_orders(order *arg);                // Добавить заявку
     void set_orders_list(QList<order*> *arg);   // Установить список заявок
     QList<order*> get_order_list() const;            // Получить список заявок
@@ -67,12 +72,12 @@ public:
     QString get_fname() const;                 // Узнать имя файла
 
 private:
-    QString name;           // Название
+    QString name{""};           // Название
     details det;            // Реквезиты
     address fadr;           // Фактический адрес
     QList<order*> orders;   // Список заявок
-    QString pth;            // Путь к файлу
-    QString fname;          // Имя файла
+    QString pth{""};            // Путь к файлу
+    QString fname{""};          // Имя файла
 };
 Q_DECLARE_METATYPE(klient*)
 #endif // KLIENT_H

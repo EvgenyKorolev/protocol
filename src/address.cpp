@@ -242,6 +242,43 @@ QString address::get_adr_str() const
     if (this->post_index != 0){ret_st += ("Индекс: " + QString::number(this->post_index) + " ");}
     return ret_st;
 }
+QString address::get_adr_str2() const
+{
+    QString ret_st;
+    if (this->post_index != 0){ret_st += QString::number(this->post_index) + ", ";}
+    if (this->country != "") {ret_st += (this->country + ", ");}
+    if (this->state_class != "") {ret_st += (this->state_class + " ");}
+    if (this->state != ""){ret_st += (this->state + ", ");}
+    if (this->state_district != ""){ret_st += (this->state_district + ", ");}
+    if (this->city_class != ""){ret_st += (this->city_class + " ");}
+    if (this->city != ""){ret_st += (this->city + ", ");}
+    if (this->district != ""){ret_st += (this->district + ", ");}
+    if (this->street_class != ""){ret_st += (this->street_class + " ");}
+    if (this->street != ""){ret_st += (this->street + ", ");}
+    if (this->building.first != 0){ret_st += ("строение " + QString::number(this->building.first) + " ");}
+    if (this->building.second != ""){ret_st += (this->building.second + ", ");}
+    if (this->office.first != 0){ret_st += ("помещение " + QString::number(this->office.first) + ", ");}
+    if (this->office.second != ""){ret_st += (this->office.second + ". ");}
+    return ret_st;
+}
+QString address::get_adr_str3() const
+{
+    QString ret_st;
+    if (this->post_index != 0){ret_st += QString::number(this->post_index) + ", ";}
+    if (this->state_class != "") {ret_st += (this->state_class + " ");}
+    if (this->state != ""){ret_st += (this->state + ", ");}
+    if (this->state_district != ""){ret_st += (this->state_district + ", ");}
+    if (this->city_class != ""){ret_st += (this->city_class + " ");}
+    if (this->city != ""){ret_st += (this->city + ", ");}
+    if (this->district != ""){ret_st += (this->district + ", ");}
+    if (this->street_class != ""){ret_st += (this->street_class + " ");}
+    if (this->street != ""){ret_st += (this->street + ", ");}
+    if (this->building.first != 0){ret_st += (QString::number(this->building.first) + " ");}
+    if (this->building.second != ""){ret_st += (this->building.second + ", ");}
+    if (this->office.first != 0){ret_st += ("офис " + QString::number(this->office.first) + ", ");}
+    if (this->office.second != ""){ret_st += (this->office.second + ". ");}
+    return ret_st;
+}
 int address::set_office_num(int arg)
 {
     this->office.first = arg;

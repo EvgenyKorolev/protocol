@@ -2,12 +2,9 @@
 
 klient::klient()
 {
-    this->name = "";
-    this->det.null_details();
-    this->fadr = address();
-    QList<order*> tmpo;
-    this->orders = tmpo;
-    this->pth = "";
+    det = details();
+    fadr = address();
+    this->orders = QList<order*>();
 }
 klient::klient(const klient &arg)
 {
@@ -80,6 +77,22 @@ void klient::init(klient *arg)
         this->add_orders(tmpo_2);
         ++it;
     }
+}
+void klient::set_email(const QString &arg)
+{
+    det.set_email(arg);
+}
+QString klient::get_email() const
+{
+    return det.get_email();
+}
+void klient::set_full_name(const QString& arg)
+{
+    det.set_name(arg);
+}
+QString klient::get_full_name() const
+{
+    return det.get_name();
 }
 void klient::set_name(QString arg)
 {

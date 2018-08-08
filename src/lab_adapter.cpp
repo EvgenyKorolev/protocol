@@ -86,6 +86,9 @@ QString lab_adapter::get_var(const QString &arg) const
         return "";
     }
  // Адрес почтовый
+    if (arg == "_lab_padr_f1") {return tmpl.get_padr().get_adr_str();}
+    if (arg == "_lab_padr_f2") {return tmpl.get_padr().get_adr_str2();}
+    if (arg == "_lab_padr_f3") {return tmpl.get_padr().get_adr_str3();}
     if (arg == "_lab_padr_cont") {return tmpl.get_padr().get_country();}
     if (arg == "_lab_padr_statclass"){return tmpl.get_padr().get_state_class();}
     if (arg == "_lab_padr_state"){return tmpl.get_padr().get_state();}
@@ -110,6 +113,9 @@ QString lab_adapter::get_var(const QString &arg) const
         return QString::number(tmpl.get_padr().get_post_index());
     }
  // Адрес юридический
+    if (arg == "_lab_uadr_f1") {return tmpl.get_uadr().get_adr_str();}
+    if (arg == "_lab_uadr_f2") {return tmpl.get_uadr().get_adr_str2();}
+    if (arg == "_lab_uadr_f3") {return tmpl.get_uadr().get_adr_str3();}
     if (arg == "_lab_uadr_cont") {return tmpl.get_uadr().get_country();}
     if (arg == "_lab_uadr_statclass"){return tmpl.get_uadr().get_state_class();}
     if (arg == "_lab_uadr_state"){return tmpl.get_uadr().get_state();}
@@ -134,6 +140,9 @@ QString lab_adapter::get_var(const QString &arg) const
         return QString::number(tmpl.get_uadr().get_post_index());
     }
  // Адрес фактический
+    if (arg == "_lab_fadr_f1") {return tmpl.get_adr().get_adr_str();}
+    if (arg == "_lab_fadr_f2") {return tmpl.get_adr().get_adr_str2();}
+    if (arg == "_lab_fadr_f3") {return tmpl.get_adr().get_adr_str3();}
     if (arg == "_lab_fadr_cont") {return tmpl.get_adr().get_country();}
     if (arg == "_lab_fadr_statclass"){return tmpl.get_adr().get_state_class();}
     if (arg == "_lab_fadr_state"){return tmpl.get_adr().get_state();}

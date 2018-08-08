@@ -41,8 +41,12 @@ public slots:
     void name_edit();                      // Слот вызывающий редактор названия
     void dir_edit();                       // Слот вызывающий редактор директора :)
     void save_klient();                    // Слот для кнопки ОК
+    void slot_full_name_edit(); // Слот редактирования полного наименования
+    void slot_email_edit();     // Слот редактирования 'полного наименования электронной почты
 private:
     klient *main_obj;
+    QLabel *full_name_label;
+    QLabel *email_label;
     QLabel *name_label;
     QLabel *inn_label;
     QLabel *dir_n_label;

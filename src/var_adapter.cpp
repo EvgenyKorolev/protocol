@@ -85,7 +85,7 @@ QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname) 
                 if (arg_vname == "_trans_npmn") return pather_obj->get_tr().get_nom_power();
                 if (arg_vname == "_trans_cco") return pather_obj->get_tr().get_obm();
                 if (arg_vname == "_trans_nnov1") return pather_obj->get_tr().get_nom_u_1();
-                if (arg_vname == "_trans_nnov1") return pather_obj->get_tr().get_nom_u_2();
+                if (arg_vname == "_trans_nnov2") return pather_obj->get_tr().get_nom_u_2();
                 if (arg_vname == "_trans_faz"){
                     if (pather_obj->get_tr().test_f() == 0) return "";
                     return QString::number(pather_obj->get_tr().test_f());
@@ -98,12 +98,11 @@ QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname) 
                 if (arg_vname == "_trans_npmn") return pather_cp->get_tr().get_nom_power();
                 if (arg_vname == "_trans_cco") return pather_cp->get_tr().get_obm();
                 if (arg_vname == "_trans_nnov1") return pather_cp->get_tr().get_nom_u_1();
-                if (arg_vname == "_trans_nnov1") return pather_cp->get_tr().get_nom_u_2();
+                if (arg_vname == "_trans_nnov2") return pather_cp->get_tr().get_nom_u_2();
                 if (arg_vname == "_trans_faz"){
                     if (pather_cp->get_tr().test_f() == 0) return "";
                     return QString::number(pather_cp->get_tr().test_f());
                 }
-
             }
             if (pather_obj->type() == "ktp" && pather_cp == nullptr){
                 return "NULL";
@@ -260,6 +259,8 @@ QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname) 
 // Клиент
     if (arg_type == "klient"){
         if (arg_vname == "_kl_name") return pather_klient->get_name();
+        if (arg_vname == "_kl_full_name") return pather_klient->get_full_name();
+        if (arg_vname == "_kl_email") return pather_klient->get_email();
     // Реквизиты
         if (arg_vname == "_kl_det_inn"){
             if (pather_klient->get_det().get_inn() == 0) return "";
@@ -320,6 +321,9 @@ QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname) 
             return "";
         }
     // Адрес почтовый
+        if (arg_vname == "_kl_padr_f1") {return pather_klient->get_padr().get_adr_str();}
+        if (arg_vname == "_kl_padr_f2") {return pather_klient->get_padr().get_adr_str2();}
+        if (arg_vname == "_kl_padr_f3") {return pather_klient->get_padr().get_adr_str3();}
         if (arg_vname == "_kl_padr_cont") return pather_klient->get_padr().get_country();
         if (arg_vname == "_kl_padr_statclass") return pather_klient->get_padr().get_state_class();
         if (arg_vname == "_kl_padr_state") return pather_klient->get_padr().get_state();
@@ -344,6 +348,9 @@ QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname) 
             return QString::number(pather_klient->get_padr().get_post_index());
         }
     // Адрес юридический
+        if (arg_vname == "_kl_uadr_f1") {return pather_klient->get_uadr().get_adr_str();}
+        if (arg_vname == "_kl_uadr_f2") {return pather_klient->get_uadr().get_adr_str2();}
+        if (arg_vname == "_kl_uadr_f3") {return pather_klient->get_uadr().get_adr_str3();}
         if (arg_vname == "_kl_uadr_cont") return pather_klient->get_uadr().get_country();
         if (arg_vname == "_kl_uadr_statclass") return pather_klient->get_uadr().get_state_class();
         if (arg_vname == "_kl_uadr_state") return pather_klient->get_uadr().get_state();
@@ -368,6 +375,9 @@ QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname) 
             return QString::number(pather_klient->get_uadr().get_post_index());
         }
     // Адрес фактический
+        if (arg_vname == "_kl_fadr_f1") {return pather_klient->get_fadr().get_adr_str();}
+        if (arg_vname == "_kl_fadr_f2") {return pather_klient->get_fadr().get_adr_str2();}
+        if (arg_vname == "_kl_fadr_f3") {return pather_klient->get_fadr().get_adr_str3();}
         if (arg_vname == "_kl_fadr_cont") return pather_klient->get_fadr().get_country();
         if (arg_vname == "_kl_fadr_statclass") return pather_klient->get_fadr().get_state_class();
         if (arg_vname == "_kl_fadr_state") return pather_klient->get_fadr().get_state();

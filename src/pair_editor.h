@@ -17,7 +17,7 @@ class pair_editor : public QDialog
     Q_OBJECT
 public:
     // Пара строк которая будет установлена в полях ввода. титлы окна. подпись первого поля ввода. подпись второго поля ввода. два минимальных размера полей
-    pair_editor(QPair<QString, QString> arg, QString *lbl, QString *lbl1, QString *lbl2, int mw = 100, int mw2 = 100);
+    pair_editor(QPair<QString, QString> arg, QString *lbl, QString *lbl1, QString *lbl2, int mw = 100, int mw2 = 100, int tw = 200, int tw2 = 200);
     ~pair_editor();
     QPair<QString, QString> result();
     void set_mask(QRegExpValidator *arg_val, what_line arg_l = what_line::one);

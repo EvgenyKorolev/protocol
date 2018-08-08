@@ -48,7 +48,9 @@ public:
     QString get_state_class() const;                  // Получить Класс региона (республика, область...)
     int set_city_class(QString* str);           // Установить Класс населенного пункта (Город, село...)
     QString get_city_class() const;                   // Получить Класс населенного пункта (Город, село...)
-    QString get_adr_str() const;                      // Выдаёт строчу с адресом
+    QString get_adr_str() const;          // Выдаёт строчу с адресом
+    QString get_adr_str2() const;         // Выдаёт строчу с адресом в другом формате
+    QString get_adr_str3() const;         // Выдаёт строчу с адресом в другом формате
 
     int set_office_num(int arg);                // Установить номер офиса отдельно
     int set_building_num(int arg);              // Установить номер здания отдельно
