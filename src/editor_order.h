@@ -19,7 +19,7 @@ class editor_order : public QDialog
 {
     Q_OBJECT
 public:
-    explicit editor_order(order *data, QWidget *parent = 0);
+    explicit editor_order(order *data, QWidget *parent = nullptr);
     ~editor_order();
     order result();
 public slots:

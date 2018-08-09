@@ -4,7 +4,7 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
 {
     this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
     this->setWindowTitle("Мастер подготовки протокола");
-    this->setMinimumWidth(600);
+    this->setMinimumWidth(800);
     actual_prot = act_prot;
     varad = new var_adapter(actual_prot->get_parent());
     vartype = new type_adapter();
@@ -17,17 +17,37 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
     model_type = new p_types_model();
     model_view = new p_types_view();
     model_view->setModel(model_type);
-    QBoxLayout* list_lay = new QBoxLayout(QBoxLayout::TopToBottom);
+// Дата
+    QLabel* dat_lab = new QLabel();
+    dat_lab->setText("Дата формирования: ");
+    dat_edit = new QDateEdit();
+    dat_edit->setDate(QDate::currentDate());
+// QList<apparaturs> appr;                  // Список приборов
+    QLabel *app_lbl = new QLabel();
+    app_lbl->setText("<b>Приборы:</b>");
+    apprat = new QList<apparaturs*>(actual_prot->get_parent()->get_app_list());
+    app_data_model *app_mod = new app_data_model(apprat);
+    app_view = new app_data_view(this);
+    QPushButton* add_app = new QPushButton("Добавить прибор");
+    QObject::connect(add_app, SIGNAL(clicked()), app_view, SLOT(slot_add()));
+    QBoxLayout* head_app_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    head_app_lay->addWidget(app_lbl);
+    head_app_lay->addWidget(add_app);
+    app_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    app_view->setModel(app_mod);
+    app_view->setMinimumHeight(100);
+    app_view->setColumnWidth(0, 203);
+    app_view->setColumnWidth(1, 203);
+    app_view->horizontalHeader()->setStretchLastSection(true);
+// ------
     QBoxLayout* head_list_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* cns_lab = new QLabel();
-    cns_lab->setText("Наборы констант:");
+    cns_lab->setText("<b>Наборы констант:</b>");
     QPushButton* add_cns = new QPushButton("Добавить набор");
     QObject::connect(add_cns, SIGNAL(clicked()), model_view, SLOT(slot_add()));
     head_list_lay->addWidget(cns_lab);
     head_list_lay->addWidget(add_cns);
-    list_lay->addLayout(head_list_lay);
-    list_lay->addWidget(model_view);
-    model_view->setMaximumHeight(100);
+    model_view->setMinimumHeight(100);
     model_view->setColumnWidth(0, 200);
     model_view->horizontalHeader()->setStretchLastSection(true);
     types = tmpl.get_idv_list();
@@ -41,9 +61,20 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
         select_type->addItem(it.first, it.second);
     }
     QObject::connect(select_type, SIGNAL(currentTextChanged(QString)), this, SLOT(slot_change_type()));
+    QBoxLayout* table_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    QBoxLayout* type_lay = new QBoxLayout(QBoxLayout::TopToBottom);
+    QBoxLayout* app_lay = new QBoxLayout(QBoxLayout::TopToBottom);
+    table_lay->addLayout(type_lay);
+    table_lay->addLayout(app_lay);
+    app_lay->addLayout(head_app_lay);
+    app_lay->addWidget(app_view);
+    type_lay->addLayout(head_list_lay);
+    type_lay->addWidget(model_view);
 
     combo_type_lay->addWidget(type_lab);
     combo_type_lay->addWidget(select_type);
+    combo_type_lay->addWidget(dat_lab);
+    combo_type_lay->addWidget(dat_edit);
     QBoxLayout* buttons_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QPushButton* but_test = new QPushButton("Проверить");
     QObject::connect(but_test, SIGNAL(clicked()), this, SLOT(slot_test()));
@@ -54,7 +85,7 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
     buttons_lay->addWidget(but_create);
     buttons_lay->addWidget(but_cancel);
     main_lay->addLayout(combo_type_lay);
-    main_lay->addLayout(list_lay);
+    main_lay->addLayout(table_lay);
     main_lay->addWidget(but_test);
 
 
@@ -66,6 +97,7 @@ protocol_constructor::~protocol_constructor()
    // delete varad;
     delete varconst;
     delete vartype;
+    delete dat_edit;
 }
 void protocol_constructor::slot_change_type()
 {
@@ -148,6 +180,10 @@ void protocol_constructor::parser_first(QString& argx)
         } while (reg.first != -1);
     }
     argx = std::move(arg.c_str());
+}
+void protocol_constructor::prepare(QString &argx)
+{
+
 }
                                         // тип адаптера, type, message, varname
 QString protocol_constructor::use_adapt(const std::tuple<std::string, std::string, std::string, std::string>& arg)

@@ -10,7 +10,8 @@
 #include "protocol.h"
 #include "type_in_direct.h"
 #include "my_function.h"
-
+#include "app_data_model.h"
+#include "app_data_view.h"
 #include <QObject>
 #include <QDialog>
 #include <QString>
@@ -24,6 +25,7 @@
 #include <QTextDocument>
 #include <QRegExp>
 #include <QWebEngineView>
+#include <QDateEdit>
 #include <tuple>
 #include <algorithm>
 #include <utility>
@@ -40,6 +42,9 @@ public slots:
     void slot_change_type();
     void slot_test();
 private:
+    QDateEdit* dat_edit;
+    app_data_view* app_view;
+    QList<apparaturs*>* apprat;
     obj* parent;            // Ссылка на родительский объект
     var_adapter* varad;     // Адаптер для получения данных у родителей протокола
     const_adapter* varconst;// Адаптер для получения констант зависящих от типа протокола
@@ -54,6 +59,8 @@ private:
     QString use_adapt(const std::tuple<std::string, std::string, std::string, std::string> &arg);    // Возвращает значения переменной из различных адаптеров
     QList<std::tuple<QString, QString, QString, QString>> ask_set;  // переменные значение которых надо спросить у пользователя
     QList<std::tuple<QString, QString, QString, QString>> var_set; // переменные значение которых должно быть доступно скриптам
+// Методы обработки текста
+    void prepare(QString& argx);
     void parser_first(QString &argx);
     QString get_html();
 

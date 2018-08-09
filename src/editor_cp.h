@@ -29,7 +29,7 @@ class editor_cp : public QDialog
 {
     Q_OBJECT
 public:
-    editor_cp(obj *arg, QWidget *parent = 0);
+    editor_cp(obj *arg, QWidget *parent = nullptr);
     ~editor_cp();
     void adr_label_set(QLabel* argl, address* arga);  // Устанвливает или обновляет надпись в разделе физического адреса
     QString get_adr_str(address *arg);                // Возвращает отформатированную строку для установки адреса в виджет

@@ -14,6 +14,8 @@ class app_data_view : public QTableView
     Q_OBJECT
 public:
     app_data_view(bool *arg, QWidget *par = nullptr);
+    app_data_view(QWidget *par = nullptr);
+    ~app_data_view();
     void mousePressEvent(QMouseEvent * arg);
     void mouseDoubleClickEvent(QMouseEvent* arg);
 public slots:
@@ -24,6 +26,7 @@ public slots:
 private:
     QPoint _curs;   // Позиция курора
     bool *flag_edit; // Флаг редактирования
+    bool manageredit{false};
 };
 
 #endif // APP_DATA_VIEW_H

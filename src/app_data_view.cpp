@@ -2,7 +2,16 @@
 
 app_data_view::app_data_view(bool *arg, QWidget *par) : QTableView(par)
 {
-    this->flag_edit = arg;
+    flag_edit = arg;
+}
+app_data_view::app_data_view(QWidget *par) : QTableView(par)
+{
+    manageredit = true;
+    flag_edit = new bool;
+}
+app_data_view::~app_data_view()
+{
+   if (manageredit) delete flag_edit;
 }
 void app_data_view::mousePressEvent(QMouseEvent * arg)
 {

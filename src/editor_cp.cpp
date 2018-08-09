@@ -90,7 +90,7 @@ editor_cp::editor_cp(obj *arg, QWidget *parent) : QDialog(parent)
         _tr_scroll->adjustSize();
     tr_l->addWidget(tr_ed);
     QObject::connect(tr_ed, SIGNAL(clicked()), this, SLOT(slot_tr_edit()));
-    //QString sh;                              // Строковой параметр СШ
+//QString sh; // Строковой параметр СШ
     this->sh_label = new QLabel;
     sh_label->setText(this->main_data->get_sh());
     QLabel *sh_cp = new QLabel();
@@ -104,7 +104,7 @@ editor_cp::editor_cp(obj *arg, QWidget *parent) : QDialog(parent)
     sh_lay->addWidget(this->sh_label);
     sh_lay->addWidget(sh_ed);
 
-    // Области списков (максимальные и минимаотные диапазоны)
+// Области списков (максимальные и минимаотные диапазоны)
         QBoxLayout *main_time_lay = new QBoxLayout(QBoxLayout::LeftToRight);
             QBoxLayout *time_lay = new QBoxLayout(QBoxLayout::LeftToRight);
             main_time_lay->addLayout(time_lay);
@@ -145,7 +145,7 @@ editor_cp::editor_cp(obj *arg, QWidget *parent) : QDialog(parent)
     QLabel *app_lbl = new QLabel();
         app_lbl->setText("<b>Приборы:</b>");
     QLayout *app_lst = new QBoxLayout(QBoxLayout::TopToBottom);
-    this->apprat = new QList<apparaturs*>(this->main_data->get_app_list());
+    apprat = new QList<apparaturs*>(this->main_data->get_app_list());
     app_data_model *app_mod = new app_data_model(this->apprat);
     app_data_view *app_view = new app_data_view(&this->edited, this);
     app_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
