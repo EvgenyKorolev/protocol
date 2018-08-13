@@ -2,24 +2,17 @@
 
 apparaturs::apparaturs()
 {
-    QList<QPair<QPair<QString, QDate>, QDate>> tmpl;
-    _name = "";
-    _mdata.setDate(1, 1, 1);
-    _verification = tmpl;
-    _type = "";
-    _mnom = "";
-    _cls = "";
-    _uniq = "0";
+    _verification = QList<QPair<QPair<QString, QDate>, QDate>>();
 }
 apparaturs::apparaturs(apparaturs *arg)
 {
-    _name = arg->get_name();
-    _mdata = arg->get_mdata();
-    _verification = arg->get_verification_list();
-    _type = arg->get_type();
-    _mnom = arg->get_mnom();
-    _cls = arg->get_clas();
-    _uniq = arg->get_uniq();
+    _name = arg->_name;
+    _mdata = arg->_mdata;
+    _verification = arg->_verification;
+    _type = arg->_type;
+    _mnom = arg->_mnom;
+    _cls = arg->_cls;
+    _uniq = arg->_uniq;
 }
 void apparaturs::init(apparaturs *arg)
 {
@@ -33,23 +26,23 @@ void apparaturs::init(apparaturs *arg)
 }
 apparaturs::apparaturs(const apparaturs& arg)
 {
-    _name = arg.get_name();
-    _mdata = arg.get_mdata();
-    _verification = arg.get_verification_list();
-    _type = arg.get_type();
-    _mnom = arg.get_mnom();
-    _cls = arg.get_clas();
-    _uniq = arg.get_uniq();
+    _name = arg._name;
+    _mdata = arg._mdata;
+    _verification = arg._verification;
+    _type = arg._type;
+    _mnom = arg._mnom;
+    _cls = arg._cls;
+    _uniq = arg._uniq;
 }
-int apparaturs::set_name(QString *arg)
+int apparaturs::set_name(const QString& arg)
 {
-    if (arg->size() < 1000) {
-        _name = *arg;
+    if (arg.size() < 1000) {
+        _name = arg;
         return 0;
     }
     return 1;
 }
-void apparaturs::set_uniq(QString arg)
+void apparaturs::set_uniq(const QString &arg)
 {
     _uniq = arg;
 }
@@ -57,10 +50,10 @@ QString apparaturs::get_uniq() const
 {
     return _uniq;
 }
-int apparaturs::set_name(QString arg)
+int apparaturs::set_name(QString&& arg)
 {
     if (arg.size() < 1000) {
-        _name = arg;
+        _name = std::move(arg);
         return 0;
     }
     return 1;
@@ -69,14 +62,14 @@ QString apparaturs::get_name() const
 {
     return _name;
 }
-int apparaturs::set_mdata(QDate *arg)
-{
-    _mdata = *arg;
-    return 0;
-}
-int apparaturs::set_mdata(QDate arg)
+int apparaturs::set_mdata(const QDate &arg)
 {
     _mdata = arg;
+    return 0;
+}
+int apparaturs::set_mdata(QDate&& arg)
+{
+    _mdata = std::move(arg);
     return 0;
 }
 QDate apparaturs::get_mdata() const
@@ -104,18 +97,18 @@ int apparaturs::clear_verification()
     _verification.clear();
     return 0;
 }
-int apparaturs::set_type(QString *arg)
+int apparaturs::set_type(const QString &arg)
 {
-    if (arg->size() < 1000) {
-        _type = *arg;
+    if (arg.size() < 1000) {
+        _type = arg;
         return 0;
     }
     return 1;
 }
-int apparaturs::set_type(QString arg)
+int apparaturs::set_type(QString&& arg)
 {
     if (arg.size() < 1000) {
-        _type = arg;
+        _type = std::move(arg);
         return 0;
     }
     return 1;
@@ -124,18 +117,18 @@ QString apparaturs::get_type() const
 {
     return _type;
 }
-int apparaturs::set_mnom(QString *arg)
+int apparaturs::set_mnom(const QString& arg)
 {
-    if (arg->size() < 1000) {
-        _mnom = *arg;
+    if (arg.size() < 1000) {
+        _mnom = arg;
         return 0;
     }
     return 1;
 }
-int apparaturs::set_mnom(QString arg)
+int apparaturs::set_mnom(QString &&arg)
 {
     if (arg.size() < 1000) {
-        _mnom = arg;
+        _mnom = std::move(arg);
         return 0;
     }
     return 1;
@@ -144,7 +137,40 @@ QString apparaturs::get_mnom() const
 {
     return _mnom;
 }
-
+// Узнать последний номер поверки // Узнать последнюю дату поверки // Узнать дату следующей поверки
+// Номер свидетельства о поверке, дата поверки, дата очередной поверки
+//QList<QPair<QPair<QString, QDate>, QDate>> _verification;
+QString apparaturs::get_act_nom() const
+{
+    return get_max_ver().first.first;
+}
+QDate apparaturs::get_act_date() const
+{
+    return get_max_ver().first.second;
+}
+QDate apparaturs::get_next_date() const
+{
+    return get_max_ver().second;
+}
+void apparaturs::sort_date()
+{
+    if (_verification.size() > 1){
+        std::sort(_verification.begin(), _verification.end(), [](const QPair<QPair<QString, QDate>, QDate>& pred1, const QPair<QPair<QString, QDate>, QDate>& pred2)->bool{
+            return pred1.first.second < pred2.first.second;});
+    }
+}
+QPair<QPair<QString, QDate>, QDate> apparaturs::get_max_ver() const
+{
+    if(_verification.size() == 0){
+        return QPair<QPair<QString, QDate>, QDate>();
+    } else if (_verification.size() == 1) {
+            return _verification.front();
+    } else if (_verification.size() > 1){
+        return *std::max_element(_verification.begin(), _verification.end(), [](const QPair<QPair<QString, QDate>, QDate>& pred1, const QPair<QPair<QString, QDate>, QDate>& pred2)->bool{
+            return pred1.first.second < pred2.first.second;});
+    }
+    return QPair<QPair<QString, QDate>, QDate>();
+}
 int apparaturs::load_xml_1(QDomNode *my_dom)
 {
     QDomNode lst = *my_dom;
@@ -172,7 +198,7 @@ QString apparaturs::get_clas() const
 {
     return _cls;
 }
-void apparaturs::set_clas(QString arg)
+void apparaturs::set_clas(const QString &arg)
 {
     _cls = arg;
 }

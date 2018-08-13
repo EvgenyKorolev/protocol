@@ -23,13 +23,10 @@ QVariant app_data_model::data(const QModelIndex &index, int role) const
             switch (index.column()) {
             case 0:
                 return QVariant(this->app_list->at(index.row())->get_name());
-                break;
             case 1:
                 return QVariant(this->app_list->at(index.row())->get_type());
-                break;
             case 2:
                 return QVariant(this->app_list->at(index.row())->get_mnom());
-                break;
             default:
                 return QVariant();
             }
@@ -66,13 +63,10 @@ QVariant app_data_model::headerData(int section, Qt::Orientation orientation, in
         switch (section){
             case 0:
                     return QVariant("Приборы:");
-            break;
             case 1:
                      return QVariant("Тип прибора:");
-            break;
             case 2:
                     return QVariant("Заводской номер:");
-            break;
         }
     }
     return QVariant();

@@ -22,7 +22,7 @@ public:
     var_adapter(const var_adapter&& arg);
     var_adapter(obj* pat);
     ~var_adapter();
-    QString get_var(const QString& arg_type, const QString &arg_vname) const;
+    QString get_var(const QString& arg_type, const QString& arg_vname, const QString& style = "") const;
     QList<QPair<QTime, QTime>> get_maxt_list() const;
     QList<QPair<QTime, QTime> > get_mint_list() const;
     QList<apparaturs*> get_app_list() const;
@@ -30,6 +30,7 @@ public:
     QPair<QString, QString> get_maxt_int() const;
     QPair<QString, QString> get_mint_int() const;
 private:
+    QString get_app_table(const QString& source, const QString& style = "") const;
     obj* pather_obj;
     obj* pather_cp;
     order* pather_order;

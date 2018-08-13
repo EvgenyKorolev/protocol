@@ -5,6 +5,7 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
     this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
     this->setWindowTitle("Мастер подготовки протокола");
     this->setMinimumWidth(800);
+   // padapt(new prot_act_adapter());
     actual_prot = act_prot;
     varad = new var_adapter(actual_prot->get_parent());
     vartype = new type_adapter();
@@ -130,9 +131,9 @@ void protocol_constructor::parser_first(QString& argx)
     std::string arg{argx.toStdString()};
     std::vector<std::pair<std::string, std::string> > parsres;
     std::string main_teg;
-    std::vector<std::string> tegs{"type", "message", "vname"};
+    std::vector<std::string> tegs{"type", "message", "vname", "style"};
     std::pair<int, int> reg = std::make_pair(0, 0);
-    std::string t_var, m_var, v_var;
+    std::string t_var, m_var, v_var, s_var;
     std::string ins_str;
     std::vector<QString> type_teg{"_prot_type", "_parent_var", "_const_type", "_set_adapt_var", "_ask_obj"};
     for (auto itx : type_teg){
@@ -157,6 +158,10 @@ void protocol_constructor::parser_first(QString& argx)
                     pos_beg += main_teg.size();
                     continue;
                 } v_var = res_v->second;
+                auto res_s =std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{return arr.first == "style";});
+                if (res_s == parsres.end()){
+                    s_var = "";
+                } else s_var = res_s->second;
                 if (itx == "_set_adapt_var"){
                     var_set.append(std::make_tuple(itx, QString(t_var.c_str()), QString(m_var.c_str()), QString(v_var.c_str())));
                     pos_beg = reg.second;
@@ -166,7 +171,7 @@ void protocol_constructor::parser_first(QString& argx)
                     pos_beg = reg.second;
                     continue;
                 } else {
-                    ins_str = this->use_adapt(std::make_tuple(itx.toStdString(), t_var, m_var, v_var)).toStdString();
+                    ins_str = this->use_adapt(std::make_tuple(itx.toStdString(), t_var, m_var, v_var, s_var)).toStdString();
                     if (ins_str != "NULL"){
                         arg.erase(static_cast<size_t>(reg.first), static_cast<size_t>(reg.second - reg.first + 1));
                         arg.insert(static_cast<size_t>(reg.first), ins_str);
@@ -185,14 +190,14 @@ void protocol_constructor::prepare(QString &argx)
 {
 
 }
-                                        // тип адаптера, type, message, varname
-QString protocol_constructor::use_adapt(const std::tuple<std::string, std::string, std::string, std::string>& arg)
+                                        // тип адаптера, type, message, varname, style
+QString protocol_constructor::use_adapt(const std::tuple<std::string, std::string, std::string, std::string , std::string>& arg)
 {
     if (std::get<0>(arg) == "_prot_type"){
         return varconst->get_var(QString(std::get<3>(arg).c_str()));
     }
     if (std::get<0>(arg) == "_parent_var"){
-        return varad->get_var(QString(std::get<1>(arg).c_str()), QString(std::get<3>(arg).c_str()));
+        return varad->get_var(QString(std::get<1>(arg).c_str()), QString(std::get<3>(arg).c_str()), QString(std::get<4>(arg).c_str()));
     }
     if (std::get<0>(arg) == "_const_type"){
         return  vartype->get_var(QString(std::get<1>(arg).c_str()), QString(std::get<3>(arg).c_str()));
@@ -202,7 +207,9 @@ QString protocol_constructor::use_adapt(const std::tuple<std::string, std::strin
 void protocol_constructor::slot_test()
 {
     is_tested = true;
+    padapt->set_current_data(dat_edit->date());
     QString html_text = get_html().remove('\n');
+    prepare(html_text);
     parser_first(html_text);
 
     QWebEngineView* tmpw = new QWebEngineView(nullptr);

@@ -99,7 +99,7 @@ SOURCES += src/address.cpp \
     src/type_in_direct.cpp \
     src/type_in_view.cpp \
     src/lab_adapter.cpp \
-    src/protocol_adapter.cpp
+    src/prot_act_adapter.cpp
 
 HEADERS  += src/address.h \
     src/app_data_model.h \
@@ -189,7 +189,7 @@ HEADERS  += src/address.h \
     src/type_in_direct.h \
     src/type_in_view.h \
     src/lab_adapter.h \
-    src/protocol_adapter.h
+    src/prot_act_adapter.h
 
 RESOURCES += \
     icons.qrc \

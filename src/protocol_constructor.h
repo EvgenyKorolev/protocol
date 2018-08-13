@@ -12,6 +12,7 @@
 #include "my_function.h"
 #include "app_data_model.h"
 #include "app_data_view.h"
+#include "prot_act_adapter.h"
 #include <QObject>
 #include <QDialog>
 #include <QString>
@@ -50,13 +51,14 @@ private:
     const_adapter* varconst;// Адаптер для получения констант зависящих от типа протокола
     type_adapter* vartype;  // Адаптер для получения констант зависящих от выбранных коллекций типов
     protocol* actual_prot;  // Формируемый объект протокола
+    std::unique_ptr<prot_act_adapter> padapt{new prot_act_adapter()}; // Адаптер для объектов настриваемых в конструкторе
     QList<QPair<QString, QString> > types;
     p_types_model* model_type;
     p_types_view* model_view;
     QComboBox* select_type;
     bool is_tested{false};
                     // тип адаптера, type, message, varname
-    QString use_adapt(const std::tuple<std::string, std::string, std::string, std::string> &arg);    // Возвращает значения переменной из различных адаптеров
+    QString use_adapt(const std::tuple<std::string, std::string, std::string, std::string, std::string> &arg);    // Возвращает значения переменной из различных адаптеров
     QList<std::tuple<QString, QString, QString, QString>> ask_set;  // переменные значение которых надо спросить у пользователя
     QList<std::tuple<QString, QString, QString, QString>> var_set; // переменные значение которых должно быть доступно скриптам
 // Методы обработки текста

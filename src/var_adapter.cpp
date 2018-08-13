@@ -39,19 +39,24 @@ var_adapter::var_adapter(const var_adapter&& arg)
     pather_klient = std::move(arg.pather_klient);
     labad = std::move(arg.labad);
 }
-QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname) const
+QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname, const QString &style) const
 {
     if (arg_type == "lab"){
         return labad->get_var(arg_vname);
     }
     if (arg_type == "obj"){
         if (arg_vname == "_obj_name") return pather_obj->get_name();
+        if (arg_vname == "_obj_app") return get_app_table(arg_vname, style);
+        if (arg_vname == "_obj_app1") return get_app_table(arg_vname, style);
+        if (arg_vname == "_obj_app2") return get_app_table(arg_vname, style);
+        if (arg_vname == "_obj_app3") return get_app_table(arg_vname, style);
+        if (arg_vname == "_obj_app4") return get_app_table(arg_vname, style);
         if (arg_vname == "_obj_unom"){
             if (pather_obj->get_voltage() == 0){ return "";}
             return QString::number(pather_obj->get_voltage());
         }
         if (arg_vname == "_obj_sh") return pather_obj->get_sh();
-  // Адрес Объекта
+// Адрес Объекта
         if (arg_vname == "_obj_padr_cont") return pather_obj->get_adr().get_country();
         if (arg_vname == "_obj_padr_statclass") return pather_obj->get_adr().get_state_class();
         if (arg_vname == "_obj_padr_state") return pather_obj->get_adr().get_state();
@@ -114,6 +119,11 @@ QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname) 
         if (arg_vname.left(4) == "_ktp"){
             if (pather_obj->type() == "ktp"){
                 if (arg_vname == "_ktp_name") return pather_obj->get_name();
+                if (arg_vname == "_ktp_app") return get_app_table(arg_vname, style);
+                if (arg_vname == "_ktp_app1") return get_app_table(arg_vname, style);
+                if (arg_vname == "_ktp_app2") return get_app_table(arg_vname, style);
+                if (arg_vname == "_ktp_app3") return get_app_table(arg_vname, style);
+                if (arg_vname == "_ktp_app4") return get_app_table(arg_vname, style);
                 if (arg_vname == "_ktp_unom"){
                     if (pather_obj->get_voltage() == 0){ return "";}
                     return QString::number(pather_obj->get_voltage());
@@ -151,6 +161,11 @@ QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname) 
       if (arg_vname.left(3) == "_cp"){
         if (pather_obj->type() == "cp"){
                 if (arg_vname == "_cp_name") return pather_obj->get_name();
+                if (arg_vname == "_cp_app") return get_app_table(arg_vname, style);
+                if (arg_vname == "_cp_app1") return get_app_table(arg_vname, style);
+                if (arg_vname == "_cp_app2") return get_app_table(arg_vname, style);
+                if (arg_vname == "_cp_app3") return get_app_table(arg_vname, style);
+                if (arg_vname == "_cp_app4") return get_app_table(arg_vname, style);
                 if (arg_vname == "_cp_unom"){
                     if (pather_obj->get_voltage() == 0){ return "";}
                     return QString::number(pather_obj->get_voltage());
@@ -464,4 +479,86 @@ QPair<QString, QString> var_adapter::get_mint_int() const
     ret.first = tmpi.first.toString();
     ret.second = tmpi.second.toString();
     return  ret;
+}
+QString var_adapter::get_app_table(const QString& source, const QString& style) const
+{
+    QString ret{""};
+    QString act_adta{""}, next_data{""};
+    QList<apparaturs*> tmpap;
+    if (source.left(8) == "_obj_app"){
+        tmpap = pather_obj->get_app_list();
+    }
+    if (source.left(8) == "_cp_app"){
+        if (pather_obj->type() == "cp"){
+            tmpap = pather_obj->get_app_list();
+        } else if (pather_obj->type() == "ktp" && pather_cp != nullptr){
+            tmpap = pather_cp->get_app_list();
+        } else return "";
+    }
+    if (source.left(8) == "_ktp_app"){
+        if (pather_obj->type() == "ktp"){
+            tmpap = pather_obj->get_app_list();
+
+        } else return "";
+    }
+    if (tmpap.size() == 0) return "";
+    ret =+ "<table";
+    if (style != ""){
+        ret += " style = \"" + style + "\"";
+    }
+    ret += ">";
+    ret += "<tr>"
+           "<td>  № п/п "
+            "</td>"
+            "<td> Наименование СИ "
+            "</td>"
+            "<td> Тип СИ "
+            "</td>"
+            "<td> Заводской номер "
+            "</td>"
+            "<td> Номер свидетельства о поверке и дата поверки "
+            "</td>"
+            "<td> Дата очередной поверки "
+            "</td>";
+    ret += "</tr>";
+    int i{0};
+    for (auto it = tmpap.begin(); it != tmpap.end(); ++it){
+        ++i;
+        if (source.back() == "p"){
+            act_adta = (*it)->get_act_date().toString() + "&nbspг.";
+            next_data = (*it)->get_next_date().toString() + "&nbspг.";
+        }
+        if (source.back() == "1"){
+            act_adta = (*it)->get_act_date().toString("dd.MM.yyyy") + "&nbspг.";
+            next_data = (*it)->get_next_date().toString("dd.MM.yyyy") + "&nbspг.";
+        }
+        if (source.back() == "2"){
+            act_adta = (*it)->get_act_date().toString("dd.MM.yy") + "&nbspг.";
+            next_data = (*it)->get_next_date().toString("dd.MM.yy") + "&nbspг.";
+        }
+        if (source.back() == "3"){
+            act_adta = (*it)->get_act_date().toString("dd.MMM.yyyy") + "&nbspг.";
+            next_data = (*it)->get_next_date().toString("dd.MMM.yyyy") + "&nbspг.";
+        }
+        if (source.back() == "4"){
+            act_adta = (*it)->get_act_date().toString("dd.MMMM.yyyy") + "&nbspг.";
+            next_data = (*it)->get_next_date().toString("dd.MMMM.yyyy") + "&nbspг.";
+        }
+        ret += "<tr>"
+               "<td> " + QString::number(i) +
+                "</td>"
+                "<td> " + (*it)->get_name() +
+                "</td>"
+                "<td> " + (*it)->get_type() +
+                "</td>"
+                "<td> " + (*it)->get_mnom() +
+                "</td>"
+                "<td> " + (*it)->get_act_nom() + "&nbsp" + act_adta +
+                "</td>"
+                "<td> " + next_data +
+                "</td>";
+        ret += "</tr>";
+    }
+    ret += "</table>";
+    return ret;
 }
