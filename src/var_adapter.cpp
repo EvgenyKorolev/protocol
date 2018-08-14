@@ -42,7 +42,7 @@ var_adapter::var_adapter(const var_adapter&& arg)
 QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname, const QString &style) const
 {
     if (arg_type == "lab"){
-        return labad->get_var(arg_vname);
+        return labad->get_var(arg_vname, style);
     }
     if (arg_type == "obj"){
         if (arg_vname == "_obj_name") return pather_obj->get_name();
@@ -264,7 +264,7 @@ QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname, 
             return QString::number(pather_order->get_num());
         }
         if (arg_vname == "_ord_uniq") return pather_order->get_uniq();
-        if (arg_vname == "_ord_date") return pather_order->get_date().toString();
+        if (arg_vname == "_ord_date") return pather_order->get_date().toString(style);
         if (arg_vname == "_ord_date_1") return pather_order->get_date().toString("dd.MM.yyyy");
         if (arg_vname == "_ord_date_2") return pather_order->get_date().toString("dd.MM.yy");
         if (arg_vname == "_ord_date_3") return pather_order->get_date().toString("dd.MMM.yyyy");

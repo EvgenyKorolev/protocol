@@ -5,20 +5,14 @@
 <_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_full_name"></p>
 <table align = "center">
 <tr>
-<td>
-<p><_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_uadr_cont">, 
-<_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_uadr_state">, 
-<_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_uadr_postind">, 
-<_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_uadr_citycl">, 
-<_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_uadr_city">, <br>
-<_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_uadr_strcl">, 
-<_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_uadr_str">, 
-<_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_uadr_bnum">. <br>
+<td valign="top" width="50%">
+<p>
+<_parent_var type = "lab", message = "Введите_юрадрес_лаборатории:", vname = "_lab_uadr_f1"><br>
 Телефон:  <_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_tel">; <br 
 Факс: <_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_fax">. <br>
 E-mail: <_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_email">.</p>
 </td>
-<td>
+<td valign="top" width="50%">
 <p>Аттестат аккредитации<br> испытательной лаборатории<br> № <_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_att"> <br>от <_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_att_date4"></p> 
 </td>
 </tr>
@@ -26,7 +20,7 @@ E-mail: <_parent_var type = "lab", message = "Введите_название_л
 <table>
 <tr><td width = "60%"></td>
 <td>
-<p align = "left">УТВЕРЖДАЮ<br> Руководитель ИЛ КЭЭ<br><_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_name"><br> _____________________<_parent_var type = "lab", message = "Введите_фамилию_руководителя_ИЛ: ", vname = "_lab_labdir"><br><b>____ДАТА____</b></p>
+<p align = "left">УТВЕРЖДАЮ<br> Руководитель ИЛ КЭЭ<br><_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_name"><br> _____________________<_parent_var type = "lab", message = "Введите_фамилию_руководителя_ИЛ: ", vname = "_lab_labdir"><br><_prot_con type = "con", message = "Дата_подписания_протокола:", vname = "_cur_data", style = "d.MM.yyyy"></p>
 </td>
 </tr>
 <tr><td></td><td><p align = "right">Лист 1/2</p></td></tr>
@@ -34,7 +28,7 @@ E-mail: <_parent_var type = "lab", message = "Введите_название_л
 <p align = "center"><b>ПРОТОКОЛ<br>
 измерений мощности нагрузки измерительного<br>
 трансформатора напряжения<br></b>
-№ ____221513.16-ТН-6____ от _____18.02.2016_______ г. 
+№ ____221513.16-ТН-6____ от <_prot_con type = "con", message = "Дата_подписания_протокола:", vname = "_cur_data", style = "d.MM.yyyy"> г. 
 </p>
 <p>1. Заказчик:<br>
 Наименование организации: <_parent_var type = "klient", message = "Введите_название_клиента:", vname = "_kl_name">.<br>

@@ -1,7 +1,7 @@
 #include "lab_adapter.h"
 
 lab_adapter::lab_adapter(){}
-QString lab_adapter::get_var(const QString &arg) const
+QString lab_adapter::get_var(const QString &arg, const QString &style) const
 {
     laboratory &tmpl = laboratory::getInstance();
     if (arg == "_lab_name"){return  tmpl.get_name();}
@@ -22,7 +22,7 @@ QString lab_adapter::get_var(const QString &arg) const
         return  ret;
     }
  // Дата
-    if (arg == "_lab_att_date"){return tmpl.get_att_date().toString();}
+    if (arg == "_lab_att_date"){return tmpl.get_att_date().toString(style);}
     if (arg == "_lab_att_date1"){return tmpl.get_att_date().toString("dd.MM.yyyy");}
     if (arg == "_lab_att_date2"){return tmpl.get_att_date().toString("dd.MM.yy");}
     if (arg == "_lab_att_date3"){return tmpl.get_att_date().toString("dd.MMM.yyyy");}

@@ -11,6 +11,7 @@ public:
     prot_act_adapter& operator=(const prot_act_adapter&) = default;
     prot_act_adapter& operator=(prot_act_adapter&&) = default;
     ~prot_act_adapter() = default;
+    QString get_var(const QString& arg, const QString& style);
     void set_current_data(const QDate& arg);
     void set_current_data(QDate&& arg);
     QDate get_current_data() const;

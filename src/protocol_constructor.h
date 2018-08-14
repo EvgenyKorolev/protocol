@@ -64,6 +64,7 @@ private:
 // Методы обработки текста
     void prepare(QString& argx);
     void parser_first(QString &argx);
+    void create_varlist();
     QString get_html();
 
 };

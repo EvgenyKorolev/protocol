@@ -135,7 +135,7 @@ void protocol_constructor::parser_first(QString& argx)
     std::pair<int, int> reg = std::make_pair(0, 0);
     std::string t_var, m_var, v_var, s_var;
     std::string ins_str;
-    std::vector<QString> type_teg{"_prot_type", "_parent_var", "_const_type", "_set_adapt_var", "_ask_obj"};
+    std::vector<QString> type_teg{"_prot_type", "_parent_var", "_const_type", "_prot_con", "_set_adapt_var", "_ask_obj"};
     for (auto itx : type_teg){
         pos_beg = 0;
         do{
@@ -196,6 +196,9 @@ QString protocol_constructor::use_adapt(const std::tuple<std::string, std::strin
     if (std::get<0>(arg) == "_prot_type"){
         return varconst->get_var(QString(std::get<3>(arg).c_str()));
     }
+    if (std::get<0>(arg) == "_prot_con"){
+        return padapt->get_var(QString(std::get<3>(arg).c_str()), QString(std::get<4>(arg).c_str()));
+    }
     if (std::get<0>(arg) == "_parent_var"){
         return varad->get_var(QString(std::get<1>(arg).c_str()), QString(std::get<3>(arg).c_str()), QString(std::get<4>(arg).c_str()));
     }
@@ -207,7 +210,7 @@ QString protocol_constructor::use_adapt(const std::tuple<std::string, std::strin
 void protocol_constructor::slot_test()
 {
     is_tested = true;
-    padapt->set_current_data(dat_edit->date());
+    create_varlist();
     QString html_text = get_html().remove('\n');
     prepare(html_text);
     parser_first(html_text);
@@ -227,6 +230,10 @@ void protocol_constructor::slot_test()
   //  varconst;// Адаптер для получения констант зависящих от типа протокола
   //  vartype;  // Адаптер для получения констант зависящих от выбранных коллекций типов
   //
+}
+void protocol_constructor::create_varlist()
+{
+    padapt->set_current_data(dat_edit->date());
 }
 void protocol_constructor::slot_create()
 {
