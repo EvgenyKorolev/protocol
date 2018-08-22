@@ -4,7 +4,8 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
 {
     this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
     this->setWindowTitle("Мастер подготовки протокола");
-    this->setMinimumWidth(800);
+    this->setMinimumWidth(900);
+    laboratory& tmplab = laboratory::getInstance();
    // padapt(new prot_act_adapter());
     actual_prot = act_prot;
     varad = new var_adapter(actual_prot->get_parent());
@@ -12,6 +13,7 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
     QBoxLayout* main_lay = new QBoxLayout(QBoxLayout::TopToBottom);
     QBoxLayout* combo_type_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* type_lab = new QLabel();
+// Тип протокола
     type_lab->setText("Тип протокола: ");
     select_type = new QComboBox();
     const_loader& tmpl = const_loader::getInstance();
@@ -23,6 +25,24 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
     dat_lab->setText("Дата формирования: ");
     dat_edit = new QDateEdit();
     dat_edit->setDate(QDate::currentDate());
+// Выбор инженера
+    QLabel* ing_lab = new QLabel();
+    ing_lab->setText("Инженер: ");
+    select_engineer = new QComboBox();
+    QList<worker> tmpwl = tmplab.get_workers_list();
+    QString tmps{""};
+    for (auto it : tmpwl){
+        if (it.get_name() != ""){
+            tmps += it.get_name().left(1) + ". ";
+        }
+        if (it.get_fname() != ""){
+            tmps += it.get_fname().left(1) + ". ";
+        }
+        tmps += it.get_surname();
+        select_engineer->addItem(tmps, QVariant::fromValue(it));
+        tmps = "";
+    }
+    padapt->set_worker(select_engineer->currentData().value<worker>());
 // QList<apparaturs> appr;                  // Список приборов
     QLabel *app_lbl = new QLabel();
     app_lbl->setText("<b>Приборы:</b>");
@@ -76,6 +96,8 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
     combo_type_lay->addWidget(select_type);
     combo_type_lay->addWidget(dat_lab);
     combo_type_lay->addWidget(dat_edit);
+    combo_type_lay->addWidget(ing_lab);
+    combo_type_lay->addWidget(select_engineer);
     QBoxLayout* buttons_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QPushButton* but_test = new QPushButton("Проверить");
     QObject::connect(but_test, SIGNAL(clicked()), this, SLOT(slot_test()));
@@ -234,6 +256,7 @@ void protocol_constructor::slot_test()
 void protocol_constructor::create_varlist()
 {
     padapt->set_current_data(dat_edit->date());
+    padapt->set_worker(select_engineer->currentData().value<worker>());
 }
 void protocol_constructor::slot_create()
 {

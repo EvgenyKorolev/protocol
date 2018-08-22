@@ -8,19 +8,11 @@ QString lab_adapter::get_var(const QString &arg, const QString &style) const
     if (arg == "_lab_att"){return tmpl.get_attestat();}
     if (arg == "_lab_full_name"){return  tmpl.get_full_name();}
     if (arg == "_lab_email"){return tmpl.get_email();}
-    if (arg == "_lab_labdir"){
-        QString ret;
-        if (tmpl.get_labdir().get_name() != ""){
-            ret += tmpl.get_labdir().get_name().left(1) + ". ";
-        }
-        if (tmpl.get_labdir().get_fname() != ""){
-            ret += tmpl.get_labdir().get_fname().left(1) + ". ";
-        }
-        if (tmpl.get_labdir().get_surname() != ""){
-            ret += tmpl.get_labdir().get_surname();
-        }
-        return  ret;
-    }
+    if (arg == "_lab_labdir"){ return worker::get_fio(tmpl.get_labdir(), fio::nf_surname);}
+    if (arg == "_lab_labdir1"){ return worker::get_fio(tmpl.get_labdir(), fio::surname_nf);}
+    if (arg == "_lab_labdir2"){ return worker::get_fio(tmpl.get_labdir(), fio::name_surname);}
+    if (arg == "_lab_labdir3"){ return worker::get_fio(tmpl.get_labdir(), fio::surname_name);}
+    if (arg == "_lab_labdir4"){ return worker::get_fio(tmpl.get_labdir(), fio::full);}
  // Дата
     if (arg == "_lab_att_date"){return tmpl.get_att_date().toString(style);}
     if (arg == "_lab_att_date1"){return tmpl.get_att_date().toString("dd.MM.yyyy");}

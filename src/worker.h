@@ -8,10 +8,8 @@
 #include <QDomElement>
 #include <utility>
 //#include <openssl/sha.h>
-
-
+enum class fio{nf_surname, surname_nf, name_surname, surname_name, full};
 // Этот класс хранит данные сотрудника
-
 class worker
 {
 public:
@@ -50,6 +48,7 @@ public:
     void inv_meneger();                 // Сменить статус начальника лаборатории
     bool test_meneger() const;          // Проверить является ли начальником маборатории
 
+    static QString get_fio(const worker& arg, fio format = fio::nf_surname);
     int load_xml(QDomNode *arg);            // Заполняет объект их xml
     QDomElement make_xml();                 // Создаёт xml из объекта
     int load_db();
@@ -66,7 +65,7 @@ private:
     QString post{""};
     QString login{""};
     QString pass{""};
-    bool manager{false};
+    bool manager{false};  // Директор ли этот сотрудник. Директоров может быть больше одного, но учитывается только первый из них.
     address adr;
 };
 Q_DECLARE_METATYPE(worker)

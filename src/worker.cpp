@@ -267,6 +267,60 @@ QDomElement worker::make_xml()
     root.appendChild(this->adr.make_xml());
     return root;
 }
+QString worker::get_fio(const worker &arg, fio format)
+{
+    QString ret{""};
+    if (format == fio::nf_surname){
+        if (arg.name != ""){
+            ret += arg.name.left(1) + ". ";
+        }
+        if (arg.fname != ""){
+            ret += arg.fname.left(1) + ". ";
+        }
+        if (arg.surname != ""){
+            ret += arg.surname;
+        }
+    }
+    if (format == fio::surname_nf){
+        if (arg.surname != ""){
+            ret += arg.surname;
+        }
+        if (arg.name != ""){
+            ret += arg.name.left(1) + ". ";
+        }
+        if (arg.fname != ""){
+            ret += arg.fname.left(1) + ". ";
+        }
+    }
+    if (format == fio::name_surname){
+        if (arg.name != ""){
+            ret += arg.name + " ";
+        }
+        if (arg.surname != ""){
+            ret += arg.surname;
+        }
+    }
+    if (format == fio::surname_name){
+        if (arg.surname != ""){
+            ret += arg.surname;
+        }
+        if (arg.name != ""){
+            ret += arg.name + " ";
+        }
+    }
+    if (format == fio::full){
+        if (arg.name != ""){
+            ret += arg.name + " ";
+        }
+        if (arg.fname != ""){
+            ret += arg.fname + " ";
+        }
+        if (arg.surname != ""){
+            ret += arg.surname;
+        }
+    }
+    return  ret;
+}
 int worker::load_db()
 {
  return 0;

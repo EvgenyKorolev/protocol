@@ -55,8 +55,9 @@ private:
     QList<QPair<QString, QString> > types;
     p_types_model* model_type;
     p_types_view* model_view;
-    QComboBox* select_type;
-    bool is_tested{false};
+    QComboBox* select_type;  // выбор типа протокола
+    QComboBox* select_engineer; // Выбор инженера подписавшегося под протоколом
+    bool is_tested{false}; // флаг того, окончательное ли формирование протокола.
                     // тип адаптера, type, message, varname
     QString use_adapt(const std::tuple<std::string, std::string, std::string, std::string, std::string> &arg);    // Возвращает значения переменной из различных адаптеров
     QList<std::tuple<QString, QString, QString, QString>> ask_set;  // переменные значение которых надо спросить у пользователя

@@ -440,7 +440,7 @@ QList<QList<QString> > var_adapter::get_app_table() const
     for (auto it : tmpap){
         QList<QString> tmplist;
         tmplist.append(it->get_name()); // Название прибора
-        tmplist.append(it->get_mdata().toString()); // Дата... чего-то там, пока непонятно (выпуска наверное)
+        tmplist.append(it->get_mdata().toString()); // Дата... выпуска наверное.
         // Номер свидетельства о поверке, дата поверки, дата очередной поверки
         QList<QPair<QPair<QString, QDate>, QDate>> tmpver = it->get_verification_list();
         if (!tmpver.empty()){
@@ -502,23 +502,25 @@ QString var_adapter::get_app_table(const QString& source, const QString& style) 
         } else return "";
     }
     if (tmpap.size() == 0) return "";
-    ret =+ "<table";
+    ret += "<table";
     if (style != ""){
         ret += " style = \"" + style + "\"";
+    } else {
+        ret += " width=\"100%\" align=\"center\" bordercolor=\"black\" border=\"1\" cellspacing=\"0\"";
     }
     ret += ">";
     ret += "<tr>"
-           "<td>  № п/п "
+           "<td align=\"center\">  №<br> п/<br>п "
             "</td>"
-            "<td> Наименование СИ "
+            "<td align=\"center\"> Наименование<br> СИ "
             "</td>"
-            "<td> Тип СИ "
+            "<td align=\"center\"> Тип СИ "
             "</td>"
-            "<td> Заводской номер "
+            "<td align=\"center\"> Заводской<br> номер "
             "</td>"
-            "<td> Номер свидетельства о поверке и дата поверки "
+            "<td align=\"center\"> Номер <br>свидетельства о <br>поверке и дата <br>поверки "
             "</td>"
-            "<td> Дата очередной поверки "
+            "<td align=\"center\"> Дата <br>очередной <br>поверки "
             "</td>";
     ret += "</tr>";
     int i{0};
@@ -545,17 +547,17 @@ QString var_adapter::get_app_table(const QString& source, const QString& style) 
             next_data = (*it)->get_next_date().toString("dd.MMMM.yyyy") + "&nbspг.";
         }
         ret += "<tr>"
-               "<td> " + QString::number(i) +
+               "<td align=\"center\"> " + QString::number(i) +
                 "</td>"
-                "<td> " + (*it)->get_name() +
+                "<td align=\"center\"> " + (*it)->get_name() +
                 "</td>"
-                "<td> " + (*it)->get_type() +
+                "<td align=\"center\"> " + (*it)->get_type() +
                 "</td>"
-                "<td> " + (*it)->get_mnom() +
+                "<td align=\"center\"> " + (*it)->get_mnom() +
                 "</td>"
-                "<td> " + (*it)->get_act_nom() + "&nbsp" + act_adta +
+                "<td align=\"center\"> " + (*it)->get_act_nom() + "<br>" + act_adta +
                 "</td>"
-                "<td> " + next_data +
+                "<td align=\"center\"> " + next_data +
                 "</td>";
         ret += "</tr>";
     }
