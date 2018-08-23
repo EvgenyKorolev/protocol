@@ -19,9 +19,12 @@ public:
     QString get_engineer() const;
     worker get_engineer_all() const;
     void set_worker(const worker& arg);
+    void set_number_prot(const QString& arg);
+    QString get_number_prot() const;
 private:
     QDate current_data{1, 1, 1};
     worker engineer;
+    QString number_prot;
 };
 
 #endif // PROT_ACT_ADAPTER_H

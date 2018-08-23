@@ -12,6 +12,8 @@ QString prot_act_adapter::get_var(const QString& arg, const QString& style)
     if (arg == "_cur_engineer2"){ return worker::get_fio(engineer, fio::name_surname);}
     if (arg == "_cur_engineer3"){ return worker::get_fio(engineer, fio::surname_name);}
     if (arg == "_cur_engineer4"){ return worker::get_fio(engineer, fio::full);}
+    if (arg == "_prt_number"){ return number_prot;}
+    if (arg == "_prt_number_y"){ return number_prot + "." + QString::number(current_data.year()).right(2);}
     return "";
 }
 void prot_act_adapter::set_current_data(const QDate& arg)
@@ -37,4 +39,12 @@ worker prot_act_adapter::get_engineer_all() const
 void prot_act_adapter::set_worker(const worker& arg)
 {
     engineer = arg;
+}
+void prot_act_adapter::set_number_prot(const QString& arg)
+{
+    number_prot = arg;
+}
+QString prot_act_adapter::get_number_prot() const
+{
+    return number_prot;
 }

@@ -2,24 +2,15 @@
 
 type_obj::type_obj()
 {
-    name = "";
-    var_name = "";
-    description = "";
     data = QList<std::tuple<QString, QString, QString, QString>>();
-}
-type_obj::type_obj(type_obj& arg)
-{
-    var_name = arg.get_vname();
-    name = arg.get_name();
-    data = arg.get_data();
-    description = arg.get_description();
 }
 type_obj::type_obj(const type_obj& arg)
 {
-    var_name = arg.get_vname();
-    name = arg.get_name();
-    data = arg.get_data();
-    description = arg.get_description();
+    var_name = arg.var_name;
+    name = arg.name;
+    data = arg.data;
+    description = arg.description;
+    cls = arg.cls;
 }
 type_obj::type_obj(type_obj&& arg)
 {
@@ -27,13 +18,15 @@ type_obj::type_obj(type_obj&& arg)
     name = std::move(arg.name);
     data = std::move(arg.data);
     description = std::move(arg.description);
+    cls = std::move(arg.cls);
 }
 type_obj& type_obj::operator=(type_obj& arg)
 {
-    var_name = arg.get_vname();
-    name = arg.get_name();
-    data = arg.get_data();
-    description = arg.get_description();
+    var_name = arg.var_name;
+    name = arg.name;
+    data = arg.data;
+    description = arg.description;
+    cls = arg.cls;
     return *this;
 }
 type_obj& type_obj::operator=(type_obj&& arg)
@@ -42,6 +35,7 @@ type_obj& type_obj::operator=(type_obj&& arg)
     name = std::move(arg.name);
     data = std::move(arg.data);
     description = std::move(arg.description);
+    cls = std::move(arg.cls);
     return *this;
 }
 QString type_obj::get_name() const
@@ -67,6 +61,14 @@ QString type_obj::get_description() const
 void type_obj::set_description(const QString& arg)
 {
     description = arg;
+}
+QString type_obj::get_cls() const
+{
+    return cls;
+}
+void type_obj::set_cls(const QString& arg)
+{
+    cls = arg;
 }
 void type_obj::append(std::tuple<QString, QString, QString, QString> arg)
 {
@@ -132,6 +134,10 @@ QDomElement type_obj::make_xml()
        QDomText xml_description_text = xml_ret.createTextNode(description);
            root.appendChild(xml_description);
            xml_description.appendChild(xml_description_text);
+   QDomElement xml_cls = xml_ret.createElement("cls");
+       QDomText xml_cls_text = xml_ret.createTextNode(cls);
+           root.appendChild(xml_cls);
+           xml_cls.appendChild(xml_cls_text);
 
     QDomElement xml_ver = xml_ret.createElement("consts");
         root.appendChild(xml_ver);
@@ -165,6 +171,7 @@ void type_obj::load_xml(QDomElement arg)
     name = arg.firstChildElement("name").text();
     var_name = arg.firstChildElement("var_name").text();
     description = arg.firstChildElement("description").text();
+    description = arg.firstChildElement("cls").text();
     QDomElement lst_temp = arg.firstChildElement("consts");
     int i{0};
     std::tuple<QString, QString, QString, QString> key;

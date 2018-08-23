@@ -112,8 +112,10 @@ std::vector<std::pair<std::string, std::string>> my_fnc::parse_teg(const std::st
                     rrt = sr2.str(0);
                     rrt.erase(rrt.size() - 1, 1);
                     rrt.erase(0, 1);
-                    while(rrt.find(" ") != std::string::npos){
-                        rrt.erase(rrt.find(" "), 1);
+                    if (it != "message"){
+                        while(rrt.find(" ") != std::string::npos){
+                            rrt.erase(rrt.find(" "), 1);
+                        }
                     }
                     ret.push_back(std::make_pair(it, rrt));
             }

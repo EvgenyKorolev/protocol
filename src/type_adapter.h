@@ -9,8 +9,11 @@
 class type_adapter
 {
 public:
-    type_adapter();
-    QString get_var(const QString &type, const QString &varname);
+    type_adapter(const QList<type_obj>& arg);
+    void add_type(const QString& arg);
+    QString get_var(const QString &cls, const QString &varname);
+private:
+    QList<type_obj> data_list{QList<type_obj>()};
 };
 
 #endif // TYPE_ADAPTER_H

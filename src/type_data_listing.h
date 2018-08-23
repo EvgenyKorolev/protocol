@@ -46,6 +46,7 @@ private:
     QList<QString> var_list;
     type_obj target_object;
     QLabel* varname;
+    QLabel* cls_lb;
     QString current_key;
     QSortFilterProxyModel* proxy_mod;
     QTextEdit* description;

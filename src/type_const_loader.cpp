@@ -12,7 +12,7 @@ type_const_loader::type_const_loader()
         open_const_lst.setContent(&con_f);
         con_f.close();
     } else {
-        QMessageBox::information(0, "Отладка", "Не открывается файл с константами для чтения");
+        QMessageBox::information(nullptr, "Отладка", "Не открывается файл с константами для чтения");
     }
     QDomElement root = open_const_lst.firstChildElement("typs");
     int i{0};
@@ -43,7 +43,7 @@ void type_const_loader::save()
         save_list.save(stream, 1);
         con_f.close();
     } else {
-        QMessageBox::information(0, "Отладка", "Не открывается файл с константами для записи");
+        QMessageBox::information(nullptr, "Отладка", "Не открывается файл с константами для записи");
     }
     con_f.close();
 }
@@ -102,7 +102,6 @@ bool type_const_loader::change_obj(type_obj& arg, QString key)
         *(*ret_it) = arg;
         return true;
     }
-    return false;
 }
 bool type_const_loader::del_type(const QString& key)
 {

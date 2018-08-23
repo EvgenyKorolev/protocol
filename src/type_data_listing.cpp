@@ -16,6 +16,16 @@ type_data_listing::type_data_listing()
     description = new QTextEdit();
     description->setReadOnly(true);
     description->setMaximumHeight(70);
+    cls_lb = new QLabel();
+    QLabel* cls_lab = new QLabel();
+    cls_lab->setText("Класс набора констант: ");
+    cls_lab->setMinimumWidth(180);
+    QBoxLayout* des_cls_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    QBoxLayout* cls_lay = new QBoxLayout(QBoxLayout::TopToBottom);
+    des_cls_lay->addWidget(description);
+    des_cls_lay->addLayout(cls_lay);
+    cls_lay->addWidget(cls_lab);
+    cls_lay->addWidget(cls_lb);
     select_type = new QComboBox();
     select_type->addItems(key_list);
     proxy_mod = new QSortFilterProxyModel();
@@ -82,7 +92,7 @@ type_data_listing::type_data_listing()
     end_lay->addWidget(cancel_but);
     end_lay->addWidget(add_txt);
     main_lay->addLayout(type_lay);
-    main_lay->addWidget(description);
+    main_lay->addLayout(des_cls_lay);
     main_lay->addWidget(type_view);
     main_lay->addLayout(end_lay);
     this->setLayout(main_lay);
@@ -94,6 +104,7 @@ type_data_listing::~type_data_listing()
     delete select_type;
     delete proxy_mod;
     delete description;
+    delete cls_lb;
 }
 void type_data_listing::set_lst(const QString &key)
 {
@@ -109,6 +120,7 @@ void type_data_listing::set_lst(const QString &key)
     type_view->setModel(proxy_mod);
     varname->setText(target_object.get_vname());
     description->setText(target_object.get_description());
+    cls_lb->setText(target_object.get_cls());
 }
 void type_data_listing::set_select_lst()
 {
@@ -119,13 +131,14 @@ void type_data_listing::add_lst()
     QString tmp1 = "Новый набор констант: ";
     QString tmp2 = "Имя набора:       ";
     QString tmp3 = "Имя переменной: ";
-    QString tmp4 = "Описание: ";
+    QString tmp4 = "Класс: ";
+    QString tmp5 = "Описание: ";
     QRegExp rexp;
     rexp.setPattern("[A-Za-z0-9]{1,20}");
     QRegExpValidator* val = new QRegExpValidator();
     val->setRegExp(rexp);
     // Пара строк которая будет установлена в полях ввода. титлы окна. подпись первого поля ввода. подпись второго поля ввода. два минимальных размера полей
-    pair_plus_editor *stred = new pair_plus_editor(std::make_tuple(QString(), QString(), QString()), tmp1, tmp2, tmp3, tmp4, 250, 250, 250);
+    pair_plus_editor *stred = new pair_plus_editor(std::make_tuple(QString(), QString(), QString(), QString()), tmp1, tmp2, tmp3, tmp4, tmp5, 250, 250, 250, 250);
     stred->set_mask(val, w_line::two);
     stred->setMinimumWidth(400);
     if (stred->exec() == QDialog::Accepted){
@@ -137,7 +150,8 @@ void type_data_listing::add_lst()
         type_obj tmpo;
         tmpo.set_name(std::get<0>(stred->result()));
         tmpo.set_vname(std::get<1>(stred->result()));
-        tmpo.set_description(std::get<2>(stred->result()));
+        tmpo.set_cls(std::get<2>(stred->result()));
+        tmpo.set_description(std::get<3>(stred->result()));
         type_const_loader& temp_set = type_const_loader::getInstance();
         temp_set.add_obj(tmpo);
         key_list = temp_set.get_id_list();
@@ -152,13 +166,14 @@ void type_data_listing::copy_list()
     QString tmp1 = "Новый набор констант: ";
     QString tmp2 = "Имя набора:       ";
     QString tmp3 = "Имя переменной: ";
-    QString tmp4 = "Описание: ";
+    QString tmp4 = "Класс: ";
+    QString tmp5 = "Описание: ";
     QRegExp rexp;
     rexp.setPattern("[A-Za-z0-9]{1,20}");
     QRegExpValidator* val = new QRegExpValidator();
     val->setRegExp(rexp);
     // Пара строк которая будет установлена в полях ввода. титлы окна. подпись первого поля ввода. подпись второго поля ввода. два минимальных размера полей
-    pair_plus_editor *stred = new pair_plus_editor(std::make_tuple(QString(), QString(), QString()), tmp1, tmp2, tmp3, tmp4, 250, 250, 250);
+    pair_plus_editor *stred = new pair_plus_editor(std::make_tuple(QString(), QString(), QString(), QString()), tmp1, tmp2, tmp3, tmp4, tmp5, 250, 250, 250, 250);
     stred->set_mask(val, w_line::two);
     stred->setMinimumWidth(400);
     if (stred->exec() == QDialog::Accepted){
@@ -171,7 +186,8 @@ void type_data_listing::copy_list()
         type_obj tmpo(target_object);
         tmpo.set_name(std::get<0>(stred->result()));
         tmpo.set_vname(std::get<1>(stred->result()));
-        tmpo.set_description(std::get<2>(stred->result()));
+        tmpo.set_cls(std::get<2>(stred->result()));
+        tmpo.set_description(std::get<3>(stred->result()));
         temp_set.add_obj(tmpo);
         key_list = temp_set.get_id_list();
         var_list = temp_set.get_var_list();
@@ -185,15 +201,16 @@ void type_data_listing::edit_lst()
     QString tmp1 = "Изменить набор констант: ";
     QString tmp2 = "Имя набора:     ";
     QString tmp3 = "Имя переменной: ";
-    QString tmp4 = "Описание: ";
+    QString tmp4 = "Класс: ";
+    QString tmp5 = "Описание: ";
     QString tmp_key = target_object.get_vname();
     QRegExp rexp;
     rexp.setPattern("[A-Za-z]{1,20}");
     QRegExpValidator* val = new QRegExpValidator();
     val->setRegExp(rexp);
-    std::tuple<QString, QString, QString> tmp_tup{target_object.get_name(), target_object.get_vname(), target_object.get_description()};
+    std::tuple<QString, QString, QString, QString> tmp_tup{target_object.get_name(), target_object.get_vname(), target_object.get_cls(), target_object.get_description()};
 // Пара строк которая будет установлена в полях ввода. титлы окна. подпись первого поля ввода. подпись второго поля ввода. два минимальных размера полей
-    pair_plus_editor *stred = new pair_plus_editor(tmp_tup, tmp1, tmp2, tmp3, tmp4, 250, 250, 250);
+    pair_plus_editor *stred = new pair_plus_editor(tmp_tup, tmp1, tmp2, tmp3, tmp4, tmp5, 250, 250, 250, 250);
     stred->set_mask(val, w_line::two);
     stred->setMinimumWidth(400);
     if (stred->exec() == QDialog::Accepted){
@@ -206,7 +223,8 @@ void type_data_listing::edit_lst()
         }
         target_object.set_name(std::get<0>(stred->result()));
         target_object.set_vname(std::get<1>(stred->result()));
-        target_object.set_description(std::get<2>(stred->result()));
+        target_object.set_cls(std::get<2>(stred->result()));
+        target_object.set_description(std::get<3>(stred->result()));
         type_const_loader& temp_set = type_const_loader::getInstance();
         if (temp_set.change_obj(target_object, tmp_key)) {
             type_model->set_source_data(target_object);

@@ -17,8 +17,8 @@ E-mail: <_parent_var type = "lab", message = "Введите_название_л
 </td>
 </tr>
 </table>
-<table>
-<tr><td width = "60%"></td>
+<table width="100%">
+<tr><td width = "50%"></td>
 <td>
 <p align = "left">УТВЕРЖДАЮ<br> Руководитель ИЛ КЭЭ<br><_parent_var type = "lab", message = "Введите_название_лаборатории:", vname = "_lab_name"><br> _____________________<_parent_var type = "lab", message = "Введите_фамилию_руководителя_ИЛ: ", vname = "_lab_labdir"><br><_prot_con type = "con", message = "Дата_подписания_протокола:", vname = "_cur_data", style = "d.MM.yyyy"></p>
 </td>
@@ -28,44 +28,48 @@ E-mail: <_parent_var type = "lab", message = "Введите_название_л
 <p align = "center"><b>ПРОТОКОЛ<br>
 измерений мощности нагрузки измерительного<br>
 трансформатора напряжения<br></b>
-№ ____221513.16-ТН-6____ от <_prot_con type = "con", message = "Дата_подписания_протокола:", vname = "_cur_data", style = "d.MM.yyyy"> г. 
+№ <_prot_con type = "con", message = "Номер_протокола:", vname = "_prt_number_y", style = "">-ТН-6 от <_prot_con type = "con", message = "Дата_подписания_протокола:", vname = "_cur_data", style = "d.MM.yyyy"> г. 
 </p>
 <p align="justify">&nbsp; &nbsp; &nbsp; &nbsp; <_prot_type type = "tn", message = "Введите_текст_первого_абзаца", vname = "part0"></p>
-<p>1. Заказчик:<br>
 <p  align="justify">
+1. Заказчик:<br>
 &nbsp; &nbsp; &nbsp; &nbsp;Наименование организации: <_parent_var type = "klient", message = "Введите_название_клиента:", vname = "_kl_name">.<br>
 &nbsp; &nbsp; &nbsp; &nbsp;Юридический адрес: <_parent_var type = "klient", message = "Введите_юрадрес_клиента:", vname = "_kl_uadr_f1"> Телефон: <_parent_var type = "klient", message = "Введите_телефон_клиента:", vname = "_kl_det_tel">, Факс: <_parent_var type = "klient", message = "Введите_телефон_клиента:", vname = "_kl_det_fax">, e-mail: <_parent_var type = "klient", message = "Введите_телефон_e-mail:", vname = "_kl_email">.<br>
-&nbsp; &nbsp; &nbsp; &nbsp;Фактический адрес: <_parent_var type = "klient", message = "Введите_индекс_юрадреса_клиента:", vname = "_kl_uadr_f1"> Телефон: <_parent_var type = "klient", message = "Введите_телефон_клиента:", vname = "_kl_det_tel">, Факс: <_parent_var type = "klient", message = "Введите_телефон_клиента:", vname = "_kl_det_fax">, e-mail: <_parent_var type = "klient", message = "Введите_телефон_e-mail:", vname = "_kl_email">.</p>
+&nbsp; &nbsp; &nbsp; &nbsp;Фактический адрес: <_parent_var type = "klient", message = "Введите_индекс_юрадреса_клиента:", vname = "_kl_uadr_f1"> Телефон: <_parent_var type = "klient", message = "Введите_телефон_клиента:", vname = "_kl_det_tel">, Факс: <_parent_var type = "klient", message = "Введите_телефон_клиента:", vname = "_kl_det_fax">, e-mail: <_parent_var type = "klient", message = "Введите_телефон_e-mail:", vname = "_kl_email">.
 </p>
-<p>
-2. Цель измерений:<br>
 <p  align="justify">
+2. Цель измерений:<br>
 &nbsp; &nbsp; &nbsp; &nbsp;<_prot_type type = "tn", message = "Введите_название_лаборатории:", vname = "part1">
-</p>
 </p>
 <p>
 3. Идентификационные данные пункта контроля КЭ:<br>
 Место (обозначение) в схеме: ГПП «Заречная», ЗРУ – 6 кВ, 2 СШ.
 Адрес: г. Саров.
 </p>
-
-4. Сроки проведения измерений:
-с 12.02.2016 г. 09:50 ч. 
-по 12.02.2016 г. 10:00 ч.
-
-5. Условия проведения измерений:
-Температура, ºС
-Атмосферное давление, кПа 
-Относительная влажность, %
-17
-99,4
-54
-Лист 2/2
 <p>
-6. Методика проведения измерений:
-<p  align="justify">
-&nbsp; &nbsp; &nbsp; &nbsp;<_prot_type type = "tn", message = "Введите_название_лаборатории:", vname = "part2">
+4. Сроки проведения измерений:<br>
+с 12.02.2016 г. 09:50 ч. <br>
+по 12.02.2016 г. 10:00 ч.<br>
 </p>
+<p>
+5. Условия проведения измерений:
+<table align = "center" width="100%" bordercolor="black" border="1" cellspacing="0">
+<tr>
+<td align = "center">Температура, ºС</td>
+<td align = "center">Атмосферное давление, кПа </td>
+<td align = "center">Относительная влажность, %</td>
+</tr>
+<tr>
+<td align = "center"><_ask_obj type = "tn_circs", message = "Введите температуру при изменениях:", vname = "temp"></td>
+<td align = "center"><_ask_obj type = "tn_circs", message = "Введите атмосферное давление при изменениях:", vname = "pressure"></td>
+<td align = "center"><_ask_obj type = "tn_circs", message = "Введите относительную влажность в % при изменениях:", vname = "humidity"></td>
+<tr>
+</table>
+</p>
+Лист 2/2
+<p  align="justify">
+6. Методика проведения измерений:<br>
+&nbsp; &nbsp; &nbsp; &nbsp;<_prot_type type = "tn", message = "Введите_название_лаборатории:", vname = "part2">
 </p>
 <p>7. Перечень средств измерений (СИ).</p>
 <p><_parent_var type = "obj", message = "::", vname = "_obj_app1", style = ""></p>
@@ -98,28 +102,44 @@ Sн для указанного класса точности, ВА:</td><td><_p
 </tr>
 </table>
 </p>
-9. Результаты измерений и обработки (вычислений)
-
-Измеряемая величина
-Значение
-Напряжение UА, В
-60,2
-Напряжение UВ, В
-59,9
-Напряжение UС, В
-59,7
-Полная мощность S, ВА
-28,7
-Коэффициент мощности 
-0,91
-Значение нагрузки ТН, %
-38,26
-
-<p>10. Заключение:<br>
+<p>
+9. Результаты измерений и обработки (вычислений)<br>
+<table align = "center" width="100%" bordercolor="black" border="1" cellspacing="0">
+<tr>
+<td align = "center">Измеряемая величина</td>
+<td align = "center">Значение</td>
+</tr>
+<tr>
+<td align = "center">Напряжение UА, В</td>
+<td align = "center"><_ask_obj type = "tn_circs", message = "Введите напряжение UА, В:", vname = "uab"></td>
+</tr>
+<tr>
+<td align = "center">Напряжение UВ, В</td>
+<td align = "center"><_ask_obj type = "tn_circs", message = "Введите напряжение UВ, В:", vname = "ubb"></td>
+</tr>
+<tr>
+<td align = "center">Напряжение UС, В</td>
+<td align = "center"><_ask_obj type = "tn_circs", message = "Введите напряжение UС, В:", vname = "ucb"></td>
+</tr>
+<tr>
+<td align = "center">Полная мощность S, ВА</td>
+<td align = "center"><_ask_obj type = "tn_circs", message = "Введите полную мощность S, ВА:", vname = "sab"></td>
+</tr>
+<tr>
+<td align = "center">Коэффициент мощности </td>
+<td align = "center"><_ask_obj type = "tn_circs", message = "Введите коэффициент мощности:", vname = "pf"></td>
+</tr>
+<tr>
+<td align = "center">Значение нагрузки ТН, %</td>
+<td align = "center"><_ask_obj type = "tn_circs", message = "Введите значение нагрузки ТН, %:", vname = "lv"></td>
+</tr>
+</table>
+</p>
+<p  align="justify">10. Заключение:<br>
 &nbsp; &nbsp; &nbsp; &nbsp;Значение полной мощности нагрузки измерительного трансформатора напряжения равно 28,7 ВА и составляет 38,26 % от номинальной (75 ВА) полной мощности, что соответствует требованиям ГОСТ 1983-2015 для класса точности 0,5 измерительного трансформатора напряжения.</p>
 
 
-Инженер – испытатель		_______________/<_prot_con type = "con", message = "Дата_подписания_протокола:", vname = "_cur_engineer", style = "">/
+<p  align="center">Инженер – испытатель		_______________/<_prot_con type = "con", message = "Дата_подписания_протокола:", vname = "_cur_engineer", style = "">/</p>
 
 
 

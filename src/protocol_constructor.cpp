@@ -11,7 +11,7 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
     varad = new var_adapter(actual_prot->get_parent());
     vartype = new type_adapter();
     QBoxLayout* main_lay = new QBoxLayout(QBoxLayout::TopToBottom);
-    QBoxLayout* combo_type_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    QGridLayout* combo_type_lay = new QGridLayout();
     QLabel* type_lab = new QLabel();
 // Тип протокола
     type_lab->setText("Тип протокола: ");
@@ -25,6 +25,10 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
     dat_lab->setText("Дата формирования: ");
     dat_edit = new QDateEdit();
     dat_edit->setDate(QDate::currentDate());
+// Дата
+   QLabel* ent_num_lab = new QLabel();
+   ent_num_lab->setText("Номер протокола: ");
+   enter_number = new QLineEdit();
 // Выбор инженера
     QLabel* ing_lab = new QLabel();
     ing_lab->setText("Инженер: ");
@@ -92,12 +96,20 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
     type_lay->addLayout(head_list_lay);
     type_lay->addWidget(model_view);
 
-    combo_type_lay->addWidget(type_lab);
-    combo_type_lay->addWidget(select_type);
-    combo_type_lay->addWidget(dat_lab);
-    combo_type_lay->addWidget(dat_edit);
-    combo_type_lay->addWidget(ing_lab);
-    combo_type_lay->addWidget(select_engineer);
+    combo_type_lay->setColumnMinimumWidth(1, 150);
+    combo_type_lay->setColumnMinimumWidth(2, 150);
+    combo_type_lay->setColumnMinimumWidth(3, 150);
+    combo_type_lay->setColumnMinimumWidth(4, 150);
+    combo_type_lay->setColumnMinimumWidth(5, 150);
+    combo_type_lay->setColumnMinimumWidth(6, 150);
+    combo_type_lay->addWidget(type_lab, 1, 1);
+    combo_type_lay->addWidget(select_type, 1, 2);
+    combo_type_lay->addWidget(dat_lab, 1, 3);
+    combo_type_lay->addWidget(dat_edit, 1, 4);
+    combo_type_lay->addWidget(ing_lab, 1, 5);
+    combo_type_lay->addWidget(select_engineer, 1, 6);
+    combo_type_lay->addWidget(ent_num_lab, 2, 1);
+    combo_type_lay->addWidget(enter_number, 2, 2);
     QBoxLayout* buttons_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QPushButton* but_test = new QPushButton("Проверить");
     QObject::connect(but_test, SIGNAL(clicked()), this, SLOT(slot_test()));
@@ -165,22 +177,26 @@ void protocol_constructor::parser_first(QString& argx)
             if (reg.second != -1 && reg.first != -1){
                 main_teg = arg.substr(static_cast<size_t>(reg.first), static_cast<size_t>(reg.second - reg.first + 1));
                 parsres = my_fnc::parse_teg(main_teg, tegs);
-                auto res_t = std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{return arr.first == "type";});
+                auto res_t = std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{
+                    return arr.first == "type";});
                 if (res_t == parsres.end()){
                     pos_beg += main_teg.size();
                     continue;
                 }
                 t_var = res_t->second;
-                auto res_m =std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{return arr.first == "message";});
+                auto res_m =std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{
+                    return arr.first == "message";});
                 if (res_m == parsres.end()){
                     m_var = "";
                 } else m_var = res_m->second;
-                auto res_v =std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{return arr.first == "vname";});
+                auto res_v =std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{
+                    return arr.first == "vname";});
                 if (res_v == parsres.end()){
                     pos_beg += main_teg.size();
                     continue;
                 } v_var = res_v->second;
-                auto res_s =std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{return arr.first == "style";});
+                auto res_s =std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{
+                    return arr.first == "style";});
                 if (res_s == parsres.end()){
                     s_var = "";
                 } else s_var = res_s->second;
@@ -210,7 +226,64 @@ void protocol_constructor::parser_first(QString& argx)
 }
 void protocol_constructor::prepare(QString &argx)
 {
+    int pos_beg{0};
+    std::string arg{argx.toStdString()};
+    std::vector<std::pair<std::string, std::string> > parsres;
+    std::string main_teg;
+    std::vector<std::string> tegs{"type", "message", "vname", "style"};
+    std::pair<int, int> reg = std::make_pair(0, 0);
+    std::string t_var, m_var, v_var, s_var;
+    std::string ins_str;
+        pos_beg = 0;
+        do{
+            reg = my_fnc::serch_teg(arg, "_ask_obj", pos_beg);
+            if (reg.second != -1 && reg.first != -1){
+                main_teg = arg.substr(static_cast<size_t>(reg.first), static_cast<size_t>(reg.second - reg.first + 1));
+                parsres = my_fnc::parse_teg(main_teg, tegs);
+                auto res_t = std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{
+                    return arr.first == "type";});
+                if (res_t == parsres.end()){
+                    pos_beg += main_teg.size();
+                    continue;
+                }
+                t_var = res_t->second;
+                auto res_m =std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{
+                    return arr.first == "message";});
+                if (res_m == parsres.end()){
+                    m_var = "";
+                } else m_var = res_m->second;
+                auto res_v =std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{
+                    return arr.first == "vname";});
+                if (res_v == parsres.end()){
+                    pos_beg += main_teg.size();
+                    continue;
+                } v_var = res_v->second;
+                auto res_s =std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{
+                    return arr.first == "style";});
+                if (res_s == parsres.end()){
+                    s_var = "";
+                } else s_var = res_s->second;
 
+                if (ask_set.end() == std::find_if(ask_set.begin(), ask_set.end(), [&t_var, &v_var](const std::tuple<QString, QString, QString, QString>& pred)->bool{
+                                                  return ((std::get<1>(pred) == QString(t_var.c_str())) && (std::get<3>(pred) == QString(v_var.c_str())));})){
+                    ask_set.append(std::make_tuple("_ask_obj", QString(t_var.c_str()), QString(m_var.c_str()), QString(v_var.c_str())));
+                }
+                pos_beg = reg.second;
+              } else ++pos_beg;
+        } while (reg.first != -1);
+        QString rrt{""};
+        for (auto it : ask_set){
+            rrt = vartype->get_var(std::get<1>(it), std::get<3>(it));
+            if (rrt != "NULL"){
+                end_ask_set.append(std::make_tuple(std::get<0>(it), std::get<1>(it), std::get<2>(it), std::get<3>(it), rrt));
+                rrt = "";
+            } else rrt = "";
+        }
+
+    ask_editor* ask = new ask_editor();
+    if (ask->exec() == QDialog::Accepted){
+        is_prepear = true;
+    }
 }
                                         // тип адаптера, type, message, varname, style
 QString protocol_constructor::use_adapt(const std::tuple<std::string, std::string, std::string, std::string , std::string>& arg)
@@ -231,12 +304,14 @@ QString protocol_constructor::use_adapt(const std::tuple<std::string, std::strin
 }
 void protocol_constructor::slot_test()
 {
-    is_tested = true;
-    create_varlist();
     QString html_text = get_html().remove('\n');
     prepare(html_text);
+    if (is_prepear == false){
+        return;
+    }
+    is_tested = true;
+    create_varlist();
     parser_first(html_text);
-
     QWebEngineView* tmpw = new QWebEngineView(nullptr);
     tmpw->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
     tmpw->setMinimumWidth(700);
@@ -244,8 +319,8 @@ void protocol_constructor::slot_test()
     tmpw->setHtml(html_text);
     tmpw->show();
 
-  //  QTextDocument tdd;
-  //  tdd.setHtml(get_html());
+    QTextDocument tdd;
+    tdd.setHtml(html_text);
    // int f = tdd.blockCount();
 
   //  varad;     // Адаптер для получения данных у родителей протокола
@@ -257,6 +332,7 @@ void protocol_constructor::create_varlist()
 {
     padapt->set_current_data(dat_edit->date());
     padapt->set_worker(select_engineer->currentData().value<worker>());
+    padapt->set_number_prot(enter_number->text());
 }
 void protocol_constructor::slot_create()
 {
