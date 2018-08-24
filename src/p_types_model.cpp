@@ -14,7 +14,7 @@ int p_types_model::columnCount(const QModelIndex &parent) const
     if (parent.isValid()){
         return 0;
     }
-    return 2;
+    return 3;
 }
 QVariant p_types_model::data(const QModelIndex &index, int role) const
 {
@@ -24,6 +24,8 @@ QVariant p_types_model::data(const QModelIndex &index, int role) const
             case 0:
                 return QVariant(std::get<0>(this->mdata.at(index.row())));
             case 1:
+                return QVariant(std::get<3>(this->mdata.at(index.row())));
+            case 2:
                 return QVariant(std::get<1>(this->mdata.at(index.row())));
             }
             return QVariant();
@@ -38,7 +40,10 @@ QVariant p_types_model::data(const QModelIndex &index, int role) const
 bool p_types_model::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (role == Qt::EditRole){
-        std::tuple<QString, QString, QString> tmp{std::make_tuple(std::get<0>(value.value<tuple_qss>()), std::get<1>(value.value<tuple_qss>()), std::get<2>(value.value<tuple_qss>()))};
+        std::tuple<QString, QString, QString, QString> tmp{std::make_tuple(std::get<0>(value.value<tuple_qss4>()),
+                                                                           std::get<1>(value.value<tuple_qss4>()),
+                                                                           std::get<2>(value.value<tuple_qss4>()),
+                                                                           std::get<3>(value.value<tuple_qss4>()))};
         if (index.isValid()){
                 this->mdata.replace(index.row(), tmp);
                 return true;
@@ -62,6 +67,8 @@ QVariant p_types_model::headerData(int section, Qt::Orientation orientation, int
             case 0:
                     return QVariant("Название набора:");
             case 1:
+                    return QVariant("Класс:");
+            case 2:
                     return QVariant("Описание:");
         }
     }
@@ -84,4 +91,8 @@ bool p_types_model::removeRows(int row, int count, const QModelIndex & parent)
      this->endRemoveRows();
      this->layoutChanged();
      return true;
+}
+QList<std::tuple<QString, QString, QString, QString>> p_types_model::ret_all_data() const
+{
+    return mdata;
 }

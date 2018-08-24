@@ -204,10 +204,6 @@ void protocol_constructor::parser_first(QString& argx)
                     var_set.append(std::make_tuple(itx, QString(t_var.c_str()), QString(m_var.c_str()), QString(v_var.c_str())));
                     pos_beg = reg.second;
                     continue;
-                } else if (itx == "_ask_obj") {
-                    ask_set.append(std::make_tuple(itx, QString(t_var.c_str()), QString(m_var.c_str()), QString(v_var.c_str())));
-                    pos_beg = reg.second;
-                    continue;
                 } else {
                     ins_str = this->use_adapt(std::make_tuple(itx.toStdString(), t_var, m_var, v_var, s_var)).toStdString();
                     if (ins_str != "NULL"){
@@ -234,6 +230,12 @@ void protocol_constructor::prepare(QString &argx)
     std::pair<int, int> reg = std::make_pair(0, 0);
     std::string t_var, m_var, v_var, s_var;
     std::string ins_str;
+    auto dlist = model_type->ret_all_data();
+   //Имя типа (чеоловекочитаемое) Описание Имя переменной Класс
+    //QList<std::tuple<QString, QString, QString, QString>>
+    for (auto it : dlist){
+        vartype->add_type(std::get<2>(it));
+    }
         pos_beg = 0;
         do{
             reg = my_fnc::serch_teg(arg, "_ask_obj", pos_beg);
@@ -279,15 +281,17 @@ void protocol_constructor::prepare(QString &argx)
                 rrt = "";
             } else rrt = "";
         }
-
     ask_editor* ask = new ask_editor();
     if (ask->exec() == QDialog::Accepted){
         is_prepear = true;
     }
 }
-                                        // тип адаптера, type, message, varname, style
+                                        //             тип адаптера,   type,       message,      varname,      style
 QString protocol_constructor::use_adapt(const std::tuple<std::string, std::string, std::string, std::string , std::string>& arg)
 {
+    if (std::get<0>(arg) == "_ask_obj"){
+        return  vartype->get_var(QString(std::get<1>(arg).c_str()), QString(std::get<3>(arg).c_str()));
+    }
     if (std::get<0>(arg) == "_prot_type"){
         return varconst->get_var(QString(std::get<3>(arg).c_str()));
     }

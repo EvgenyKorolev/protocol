@@ -29,13 +29,13 @@ void type_in_view::set_pather(type_in_direct* arg)
 {
     pather = arg;
 }
-std::tuple<QString, QString, QString> type_in_view::result()
+std::tuple<QString, QString, QString, QString> type_in_view::result()
 {
     return  ret;
 }
 void type_in_view::slot_return()
 {
-    ret = this->indexAt(curs).data(Qt::EditRole).value<tuple_qss>();
+    ret = this->indexAt(curs).data(Qt::EditRole).value<tuple_qss4>();
     if (pather != nullptr){
         pather->result();
     }

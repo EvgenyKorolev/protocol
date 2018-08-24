@@ -27,7 +27,7 @@ public:
     type_in_direct();
   //  ~type_in_direct();
     void result();
-    std::tuple<QString, QString, QString> get_result();
+    std::tuple<QString, QString, QString, QString> get_result();
 public slots:
     void slot_reset_list();
     void slot_filtr();
@@ -37,7 +37,7 @@ private:
     QComboBox* find_str;
     QComboBox* find_status;
     QLineEdit* find_ar;
-    std::tuple<QString, QString, QString> ret;
+    std::tuple<QString, QString, QString, QString> ret;
 };
 
 #endif // TYPE_IN_DIRECT_H

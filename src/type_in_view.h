@@ -20,13 +20,13 @@ public:
     void mousePressEvent(QMouseEvent * arg);
     void mouseDoubleClickEvent(QMouseEvent* arg);
     void set_pather(type_in_direct* arg);
-    std::tuple<QString, QString, QString> result();
+    std::tuple<QString, QString, QString, QString> result();
 public slots:
     void slot_return(); // Возвращает выбранный прибор и закрывается
 private:
     QPoint curs;
     type_in_direct* pather;
-    std::tuple<QString, QString, QString> ret;
+    std::tuple<QString, QString, QString, QString> ret;
 };
 
 #endif // TYPE_IN_VIEW_H

@@ -1,9 +1,6 @@
 #include "type_obj.h"
 
-type_obj::type_obj()
-{
-    data = QList<std::tuple<QString, QString, QString, QString>>();
-}
+type_obj::type_obj(){}
 type_obj::type_obj(const type_obj& arg)
 {
     var_name = arg.var_name;
@@ -20,7 +17,7 @@ type_obj::type_obj(type_obj&& arg)
     description = std::move(arg.description);
     cls = std::move(arg.cls);
 }
-type_obj& type_obj::operator=(type_obj& arg)
+type_obj& type_obj::operator=(const type_obj& arg)
 {
     var_name = arg.var_name;
     name = arg.name;
@@ -84,13 +81,13 @@ std::tuple<QString, QString, QString, QString> type_obj::at(int arg) const
 {
     return data.at(arg);
 }
-QString type_obj::get_vdata(const QString &key)
+QString type_obj::get_vdata(const QString &key) const
 {
     // имя переменной, описание, значение, тип переменной
-    auto it = std::find_if(data.begin(), data.end(), [key](std::tuple<QString, QString, QString, QString>& pred)->bool{
+    auto it = std::find_if(data.begin(), data.end(), [key](const std::tuple<QString, QString, QString, QString>& pred)->bool{
             return std::get<0>(pred) == key; });
     if (it == data.end()) return "";
-    return  std::get<2>(*it);
+    return  std::get<3>(*it);
 }
 void type_obj::removeAt(int arg)
 {
@@ -98,7 +95,7 @@ void type_obj::removeAt(int arg)
 }
 void type_obj::replace(int row, std::tuple<QString, QString, QString, QString> arg)
 {
-    if (std::find_if(data.begin(), data.end(), [arg](std::tuple<QString, QString, QString, QString>& pred)->bool{
+    if (std::find_if(data.begin(), data.end(), [arg](const std::tuple<QString, QString, QString, QString>& pred)->bool{
                      return (std::get<0>(arg) == std::get<0>(pred));}) != data.end()){
         if (std::get<0>(data.at(row)) != std::get<0>(arg)) {
             QMessageBox::information(nullptr, "Отладка", "Нельзя создавать две переменных с одним именем");
@@ -171,7 +168,7 @@ void type_obj::load_xml(QDomElement arg)
     name = arg.firstChildElement("name").text();
     var_name = arg.firstChildElement("var_name").text();
     description = arg.firstChildElement("description").text();
-    description = arg.firstChildElement("cls").text();
+    cls = arg.firstChildElement("cls").text();
     QDomElement lst_temp = arg.firstChildElement("consts");
     int i{0};
     std::tuple<QString, QString, QString, QString> key;

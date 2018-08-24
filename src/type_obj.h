@@ -21,7 +21,7 @@ public:
     type_obj();
     type_obj(const type_obj& arg);
     type_obj(type_obj&& arg);
-    type_obj& operator=(type_obj& arg);
+    type_obj& operator=(const type_obj& arg);
     type_obj& operator=(type_obj&& arg);
     QString get_name() const;
     void set_name(const QString& arg);
@@ -33,7 +33,7 @@ public:
     void set_cls(const QString& arg);
     void append(std::tuple<QString, QString, QString, QString> arg);
     std::tuple<QString, QString, QString, QString> at(int arg) const;
-    QString get_vdata(const QString &key);
+    QString get_vdata(const QString &key) const;
     void removeAt(int arg);
     void replace(int row, std::tuple<QString, QString, QString, QString> arg);
     lst_type get_data() const;
@@ -41,11 +41,11 @@ public:
     QDomElement make_xml();
     void load_xml(QDomElement arg);
 private:
-    QString name{""};
-    QString var_name{""};
-    QString description{""};
+    QString name{""};    // Название типа
+    QString var_name{""}; // имя переменной
+    QString description{""};  // Описание
     QString cls{""}; // класс типа. (Несколько типов могут быть одного класса, таким образом реализованна их взаимозаменяемость при поимске переменной)
-    lst_type data;
+    lst_type data{QList<std::tuple<QString, QString, QString, QString>>()};
 };
 
 #endif // TYPE_OBJ_H

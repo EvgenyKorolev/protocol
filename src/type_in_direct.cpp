@@ -5,7 +5,7 @@ type_in_direct::type_in_direct()
     this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
     this->setWindowTitle("Выбрать набор констант");
     this->setMinimumWidth(630);
-    ret = std::make_tuple("", "", "");
+    ret = std::make_tuple("", "", "", "");
     QBoxLayout* main_lay = new QBoxLayout(QBoxLayout::TopToBottom);
     QPushButton* ok = new QPushButton("Закрыть");
     QObject::connect(ok, SIGNAL(clicked()), this, SLOT(reject()));
@@ -15,7 +15,7 @@ type_in_direct::type_in_direct()
     int i{0};
     for (auto it : tmpl){
        type_obj tmpto = tcnl.get_obj(it);
-       std::tuple<QString, QString, QString> tmpt = std::make_tuple(tmpto.get_name(), tmpto.get_description(), tmpto.get_vname());
+       std::tuple<QString, QString, QString, QString> tmpt = std::make_tuple(tmpto.get_name(), tmpto.get_description(), tmpto.get_vname(), tmpto.get_cls());
        apdm->setData(QModelIndex(), QVariant::fromValue(tmpt), Qt::EditRole);
        ++i;
     }
@@ -55,7 +55,7 @@ void type_in_direct::result()
     ret = apdv->result();
     emit accept();
 }
-std::tuple<QString, QString, QString> type_in_direct::get_result()
+std::tuple<QString, QString, QString, QString> type_in_direct::get_result()
 {
     return ret;
 }

@@ -18,8 +18,8 @@ type_data_editor::type_data_editor(const std::tuple<QString, QString, QString, Q
     remark = new QLineEdit();
     text_area = new QLineEdit();
     id_type = new QComboBox();
-    id_type->addItem("число");
     id_type->addItem("строка");
+    id_type->addItem("число");
     QObject::connect(id_type, SIGNAL(currentTextChanged(QString)), this, SLOT(change_type()));
     val = new QRegExpValidator();
     val2 = new QRegExpValidator();
