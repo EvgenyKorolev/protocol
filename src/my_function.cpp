@@ -124,3 +124,17 @@ std::vector<std::pair<std::string, std::string>> my_fnc::parse_teg(const std::st
     }
     return  ret;
 }
+float my_fnc::stof(const QString& arg){
+    std::string objstr{arg.toStdString()}, tmps{"-?\\d{1,}[,.]{0,1}\\d{0,}"}; // Сначала храним тут регулярное выражение, а потом результат поиска
+    std::regex reg(tmps.c_str(), std::regex::ECMAScript);
+    std::cmatch sr;
+    if (!(std::regex_search(objstr.c_str(), sr, reg))){
+        throw "bad_data";
+    }
+    std::string ret = sr.str(0);
+    std::replace_if(ret.begin(), ret.end(), [](const char& pred)->bool{ return pred == '.';}, ',');
+    if (ret == ""){
+        throw "bad_data";
+    }
+    return std::stof(ret);
+}

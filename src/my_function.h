@@ -11,6 +11,7 @@
 #include <vector>
 #include <utility>
 #include <tuple>
+
 // просто несколько функция для повторного использования. Они преобразуют дату в xml и обратно
 namespace my_fnc
 {
@@ -21,6 +22,8 @@ namespace my_fnc
    std::pair<int, int> serch_teg(const QString& arg, const QString& substr, int pos = 0);           // Возврещет первую и последнюю позицию тега <substr......> поиск начинается с позиции pos
    std::pair<int, int> serch_teg(const std::string& arg, const std::string& substr, int pos = 0);   // Возврещет первую и последнюю позицию тега <substr......> поиск начинается с позиции pos
    std::vector<std::pair<std::string, std::string> > parse_teg(const std::string& arg, const std::vector<std::string>& lst); //Превращает тэг вида <... a = "b", c = "d"....> в список пар a:b c:d
+   float stof(const QString& arg); // Превращает строку в число флоат (удяляя буквы и прочие ненужные символы. Превращает первую найденную последовательность
+   // вида [цифры(. или ,)цифры если есть] в число. Остальные символы отбрасываются)
 }
 
 #endif // MY_FUNCTION_H

@@ -154,7 +154,7 @@ TEST(test_parse_teg009, restsprotocol)
 {
     std::vector<std::string> lst{"type", "message", "vname"};
     std::string tst = "<_parent_var type=\"parent type\", message=\"Введите вот это: \", vname=\"varname\">";
-    EXPECT_EQ(my_fnc::parse_teg(tst, lst).at(1).second, "Введитевотэто:");
+    EXPECT_EQ(my_fnc::parse_teg(tst, lst).at(1).second, "Введите вот это: ");
 }
 TEST(test_parse_teg010, restsprotocol)
 {
@@ -319,4 +319,55 @@ TEST(test_search_teg_2_020, restsprotocol)
             "<_parent_var type = \"klient\", message = \"имя клиента: \", vname = \"_kl_name\"><br>";
     std::string teg = "_const_type";
     EXPECT_EQ(my_fnc::serch_teg(tst, teg, 1).second, 357);
+}
+// -----------====================Тестирование функции вольного превращения строки в число =============================---------------------
+TEST(test_string_to_float_001, restsprotocol)
+{
+QString tst = "<p>11111111111111111</p><br>";
+EXPECT_EQ(my_fnc::stof(tst), (float)11111111111111111);
+}
+TEST(test_string_to_float_002, restsprotocol)
+{
+QString tst = "<p>defsf75dasmkdh</p><br>";
+EXPECT_EQ(my_fnc::stof(tst), (float)75);
+}
+TEST(test_string_to_float_003, restsprotocol)
+{
+QString tst = "xsdmxd  efdsf 67,3 fcgndcmds";
+EXPECT_EQ(my_fnc::stof(tst), (float)67.3);
+}
+TEST(test_string_to_float_004, restsprotocol)
+{
+QString tst = "xsdocfhdvgmdf0lvmfsdvhnsdfunv";
+EXPECT_EQ(my_fnc::stof(tst), (float)0);
+}
+TEST(test_string_to_float_005, restsprotocol)
+{
+QString tst = "vbdflvhodf-76,8vdgbdfbcbg";
+EXPECT_EQ(my_fnc::stof(tst), (float)-76.8);
+}
+TEST(test_string_to_float_006, restsprotocol)
+{
+QString tst = "mjvgfcvghduvg89.77gfhgfhnn";
+EXPECT_EQ(my_fnc::stof(tst), (float)89.77);
+}
+TEST(test_string_to_float_007, restsprotocol)
+{
+QString tst = "<p>vthgjgcdf66.666</p><br>";
+EXPECT_EQ(my_fnc::stof(tst), (float)66.666);
+}
+TEST(test_string_to_float_008, restsprotocol)
+{
+QString tst = "<p>yvtyhbgjhgjn0.456ghvbgf";
+EXPECT_EQ(my_fnc::stof(tst), (float)0.456);
+}
+TEST(test_string_to_float_009, restsprotocol)
+{
+QString tst = "tfbvhghnjhgh-0.4343hlmkl";
+EXPECT_EQ(my_fnc::stof(tst), (float)-0.4343);
+}
+TEST(test_string_to_float_010, restsprotocol)
+{
+QString tst = "vgrtgkjfgjcbh-0,777vfgfcb cfg";
+EXPECT_EQ(my_fnc::stof(tst), (float)-0.777);
 }

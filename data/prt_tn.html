@@ -33,7 +33,7 @@ E-mail: <_parent_var type = "lab", message = "Введите_название_л
 <p align="justify">&nbsp; &nbsp; &nbsp; &nbsp; <_prot_type type = "tn", message = "Введите_текст_первого_абзаца", vname = "part0"></p>
 <p  align="justify">
 1. Заказчик:<br>
-&nbsp; &nbsp; &nbsp; &nbsp;Наименование организации: <_parent_var type = "klient", message = "Введите_название_клиента:", vname = "_kl_name">.<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Наименование организации: <_parent_var type = "klient", message = "Введите_название_клиента:", vname = "_kl_name">.<br>
 &nbsp; &nbsp; &nbsp; &nbsp;Юридический адрес: <_parent_var type = "klient", message = "Введите_юрадрес_клиента:", vname = "_kl_uadr_f1"> Телефон: <_parent_var type = "klient", message = "Введите_телефон_клиента:", vname = "_kl_det_tel">, Факс: <_parent_var type = "klient", message = "Введите_телефон_клиента:", vname = "_kl_det_fax">, e-mail: <_parent_var type = "klient", message = "Введите_телефон_e-mail:", vname = "_kl_email">.<br>
 &nbsp; &nbsp; &nbsp; &nbsp;Фактический адрес: <_parent_var type = "klient", message = "Введите_индекс_юрадреса_клиента:", vname = "_kl_uadr_f1"> Телефон: <_parent_var type = "klient", message = "Введите_телефон_клиента:", vname = "_kl_det_tel">, Факс: <_parent_var type = "klient", message = "Введите_телефон_клиента:", vname = "_kl_det_fax">, e-mail: <_parent_var type = "klient", message = "Введите_телефон_e-mail:", vname = "_kl_email">.
 </p>
@@ -43,13 +43,13 @@ E-mail: <_parent_var type = "lab", message = "Введите_название_л
 </p>
 <p>
 3. Идентификационные данные пункта контроля КЭ:<br>
-Место (обозначение) в схеме: ГПП «Заречная», ЗРУ – 6 кВ, <_parent_var type = "obj", message = "Введите параметр СШ:", vname = "_obj_sh"> СШ.
+Место (обозначение) в схеме: ====????====ГПП «Заречная», ЗРУ – 6 кВ,====????==== <_parent_var type = "obj", message = "Введите параметр СШ:", vname = "_obj_sh"> СШ.
 Адрес: <_parent_var type = "obj", message = "Введите вид населенного пункта объекта:", vname = "_obj_padr_citycl"> <_parent_var type = "obj", message = "Введите название населенного пункта объекта:", vname = "_obj_padr_city">.
 </p>
 <p>
 4. Сроки проведения измерений:<br>
-с 12.02.2016 г. 09:50 ч. <br>
-по 12.02.2016 г. 10:00 ч.<br>
+с <_ask_obj type = "tn_circs", message = "Дата начала проведения измерений:", vname = "start_date"> г. <_ask_obj type = "tn_circs", message = "Время начала проведения измерений:", vname = "start_time"> ч. <br>
+по <_ask_obj type = "tn_circs", message = "Дата окончания проведения измерений:", vname = "end_date"> г. <_ask_obj type = "tn_circs", message = "Время окончания проведения измерений:", vname = "end_time"> ч.<br>
 </p>
 <p>
 5. Условия проведения измерений:
@@ -66,7 +66,7 @@ E-mail: <_parent_var type = "lab", message = "Введите_название_л
 <tr>
 </table>
 </p>
-Лист 2/2
+<p align = "right">Лист 2/2</p>
 <p  align="justify">
 6. Методика проведения измерений:<br>
 &nbsp; &nbsp; &nbsp; &nbsp;<_prot_type type = "tn", message = "Введите_название_лаборатории:", vname = "part2">
@@ -136,13 +136,19 @@ Sн для указанного класса точности, ВА:</td><td><_p
 </table>
 </p>
 <p  align="justify">10. Заключение:<br>
-&nbsp; &nbsp; &nbsp; &nbsp;Значение полной мощности нагрузки измерительного трансформатора напряжения равно 28,7 ВА и составляет 38,26 % от номинальной (75 ВА) полной мощности, что соответствует требованиям ГОСТ 1983-2015 для класса точности 0,5 измерительного трансформатора напряжения.</p>
+&nbsp; &nbsp; &nbsp; &nbsp;Значение полной мощности нагрузки измерительного трансформатора напряжения равно <_ask_obj type = "tn_circs", message = "Введите полную мощность S, ВА:", vname = "sab"> ВА и составляет <p id="list"></p> % от номинальной (<_parent_var type = "obj", message = "Введите_НПМНSн_трансформатора:", vname = "_trans_npmn"> ВА) полной мощности, что соответствует требованиям ГОСТ 1983-2015 для класса точности <_parent_var type = "obj", message = "Введите_клас_точности_трансформатора:", vname = "_trans_class"> измерительного трансформатора напряжения.</p>
 
 
 <p  align="center">Инженер – испытатель		_______________/<_prot_con type = "con", message = "Дата_подписания_протокола:", vname = "_cur_engineer", style = "">/</p>
 
 
 
+  <script>
+    var ret = (<_parent_var type = "obj", message = "Введите_НПМНSн_трансформатора:", vname = "_trans_npmn"> * 100) / <_ask_obj type = "tn_circs", message = "Введите полную мощность S, ВА:", vname = "sab">;
+    var newpl = document.createElement('plaintext');
+    newpl.innerHTML = ret;
+    list.insertBefore(newpl, list.children[1]);
+  </script>
 
 
 

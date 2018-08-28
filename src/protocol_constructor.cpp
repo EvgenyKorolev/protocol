@@ -169,7 +169,7 @@ void protocol_constructor::parser_first(QString& argx)
     std::pair<int, int> reg = std::make_pair(0, 0);
     std::string t_var, m_var, v_var, s_var;
     std::string ins_str;
-    std::vector<QString> type_teg{"_prot_type", "_parent_var", "_const_type", "_prot_con", "_set_adapt_var", "_ask_obj"};
+    std::vector<QString> type_teg{"_prot_type", "_parent_var", "_const_type", "_prot_con", "_set_adapt_var", "_ask_obj", "_arithmetic_type"};
     for (auto itx : type_teg){
         pos_beg = 0;
         do{
@@ -302,6 +302,9 @@ QString protocol_constructor::use_adapt(const std::tuple<std::string, std::strin
         return varad->get_var(QString(std::get<1>(arg).c_str()), QString(std::get<3>(arg).c_str()), QString(std::get<4>(arg).c_str()));
     }
     if (std::get<0>(arg) == "_const_type"){
+        return  vartype->get_var(QString(std::get<1>(arg).c_str()), QString(std::get<3>(arg).c_str()));
+    }
+    if (std::get<0>(arg) == "_arithmetic_type"){
         return  vartype->get_var(QString(std::get<1>(arg).c_str()), QString(std::get<3>(arg).c_str()));
     }
     return "NULL";
