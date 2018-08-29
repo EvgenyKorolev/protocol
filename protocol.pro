@@ -100,7 +100,9 @@ SOURCES += src/address.cpp \
     src/type_in_view.cpp \
     src/lab_adapter.cpp \
     src/prot_act_adapter.cpp \
-    src/ask_editor.cpp
+    src/ask_editor.cpp \
+    src/ask_view.cpp \
+    src/ask_model.cpp
 
 HEADERS  += src/address.h \
     src/app_data_model.h \
@@ -191,7 +193,9 @@ HEADERS  += src/address.h \
     src/type_in_view.h \
     src/lab_adapter.h \
     src/prot_act_adapter.h \
-    src/ask_editor.h
+    src/ask_editor.h \
+    src/ask_view.h \
+    src/ask_model.h
 
 RESOURCES += \
     icons.qrc \

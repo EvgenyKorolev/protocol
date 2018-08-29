@@ -30,6 +30,7 @@
 #include <QDateEdit>
 #include <QGridLayout>
 #include <QLineEdit>
+#include <QTextDocumentWriter>
 #include <tuple>
 #include <algorithm>
 #include <utility>

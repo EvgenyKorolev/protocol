@@ -328,6 +328,12 @@ void protocol_constructor::slot_test()
 
     QTextDocument tdd;
     tdd.setHtml(html_text);
+
+
+    QTextDocumentWriter  writer("result/test.odt", "odf");
+    QTextDocumentWriter  writer2("result/test2.odt", "plaintext");
+    writer.write(&tdd);
+    writer2.write(&tdd);
    // int f = tdd.blockCount();
 
   //  varad;     // Адаптер для получения данных у родителей протокола
