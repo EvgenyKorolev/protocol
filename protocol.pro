@@ -102,7 +102,8 @@ SOURCES += src/address.cpp \
     src/prot_act_adapter.cpp \
     src/ask_editor.cpp \
     src/ask_view.cpp \
-    src/ask_model.cpp
+    src/ask_model.cpp \
+    src/ask_delegat.cpp
 
 HEADERS  += src/address.h \
     src/app_data_model.h \
@@ -195,7 +196,8 @@ HEADERS  += src/address.h \
     src/prot_act_adapter.h \
     src/ask_editor.h \
     src/ask_view.h \
-    src/ask_model.h
+    src/ask_model.h \
+    src/ask_delegat.h
 
 RESOURCES += \
     icons.qrc \

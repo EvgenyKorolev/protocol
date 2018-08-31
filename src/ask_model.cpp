@@ -18,13 +18,15 @@ int ask_model::columnCount(const QModelIndex &parent) const
 }
 QVariant ask_model::data(const QModelIndex &index, int role) const
 {
+                      //Имя типа Описание Имя переменной Класс Значение
+     //QList<std::tuple<QString, QString, QString, QString, QString>>
     if (index.isValid()){
         if (role == Qt::DisplayRole){
             switch (index.column()) {
             case 0:
-                return QVariant(std::get<0>(this->ask_set.at(index.row())));
+                return QVariant(std::get<2>(this->ask_set.at(index.row())));
             case 1:
-                return QVariant(std::get<1>(this->ask_set.at(index.row())));
+                return QVariant(std::get<4>(this->ask_set.at(index.row())));
             default:
                 return QVariant();
             }
@@ -44,6 +46,11 @@ bool ask_model::setData(const QModelIndex &index, const QVariant &value, int rol
             return true;
         } else {
             this->ask_set.append(value.value<tuple_qss5>());
+            return true;
+        }
+    } else if (role == Qt::UserRole){
+        if (index.isValid()){
+            std::get<4>(this->ask_set[index.row()]) = value.value<QString>();
             return true;
         }
     }
@@ -71,7 +78,11 @@ Qt::ItemFlags ask_model::flags(const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QAbstractTableModel::flags(index);
     if( index.isValid() ) {
-            flags |= Qt::NoItemFlags;
+        if (index.column() == 1){
+            flags |= Qt::ItemIsEditable;
+        } else {
+           flags |= Qt::NoItemFlags;
+        }
     }
     return flags;
 }

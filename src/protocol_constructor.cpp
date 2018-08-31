@@ -127,6 +127,10 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
     main_lay->addLayout(buttons_lay);
     this->setLayout(main_lay);
 }
+void protocol_constructor::closeEvent(QCloseEvent *event)
+{
+    emit rejected();
+}
 protocol_constructor::~protocol_constructor()
 {
    // delete varad;
@@ -281,7 +285,7 @@ void protocol_constructor::prepare(QString &argx)
                 rrt = "";
             } else rrt = "";
         }
-    ask_editor* ask = new ask_editor();
+    ask_editor* ask = new ask_editor(end_ask_set);
     if (ask->exec() == QDialog::Accepted){
         is_prepear = true;
     }

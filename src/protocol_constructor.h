@@ -47,6 +47,7 @@ public slots:
     void slot_change_type();
     void slot_test();
 private:
+    void closeEvent(QCloseEvent *event);
     QDateEdit* dat_edit;
     app_data_view* app_view;
     QList<apparaturs*>* apprat;

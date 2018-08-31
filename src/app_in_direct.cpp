@@ -48,7 +48,6 @@ app_in_direct::app_in_direct()
     _find_str->addItem("Тип прибора", QVariant("type"));
     _find_str->addItem("Завод №", QVariant("mnom"));
     _find_str->addItem("Кл. точн.", QVariant("cls"));
-
     _find_status->addItem("равно", QVariant("eq"));
     _find_status->addItem("содержит", QVariant("incl"));
 
