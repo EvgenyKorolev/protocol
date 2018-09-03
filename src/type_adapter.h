@@ -18,6 +18,7 @@ public:
     void del_type(const QString& arg);
     QString get_var(const QString &cls, const QString &varname) const;
     bool test_duplicate() const;
+    void clear();
 private:
     void test_d();
     QList<type_obj> data_list{QList<type_obj>()};

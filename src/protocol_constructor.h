@@ -35,7 +35,7 @@
 #include <algorithm>
 #include <utility>
 #include <memory>
-
+enum class ask_p{parse, ask}; // указывает парсеру из каких адаптеров брать значения для замены
 class protocol_constructor : public QDialog
 {
     Q_OBJECT
@@ -63,16 +63,14 @@ private:
     QComboBox* select_type;  // выбор типа протокола
     QComboBox* select_engineer; // Выбор инженера подписавшегося под протоколом
     QLineEdit* enter_number; // Номер протокола
-    bool is_prepear{false}; // флаг того, прошел ли протокол подготовку (вводились ли значения типа ask).
     bool is_tested{false}; // флаг того, окончательное ли формирование протокола.
                     // тип адаптера, type, message, varname
     QString use_adapt(const std::tuple<std::string, std::string, std::string, std::string, std::string> &arg);    // Возвращает значения переменной из различных адаптеров
-    QList<std::tuple<QString, QString, QString, QString>> ask_set;  // переменные значение которых надо спросить у пользователя
-    QList<std::tuple<QString, QString, QString, QString, QString>> end_ask_set;  // переменные значение которых подставленый или уже спрошены у пользователя.
-    QList<std::tuple<QString, QString, QString, QString>> var_set; // переменные значение которых должно быть доступно скриптам
+    QString use_ask_adapt(const std::tuple<std::string, std::string, std::string, std::string, std::string> &arg); // Возвращает значения переменной из заполненного ask_set
+    QList<std::tuple<QString, QString, QString, QString, QString>> ask_set;  // переменные значение которых надо спросить у пользователя
 // Методы обработки текста
     void prepare(QString& argx);
-    void parser_first(QString &argx);
+    void replace_tags(std::string &arg, ask_p arg2 = ask_p::parse);
     void create_varlist();
     QString get_html();
 

@@ -11,6 +11,7 @@
 #include <QPushButton>
 #include <QSortFilterProxyModel>
 #include <QHeaderView>
+#include <memory>
 
 // Класс запрашивает для ввода список значений
 class ask_editor : public QDialog
@@ -19,6 +20,7 @@ class ask_editor : public QDialog
 public:
     ask_editor(const QList<tuple_qss5> &arg);
     ~ask_editor();
+    std::unique_ptr<QList<tuple_qss5> > result();
 public slots:
     void slot_ok();
 private:

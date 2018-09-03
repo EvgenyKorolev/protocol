@@ -7,7 +7,7 @@
 #include <memory>
 #include "const_loader.h"
 #include "const_obj.h"
-
+// Адаптер для подстановки данных зависящих от типа протокола (константных строк)
 class const_adapter
 {
 public:

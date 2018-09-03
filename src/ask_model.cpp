@@ -96,3 +96,7 @@ bool ask_model::removeRows(int row, int count, const QModelIndex & parent)
      this->layoutChanged();
      return true;
 }
+std::unique_ptr<QList<tuple_qss5> > ask_model::return_list()
+{
+    return std::make_unique<QList<tuple_qss5> >(ask_set);
+}

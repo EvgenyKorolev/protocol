@@ -42,3 +42,7 @@ ask_editor::~ask_editor()
     delete data_view;
     delete proxy_mod;
 }
+std::unique_ptr<QList<tuple_qss5> > ask_editor::result()
+{
+    return data_model->return_list();
+}

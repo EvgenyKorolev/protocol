@@ -8,12 +8,11 @@
 #include "ktp.h"
 #include "apparaturs.h"
 #include "lab_adapter.h"
-
 #include <QString>
 #include <QList>
 #include <QTime>
 #include <algorithm>
-
+// Адаптер переменных зависящих от родительских объектов (клиента) и настроек лаборатории.
 class var_adapter
 {
 public:

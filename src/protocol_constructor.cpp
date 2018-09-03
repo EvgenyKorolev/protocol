@@ -129,6 +129,7 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
 }
 void protocol_constructor::closeEvent(QCloseEvent *event)
 {
+    Q_UNUSED(event);
     emit rejected();
 }
 protocol_constructor::~protocol_constructor()
@@ -140,8 +141,7 @@ protocol_constructor::~protocol_constructor()
 }
 void protocol_constructor::slot_change_type()
 {
-    delete varconst;
-    varconst = new const_adapter(select_type->currentData().toString());
+    create_varlist();
     if (is_tested) slot_test();
 }
 QString protocol_constructor::get_html()
@@ -163,17 +163,29 @@ QString protocol_constructor::get_html()
      }
      return  QString(open_html);
 }
-void protocol_constructor::parser_first(QString& argx)
+void protocol_constructor::prepare(QString &argx)
+{
+    std::string arg{argx.toStdString()};
+    replace_tags(arg, ask_p::parse);
+    if (ask_set.size() != 0){
+        ask_editor* ask = new ask_editor(ask_set);
+        if (ask->exec() == QDialog::Accepted){
+            ask_set = *ask->result().release();
+            replace_tags(arg, ask_p::ask);
+        }
+    }
+    argx = std::move(arg.c_str());
+}
+void protocol_constructor::replace_tags(std::string& arg, ask_p arg2)
 {
     int pos_beg{0};
-    std::string arg{argx.toStdString()};
-    std::vector<std::pair<std::string, std::string> > parsres;
     std::string main_teg;
-    std::vector<std::string> tegs{"type", "message", "vname", "style"};
-    std::pair<int, int> reg = std::make_pair(0, 0);
+    std::vector<std::pair<std::string, std::string> > parsres;
     std::string t_var, m_var, v_var, s_var;
     std::string ins_str;
-    std::vector<QString> type_teg{"_prot_type", "_parent_var", "_const_type", "_prot_con", "_set_adapt_var", "_ask_obj", "_arithmetic_type"};
+    std::pair<int, int> reg{std::make_pair(0, 0)};
+    std::vector<std::string> tegs{"type", "message", "vname", "style"};
+    std::vector<QString> type_teg{"_prot_type", "_parent_var", "_const_type", "_prot_con", "_set_adapt_var", "_ask_obj"};
     for (auto itx : type_teg){
         pos_beg = 0;
         do{
@@ -204,91 +216,30 @@ void protocol_constructor::parser_first(QString& argx)
                 if (res_s == parsres.end()){
                     s_var = "";
                 } else s_var = res_s->second;
-                if (itx == "_set_adapt_var"){
-                    var_set.append(std::make_tuple(itx, QString(t_var.c_str()), QString(m_var.c_str()), QString(v_var.c_str())));
-                    pos_beg = reg.second;
-                    continue;
-                } else {
+                if (arg2 == ask_p::parse){
                     ins_str = this->use_adapt(std::make_tuple(itx.toStdString(), t_var, m_var, v_var, s_var)).toStdString();
                     if (ins_str != "NULL"){
                         arg.erase(static_cast<size_t>(reg.first), static_cast<size_t>(reg.second - reg.first + 1));
                         arg.insert(static_cast<size_t>(reg.first), ins_str);
                         pos_beg = reg.first + static_cast<int>(ins_str.size()) - 1;
                     } else {
-                        ask_set.append(std::make_tuple(itx, QString(t_var.c_str()), QString(m_var.c_str()), QString(v_var.c_str())));
+                        if (ask_set.end() == std::find_if(ask_set.begin(), ask_set.end(), [&itx, &t_var, &v_var](const std::tuple<QString, QString, QString, QString, QString>& pred)->bool{
+                                                          return ((std::get<1>(pred) == QString(t_var.c_str())) &&
+                                                                  (std::get<3>(pred) == QString(v_var.c_str())) &&
+                                                                  ((std::get<0>(pred) == itx)));})){
+                            ask_set.append(std::make_tuple(itx, QString(t_var.c_str()), QString(m_var.c_str()), QString(v_var.c_str()), ""));
+                        }
                         pos_beg = reg.second;
                     }
+                } else {
+                    ins_str = this->use_ask_adapt(std::make_tuple(itx.toStdString(), t_var, m_var, v_var, s_var)).toStdString();
+                    arg.erase(static_cast<size_t>(reg.first), static_cast<size_t>(reg.second - reg.first + 1));
+                    arg.insert(static_cast<size_t>(reg.first), ins_str);
+                    pos_beg = reg.first + static_cast<int>(ins_str.size()) - 1;
                 }
-            }
-        } while (reg.first != -1);
-    }
-    argx = std::move(arg.c_str());
-}
-void protocol_constructor::prepare(QString &argx)
-{
-    int pos_beg{0};
-    std::string arg{argx.toStdString()};
-    std::vector<std::pair<std::string, std::string> > parsres;
-    std::string main_teg;
-    std::vector<std::string> tegs{"type", "message", "vname", "style"};
-    std::pair<int, int> reg = std::make_pair(0, 0);
-    std::string t_var, m_var, v_var, s_var;
-    std::string ins_str;
-    auto dlist = model_type->ret_all_data();
-   //Имя типа (чеоловекочитаемое) Описание Имя переменной Класс
-    //QList<std::tuple<QString, QString, QString, QString>>
-    for (auto it : dlist){
-        vartype->add_type(std::get<2>(it));
-    }
-        pos_beg = 0;
-        do{
-            reg = my_fnc::serch_teg(arg, "_ask_obj", pos_beg);
-            if (reg.second != -1 && reg.first != -1){
-                main_teg = arg.substr(static_cast<size_t>(reg.first), static_cast<size_t>(reg.second - reg.first + 1));
-                parsres = my_fnc::parse_teg(main_teg, tegs);
-                auto res_t = std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{
-                    return arr.first == "type";});
-                if (res_t == parsres.end()){
-                    pos_beg += main_teg.size();
-                    continue;
-                }
-                t_var = res_t->second;
-                auto res_m =std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{
-                    return arr.first == "message";});
-                if (res_m == parsres.end()){
-                    m_var = "";
-                } else m_var = res_m->second;
-                auto res_v =std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{
-                    return arr.first == "vname";});
-                if (res_v == parsres.end()){
-                    pos_beg += main_teg.size();
-                    continue;
-                } v_var = res_v->second;
-                auto res_s =std::find_if(parsres.begin(), parsres.end(), [](const std::pair<std::string, std::string>& arr)->bool{
-                    return arr.first == "style";});
-                if (res_s == parsres.end()){
-                    s_var = "";
-                } else s_var = res_s->second;
-
-                if (ask_set.end() == std::find_if(ask_set.begin(), ask_set.end(), [&t_var, &v_var](const std::tuple<QString, QString, QString, QString>& pred)->bool{
-                                                  return ((std::get<1>(pred) == QString(t_var.c_str())) && (std::get<3>(pred) == QString(v_var.c_str())));})){
-                    ask_set.append(std::make_tuple("_ask_obj", QString(t_var.c_str()), QString(m_var.c_str()), QString(v_var.c_str())));
-                }
-                pos_beg = reg.second;
               } else ++pos_beg;
         } while (reg.first != -1);
-        QString rrt{""};
-        for (auto it : ask_set){
-            rrt = vartype->get_var(std::get<1>(it), std::get<3>(it));
-            if (rrt != "NULL"){
-                end_ask_set.append(std::make_tuple(std::get<0>(it), std::get<1>(it), std::get<2>(it), std::get<3>(it), rrt));
-                rrt = "";
-            } else rrt = "";
-        }
-    ask_editor* ask = new ask_editor(end_ask_set);
-    if (ask->exec() == QDialog::Accepted){
-        is_prepear = true;
-    }
+       }
 }
                                         //             тип адаптера,   type,       message,      varname,      style
 QString protocol_constructor::use_adapt(const std::tuple<std::string, std::string, std::string, std::string , std::string>& arg)
@@ -308,21 +259,26 @@ QString protocol_constructor::use_adapt(const std::tuple<std::string, std::strin
     if (std::get<0>(arg) == "_const_type"){
         return  vartype->get_var(QString(std::get<1>(arg).c_str()), QString(std::get<3>(arg).c_str()));
     }
-    if (std::get<0>(arg) == "_arithmetic_type"){
-        return  vartype->get_var(QString(std::get<1>(arg).c_str()), QString(std::get<3>(arg).c_str()));
-    }
     return "NULL";
+}
+QString protocol_constructor::use_ask_adapt(const std::tuple<std::string, std::string, std::string, std::string, std::string>& arg)
+{
+    auto it = std::find_if(ask_set.begin(), ask_set.end(), [&arg](const std::tuple<QString, QString, QString, QString, QString>& pred)->bool{
+        return (std::get<0>(arg) == std::get<0>(pred).toStdString() &&
+                std::get<1>(arg) == std::get<1>(pred).toStdString() &&
+                std::get<2>(arg) == std::get<2>(pred).toStdString() &&
+                std::get<3>(arg) == std::get<3>(pred).toStdString());});
+    if (ask_set.end() != it){
+        return  std::get<4>(*it);
+    }
+    return "";
 }
 void protocol_constructor::slot_test()
 {
     QString html_text = get_html().remove('\n');
-    prepare(html_text);
-    if (is_prepear == false){
-        return;
-    }
-    is_tested = true;
     create_varlist();
-    parser_first(html_text);
+    prepare(html_text);
+    is_tested = true;
     QWebEngineView* tmpw = new QWebEngineView(nullptr);
     tmpw->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
     tmpw->setMinimumWidth(700);
@@ -347,9 +303,15 @@ void protocol_constructor::slot_test()
 }
 void protocol_constructor::create_varlist()
 {
+    auto dlist = model_type->ret_all_data();
+    vartype->clear();
+    for (auto it : dlist){
+        vartype->add_type(std::get<2>(it));
+    }
     padapt->set_current_data(dat_edit->date());
     padapt->set_worker(select_engineer->currentData().value<worker>());
     padapt->set_number_prot(enter_number->text());
+    varconst->change_type(select_type->currentData().toString());
 }
 void protocol_constructor::slot_create()
 {

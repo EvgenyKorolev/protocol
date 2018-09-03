@@ -42,11 +42,15 @@ void type_adapter::test_d()
 QString type_adapter::get_var(const QString &cls, const QString &varname) const
 {
     auto ret = std::find_if(data_list.begin(), data_list.end(), [cls](const type_obj& pred)->bool{return pred.get_cls() == cls;});
-    if (ret == data_list.end()) return "";
+    if (ret == data_list.end()) return "NULL";
     return ret->get_vdata(varname);
 }
 void type_adapter::del_type(const QString& arg)
 {
     std::remove_if(data_list.begin(), data_list.end(), [arg](const type_obj& pred)->bool{return pred.get_vname() == arg;});
     test_d();
+}
+void type_adapter::clear()
+{
+    data_list = QList<type_obj>();
 }
