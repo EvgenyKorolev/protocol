@@ -13,7 +13,7 @@
 class address
 {
 public:
-    address();                                  // Конструктор по умолчанию
+    address() = default;                                  // Конструктор по умолчанию
     address(const address& arg);                // Конструктор копировщик
     address(address&& arg) = default;           // Конструктор перемещающий
     address& operator = (const address &arg);   // Присваивание
@@ -21,7 +21,7 @@ public:
     // Переопределение операций которые возможны с адресом
     bool operator == (const address &arg);      // Равенство
     bool operator != (const address &arg);      // Неравенство
-    ~address();                                 // Деструктор
+    ~address() = default;                                 // Деструктор
     int clear_address();                        // Функция очищающая объект "адрес"
 
     int set_country(QString* str);              // Установить название страны
@@ -67,19 +67,19 @@ public:
     int load_db();                         // Должен выполнить подготовку к получению из базы данных. Надо реализовать
     int save_db() const;                         // Должен выполнить подготовку к загрузке в базу данных. Надо реализовать
 // Перегрузка функций устанавливающих различные значения
-    int set_country(QString str);              // Установить название страны
-    int set_state(QString str);                // Установить Регион (субъект РФ)
-    int set_state_distr(QString str);          // Установить район в регионе
-    int set_city(QString str);                 // Установить Город (населенный пункт)
-    int set_district(QString str);             // Установить Район
-    int set_street(QString str);               // Установить Улица
-    int set_street_class(QString str);         // Установить вид улицы (улица, проспект...)
+    int set_country(const QString& str);              // Установить название страны
+    int set_state(const QString& str);                // Установить Регион (субъект РФ)
+    int set_state_distr(const QString& str);          // Установить район в регионе
+    int set_city(const QString& str);                 // Установить Город (населенный пункт)
+    int set_district(const QString& str);             // Установить Район
+    int set_street(const QString& str);               // Установить Улица
+    int set_street_class(const QString& str);         // Установить вид улицы (улица, проспект...)
     int set_building(QPair<int, QString> pr);  // Установить Номер дома и литер если есть
     int set_office(QPair<int, QString> pr);    // Установить Номер офиса (и литер если есть)
-    int set_state_class(QString str);          // Установить Класс региона (республика, область...)
-    int set_city_class(QString str);           // Установить Класс населенного пункта (Город, село...)
-    int set_office_lit(QString arg);           // Установить литер офиса отдельно
-    int set_building_lit(QString arg);         // Установить литер офиса отдельно
+    int set_state_class(const QString& str);          // Установить Класс региона (республика, область...)
+    int set_city_class(const QString& str);           // Установить Класс населенного пункта (Город, село...)
+    int set_office_lit(const QString& str);           // Установить литер офиса отдельно
+    int set_building_lit(const QString& str);         // Установить литер офиса отдельно
 
 private:
     QString country{""};                 // Страна

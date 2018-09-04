@@ -24,7 +24,7 @@ const_obj::const_obj(const_obj&& arg)
     name = std::move(arg.name);
     data = std::move(arg.data);
 }
-const_obj& const_obj::operator=(const_obj& arg)
+const_obj& const_obj::operator=(const const_obj& arg)
 {
     var_name = arg.get_vname();
     name = arg.get_name();

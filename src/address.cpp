@@ -1,6 +1,5 @@
 #include "address.h"
 
-address::address(){}
 address::address(const address &arg)
 {
     country = arg.country;
@@ -16,7 +15,6 @@ address::address(const address &arg)
     office = arg.office;
     post_index = arg.post_index;
 }
-address::~address(){}
 bool address::operator == (const address &arg)
 {
     if (
@@ -316,7 +314,7 @@ QString address::get_building_lit() const
     return this->building.second;
 }
 // Определение перегруженных функций ввода
-int address::set_country(QString str)
+int address::set_country(const QString &str)
 {
     if (str.size() < 1000) {
         this->country = str;
@@ -324,7 +322,7 @@ int address::set_country(QString str)
     }
     return 1;
 }
-int address::set_state(QString str)
+int address::set_state(const QString &str)
 {
     if (str.size() < 1000) {
         this->state = str;
@@ -332,7 +330,7 @@ int address::set_state(QString str)
     }
     return 1;
 }
-int address::set_state_distr(QString str)
+int address::set_state_distr(const QString &str)
 {
     if (str.size() < 1000) {
         this->state_district = str;
@@ -340,7 +338,7 @@ int address::set_state_distr(QString str)
     }
     return 1;
 }
-int address::set_city(QString str)
+int address::set_city(const QString &str)
 {
     if (str.size() < 1000) {
         this->city = str;
@@ -348,7 +346,7 @@ int address::set_city(QString str)
     }
     return 1;
 }
-int address::set_district(QString str)
+int address::set_district(const QString &str)
 {
     if (str.size() < 1000) {
         this->district = str;
@@ -356,7 +354,7 @@ int address::set_district(QString str)
     }
     return 1;
 }
-int address::set_street(QString str)
+int address::set_street(const QString &str)
 {
     if (str.size() < 1000) {
         this->street = str;
@@ -364,7 +362,7 @@ int address::set_street(QString str)
     }
     return 1;
 }
-int address::set_street_class(QString str)
+int address::set_street_class(const QString &str)
 {
     if (str.size() < 1000) {
         this->street_class = str;
@@ -390,7 +388,7 @@ int address::set_office(QPair<int, QString> pr)
     }
     return 1;
 }
-int address::set_state_class(QString str)
+int address::set_state_class(const QString &str)
 {
     if (str.size() < 1000) {
         this->state_class = str;
@@ -398,7 +396,7 @@ int address::set_state_class(QString str)
     }
     return 1;
 }
-int address::set_city_class(QString str)
+int address::set_city_class(const QString &str)
 {
     if (str.size() < 1000) {
         this->city_class = str;
@@ -406,18 +404,18 @@ int address::set_city_class(QString str)
     }
     return 1;
 }
-int address::set_office_lit(QString arg)
+int address::set_office_lit(const QString &str)
 {
-    if (arg.size() < 1000) {
-        this->office.second = arg;
+    if (str.size() < 1000) {
+        this->office.second = str;
         return 0;
     }
     return 1;
 }
-int address::set_building_lit(QString arg)
+int address::set_building_lit(const QString &str)
 {
-    if (arg.size() < 1000) {
-        this->building.second = arg;
+    if (str.size() < 1000) {
+        this->building.second = str;
         return 0;
     }
     return 1;

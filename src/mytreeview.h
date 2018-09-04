@@ -52,6 +52,7 @@ public:
     void save_all_klient();
 public slots:
     void slot_delete();
+    void slot_del_klient();
 
     void slot_edit_klient();
     void slot_edit_order();

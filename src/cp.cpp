@@ -29,12 +29,12 @@ cp::cp(obj *arg)
         this->p_list.append(*it1);
         ++it1;
     }
-    this->adr = arg->get_adr();
-    this->sh = arg->get_sh();
-    this->status = arg->get_status();
-    this->max_time = arg->get_maxt_list();
-    this->min_time = arg->get_mint_list();
-    this->voltage = arg->get_voltage();
+    adr = arg->get_adr();
+    sh = arg->get_sh();
+    status = arg->get_status();
+    max_time = arg->get_maxt_list();
+    min_time = arg->get_mint_list();
+    voltage = arg->get_voltage();
     fab_obj fabob;
     QList<obj*> tmp_ktp = arg->get_ktp_list();
     QList<obj*>::iterator it2 = tmp_ktp.begin();
@@ -52,9 +52,18 @@ cp::cp(obj *arg)
     }
     _tr = arg->get_tr();
 }
-cp::cp(const cp &arg)
+cp::cp(const cp &arg) : obj(arg)
 {
-    this->init(&arg);
+    fab_obj fabob;
+    QList<obj*> tmp_ktp = arg.get_ktp_list();
+    QList<obj*>::iterator it2 = tmp_ktp.begin();
+    while (it2 != tmp_ktp.end()){
+        obj *tmpo = fabob.create_ktp();
+        tmpo->init(*it2);
+        this->add_ktp(tmpo);
+        ++it2;
+    }
+    _tr = arg.get_tr();
 }
 cp::~cp()
 {

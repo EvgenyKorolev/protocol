@@ -65,8 +65,6 @@ public:
     int load_db();                                  // Загрузить из базы даных
     int save_db();                                  // Загрузить в бвзу данных
 
-    details null_details();                         // Очистить объект от данных и вернуть пустой объект
-
 private:
     QList<QString> list_tel;        // Список телефонов
     QList<QString> list_fax;        // Список факсов

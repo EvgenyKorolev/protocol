@@ -41,7 +41,7 @@ void type_adapter::test_d()
 }
 QString type_adapter::get_var(const QString &cls, const QString &varname) const
 {
-    auto ret = std::find_if(data_list.begin(), data_list.end(), [cls](const type_obj& pred)->bool{return pred.get_cls() == cls;});
+    auto ret = std::find_if(data_list.begin(), data_list.end(), [cls, varname](const type_obj& pred)->bool{return pred.get_cls() == cls;});
     if (ret == data_list.end()) return "NULL";
     return ret->get_vdata(varname);
 }

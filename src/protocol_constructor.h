@@ -27,10 +27,16 @@
 #include <QTextDocument>
 #include <QRegExp>
 #include <QWebEngineView>
+#include <QWebEnginePage>
 #include <QDateEdit>
 #include <QGridLayout>
 #include <QLineEdit>
+
+
 #include <QTextDocumentWriter>
+#include <QPrinter>
+
+
 #include <tuple>
 #include <algorithm>
 #include <utility>
@@ -54,7 +60,7 @@ private:
     obj* parent;            // Ссылка на родительский объект
     var_adapter* varad;     // Адаптер для получения данных у родителей протокола
     const_adapter* varconst;// Адаптер для получения констант зависящих от типа протокола
-    type_adapter* vartype;  // Адаптер для получения констант зависящих от выбранных коллекций типов
+    std::unique_ptr<type_adapter> vartype{new type_adapter()};  // Адаптер для получения констант зависящих от выбранных коллекций типов
     protocol* actual_prot;  // Формируемый объект протокола
     std::unique_ptr<prot_act_adapter> padapt{new prot_act_adapter()}; // Адаптер для объектов настриваемых в конструкторе
     QList<QPair<QString, QString> > types;

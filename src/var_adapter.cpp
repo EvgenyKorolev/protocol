@@ -46,6 +46,7 @@ QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname, 
     }
     if (arg_type == "obj"){
         if (arg_vname == "_obj_name") return pather_obj->get_name();
+        if (arg_vname == "_obj_schema") return pather_obj->get_schema();
         if (arg_vname == "_obj_app") return get_app_table(arg_vname, style);
         if (arg_vname == "_obj_app1") return get_app_table(arg_vname, style);
         if (arg_vname == "_obj_app2") return get_app_table(arg_vname, style);
@@ -119,6 +120,7 @@ QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname, 
         if (arg_vname.left(4) == "_ktp"){
             if (pather_obj->type() == "ktp"){
                 if (arg_vname == "_ktp_name") return pather_obj->get_name();
+                if (arg_vname == "_ktp_schema") return pather_obj->get_schema();
                 if (arg_vname == "_ktp_app") return get_app_table(arg_vname, style);
                 if (arg_vname == "_ktp_app1") return get_app_table(arg_vname, style);
                 if (arg_vname == "_ktp_app2") return get_app_table(arg_vname, style);
@@ -161,6 +163,7 @@ QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname, 
       if (arg_vname.left(3) == "_cp"){
         if (pather_obj->type() == "cp"){
                 if (arg_vname == "_cp_name") return pather_obj->get_name();
+                if (arg_vname == "_cp_schema") return pather_obj->get_schema();
                 if (arg_vname == "_cp_app") return get_app_table(arg_vname, style);
                 if (arg_vname == "_cp_app1") return get_app_table(arg_vname, style);
                 if (arg_vname == "_cp_app2") return get_app_table(arg_vname, style);

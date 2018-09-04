@@ -22,7 +22,7 @@ public:
     const_obj(const_obj& arg);
     const_obj(const const_obj& arg);
     const_obj(const_obj&& arg);
-    const_obj& operator=(const_obj& arg);
+    const_obj& operator=(const const_obj& arg);
     const_obj& operator=(const_obj&& arg);
     QString get_name() const;
     void set_name(const QString& arg);

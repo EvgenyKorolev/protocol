@@ -6,6 +6,7 @@ editor_cp::~editor_cp()
     delete adr_label;
     delete sh_label;
     delete volt_label;
+    delete schema_label;
     delete _tr_label;
     delete _tr_scroll;
     delete adr_scroll;
@@ -34,7 +35,7 @@ editor_cp::editor_cp(obj *arg, QWidget *parent) : QDialog(parent)
     name_lay->addWidget(this->name_label);
     name_lay->addWidget(name_ed);
 //int voltage;                             // Напряжение номинальное
-    this->volt_label = new QLabel;
+    volt_label = new QLabel;
     QString tmps;
     volt_label->setText(tmps.setNum(this->main_data->get_voltage()));
     QLabel *volt_cp = new QLabel();
@@ -45,8 +46,21 @@ editor_cp::editor_cp(obj *arg, QWidget *parent) : QDialog(parent)
     QObject::connect(volt_ed, SIGNAL(clicked()), this, SLOT(slot_volt_edit()));
     QBoxLayout *volt_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     volt_lay->addWidget(volt_cp);
-    volt_lay->addWidget(this->volt_label);
+    volt_lay->addWidget(volt_label);
     volt_lay->addWidget(volt_ed);
+//QString schema;                             // Место обозначения на схеме
+    schema_label = new QLabel;
+    schema_label->setText(this->main_data->get_schema());
+    QLabel *schema_cp = new QLabel();
+    schema_cp->setText("<b>Место обозначения на схеме: </b>");
+    QPushButton *schema_ed = new QPushButton("Изменить...");
+    schema_ed->setMaximumWidth(100);
+    schema_ed->setMinimumWidth(100);
+    QObject::connect(schema_ed, SIGNAL(clicked()), this, SLOT(slot_schema_edit()));
+    QBoxLayout *schema_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    schema_lay->addWidget(schema_cp);
+    schema_lay->addWidget(schema_label);
+    schema_lay->addWidget(schema_ed);
 //address adr;                             // Адрес объекта
     QLabel *adr_txt = new QLabel();
     adr_txt->setText("<H4><CENTER>Адрес центра питания: <CENTER></H4>");
@@ -169,6 +183,7 @@ editor_cp::editor_cp(obj *arg, QWidget *parent) : QDialog(parent)
 // Расставляем виджеты
     QBoxLayout *main_lay = new QBoxLayout(QBoxLayout::TopToBottom);
     main_lay->addLayout(name_lay);
+    main_lay->addLayout(schema_lay);
     main_lay->addLayout(volt_lay);
     main_lay->addWidget(adr_txt);
     main_lay->addLayout(adr_l);
@@ -182,7 +197,7 @@ editor_cp::editor_cp(obj *arg, QWidget *parent) : QDialog(parent)
 }
 bool editor_cp::is_edit()
 {
-    return this->edited;
+    return edited;
 }
 void editor_cp::slot_name_edit()
 {
@@ -190,10 +205,23 @@ void editor_cp::slot_name_edit()
     QString tmp2 = this->main_data->get_name();
     string_edit *stred = new string_edit(&tmp2, &tmp1, 300);
     if (stred->exec() == QDialog::Accepted){
-        this->main_data->set_name(stred->result());
-        this->name_label->setText(main_data->get_name());
-        this->name_label->adjustSize();
-      this->edited = true;
+        main_data->set_name(stred->result());
+        name_label->setText(main_data->get_name());
+        name_label->adjustSize();
+      edited = true;
+    }
+    delete stred;
+}
+void editor_cp::slot_schema_edit()
+{
+    QString tmp1 = "Место обозначения на схеме: ";
+    QString tmp2 = this->main_data->get_schema();
+    string_edit *stred = new string_edit(&tmp2, &tmp1, 300);
+    if (stred->exec() == QDialog::Accepted){
+        main_data->set_schema(stred->result());
+        schema_label->setText(main_data->get_schema());
+        schema_label->adjustSize();
+      edited = true;
     }
     delete stred;
 }

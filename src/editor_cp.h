@@ -38,6 +38,7 @@ public:
     bool is_edit();
 public slots:
     void slot_name_edit();
+    void slot_schema_edit();
     void slot_save_cp();
     void slot_volt_edit();
     void slot_address_edit();
@@ -46,6 +47,7 @@ public slots:
 private:
     obj* main_data;
     QLabel* name_label;
+    QLabel* schema_label;
     QLabel* adr_label;
     QLabel* sh_label;
     QLabel* volt_label;

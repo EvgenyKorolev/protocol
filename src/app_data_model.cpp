@@ -1,6 +1,6 @@
 #include "app_data_model.h"
 
-app_data_model::app_data_model(QList<apparaturs *> *arg) : QAbstractTableModel ()
+app_data_model::app_data_model(QList<apparaturs *> *arg) : QAbstractTableModel()
 {
     app_list = arg;
 }

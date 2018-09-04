@@ -9,7 +9,7 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
    // padapt(new prot_act_adapter());
     actual_prot = act_prot;
     varad = new var_adapter(actual_prot->get_parent());
-    vartype = new type_adapter();
+
     QBoxLayout* main_lay = new QBoxLayout(QBoxLayout::TopToBottom);
     QGridLayout* combo_type_lay = new QGridLayout();
     QLabel* type_lab = new QLabel();
@@ -134,9 +134,7 @@ void protocol_constructor::closeEvent(QCloseEvent *event)
 }
 protocol_constructor::~protocol_constructor()
 {
-   // delete varad;
     delete varconst;
-    delete vartype;
     delete dat_edit;
 }
 void protocol_constructor::slot_change_type()
@@ -286,23 +284,36 @@ void protocol_constructor::slot_test()
     tmpw->setHtml(html_text);
     tmpw->show();
 
-    QTextDocument tdd;
-    tdd.setHtml(html_text);
+//    QWebEnginePage* tmppage = new QWebEnginePage();
+//    tmppage->setHtml(html_text);
+//    tmppage->printToPdf(QString("result/test.pdf"));
+
+//    QTextDocument tdd;
+//    tdd.setHtml(html_text);
+
+//    QPrinter* print = new QPrinter();
+//    print->setOutputFormat(QPrinter::PdfFormat);
+//    print->setOutputFileName("/result.testx.pdf");
+
+//    QPainter* tmppaint = new QPainter();
 
 
-    QTextDocumentWriter  writer("result/test.odt", "odf");
-    QTextDocumentWriter  writer2("result/test2.odt", "plaintext");
-    writer.write(&tdd);
-    writer2.write(&tdd);
+//    QTextDocumentWriter  writer("result/test.odt", "odf");
+//    QTextDocumentWriter  writer1("result/test3.odt", "html");
+//    QTextDocumentWriter  writer2("result/test2.odt", "plaintext");
+//    writer.write(&tdd);
+//    writer2.write(&tdd);
    // int f = tdd.blockCount();
 
-  //  varad;     // Адаптер для получения данных у родителей протокола
-  //  varconst;// Адаптер для получения констант зависящих от типа протокола
-  //  vartype;  // Адаптер для получения констант зависящих от выбранных коллекций типов
+    // var_adapter* varad;     // Адаптер для получения данных у родителей протокола
+    // ++const_adapter* varconst;// Адаптер для получения констант зависящих от типа протокола
+    //++ type_adapter* vartype;  // Адаптер для получения констант зависящих от выбранных коллекций типов
+    // ++std::unique_ptr<prot_act_adapter> padapt{new prot_act_adapter()}; // Адаптер для объектов настриваемых в конструкторе
   //
 }
 void protocol_constructor::create_varlist()
 {
+    varconst->change_type(select_type->currentData().toString());
     auto dlist = model_type->ret_all_data();
     vartype->clear();
     for (auto it : dlist){
@@ -311,7 +322,6 @@ void protocol_constructor::create_varlist()
     padapt->set_current_data(dat_edit->date());
     padapt->set_worker(select_engineer->currentData().value<worker>());
     padapt->set_number_prot(enter_number->text());
-    varconst->change_type(select_type->currentData().toString());
 }
 void protocol_constructor::slot_create()
 {

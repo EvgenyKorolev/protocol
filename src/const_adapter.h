@@ -14,7 +14,7 @@ public:
     const_adapter(const QString& type);
     const_adapter(const_adapter& arg);
     const_adapter(const_adapter&& arg);
-    const_adapter& operator=(const_adapter& arg);
+    const_adapter& operator=(const const_adapter& arg);
     const_adapter& operator=(const_adapter&& arg);
     bool is_valid();
     QString get_var(const QString &varname);

@@ -4,13 +4,13 @@ klient::klient()
 {
     det = details();
     fadr = address();
-    this->orders = QList<order*>();
+    orders = QList<order*>();
 }
 klient::klient(const klient &arg)
 {
-    this->name = arg.name;
-    this->det = arg.det;
-    this->fadr = arg.fadr;
+    name = arg.name;
+    det = arg.det;
+    fadr = arg.fadr;
     fab_order fabo;
     QList<order*>::const_iterator it = arg.orders.begin();
     while (it != arg.orders.end()){
@@ -24,9 +24,9 @@ klient::klient(const klient &arg)
 bool klient::operator == (const klient &arg)
 {
     if (
-            this->name == arg.name &&
-            this->det == arg.det &&
-            this->fadr == arg.fadr
+            name == arg.name &&
+            det == arg.det &&
+            fadr == arg.fadr
             ) {return true;}
     return false;
 }
@@ -36,9 +36,9 @@ bool klient::operator != (const klient &arg)
 }
 klient& klient::operator = (const klient &arg)
 {
-    this->name = arg.name;
-    this->det = arg.det;
-    this->fadr = arg.fadr;
+    name = arg.name;
+    det = arg.det;
+    fadr = arg.fadr;
     fab_order fabo;
     QList<order*>::const_iterator it = arg.orders.begin();
     while (it != arg.orders.end()){

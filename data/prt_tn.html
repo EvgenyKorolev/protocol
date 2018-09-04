@@ -43,13 +43,13 @@ E-mail: <_parent_var type = "lab", message = "Введите_название_л
 </p>
 <p>
 3. Идентификационные данные пункта контроля КЭ:<br>
-Место (обозначение) в схеме: ====????====ГПП «Заречная», ЗРУ – 6 кВ,====????==== <_parent_var type = "obj", message = "Введите параметр СШ:", vname = "_obj_sh"> СШ.
+Место (обозначение) в схеме: <_parent_var type = "obj", message = "Введите место обозначения в схеме:", vname = "_obj_schema">, ЗРУ – <_parent_var type = "obj", message = "Введите номинальное напряжение:", vname = "_obj_unom"> кВ, <_parent_var type = "obj", message = "Введите параметр СШ:", vname = "_obj_sh"> СШ.<br>
 Адрес: <_parent_var type = "obj", message = "Введите вид населенного пункта объекта:", vname = "_obj_padr_citycl"> <_parent_var type = "obj", message = "Введите название населенного пункта объекта:", vname = "_obj_padr_city">.
 </p>
 <p>
 4. Сроки проведения измерений:<br>
-с <_ask_obj type = "tn_circs", message = "Дата начала проведения измерений:", vname = "start_date"> г. <_ask_obj type = "tn_circs", message = "Время начала проведения измерений:", vname = "start_time"> ч. <br>
-по <_ask_obj type = "tn_circs", message = "Дата окончания проведения измерений:", vname = "end_date"> г. <_ask_obj type = "tn_circs", message = "Время окончания проведения измерений:", vname = "end_time"> ч.<br>
+с <_ask_obj type = "tn_dtime", message = "Дата начала проведения измерений:", vname = "startdate"> г. <_ask_obj type = "tn_dtime", message = "Время начала проведения измерений:", vname = "starttime"> ч. <br>
+по <_ask_obj type = "tn_dtime", message = "Дата окончания проведения измерений:", vname = "enddate"> г. <_ask_obj type = "tn_dtime", message = "Время окончания проведения измерений:", vname = "endtime"> ч.<br>
 </p>
 <p>
 5. Условия проведения измерений:
@@ -136,7 +136,7 @@ Sн для указанного класса точности, ВА:</td><td><_p
 </table>
 </p>
 <p  style="margin: 0px">10. Заключение:<br>
-<p style="text-align: justify; text-indent: 50; margin: 0px">Значение полной мощности нагрузки измерительного трансформатора напряжения равно <_ask_obj type = "tn_circs", message = "Введите полную мощность S, ВА:", vname = "sab"> ВА и составляет <p id="list"></p> % от номинальной (<_parent_var type = "obj", message = "Введите_НПМНSн_трансформатора:", vname = "_trans_npmn"> ВА) полной мощности, что соответствует требованиям ГОСТ 1983-2015 для класса точности <_parent_var type = "obj", message = "Введите_клас_точности_трансформатора:", vname = "_trans_class"> измерительного трансформатора напряжения.<p></p>
+<p style="text-align: justify; text-indent: 50; margin: 0px">Значение полной мощности нагрузки измерительного трансформатора напряжения равно <_ask_obj type = "tn_circs", message = "Введите полную мощность S, ВА:", vname = "sab"> ВА и составляет <font id="list"></font> % от номинальной (<_parent_var type = "obj", message = "Введите_НПМНSн_трансформатора:", vname = "_trans_npmn"> ВА) полной мощности, что соответствует требованиям ГОСТ 1983-2015 для класса точности <_parent_var type = "obj", message = "Введите_клас_точности_трансформатора:", vname = "_trans_class"> измерительного трансформатора напряжения.<p></p>
 
 
 <p  align="center">Инженер – испытатель		_______________/<_prot_con type = "con", message = "Дата_подписания_протокола:", vname = "_cur_engineer", style = "">/</p>
@@ -144,7 +144,7 @@ Sн для указанного класса точности, ВА:</td><td><_p
 
 
   <script>
-    var ret = (<_parent_var type = "obj", message = "Введите_НПМНSн_трансформатора:", vname = "_trans_npmn"> * 100) / <_ask_obj type = "tn_circs", message = "Введите полную мощность S, ВА:", vname = "sab">;
+    var ret = Math.round(((parseFloat('<_parent_var type = "obj", message = "Введите_НПМНSн_трансформатора:", vname = "_trans_npmn">') * 100) / parseFloat('<_ask_obj type = "tn_circs", message = "Введите полную мощность S, ВА:", vname = "sab">'))*100)/100;
     var newpl = document.createElement('text');
     newpl.innerHTML = ret;
     list.insertBefore(newpl, list.children[1]);

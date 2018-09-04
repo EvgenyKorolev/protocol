@@ -30,6 +30,10 @@ void MyTreeView::mousePressEvent(QMouseEvent *arg)
              QAction *save_as = new QAction(trUtf8("Сохранить клиента"), this);
              QObject::connect(save_as, SIGNAL(triggered()), this, SLOT(slot_save_klient()));
              mnu->addAction(save_as);
+             QAction *del_kli = new QAction(trUtf8("Удалить клиента"), this);
+             QObject::connect(del_kli, SIGNAL(triggered()), this, SLOT(slot_del_klient()));
+             mnu->addAction(del_kli);
+             delete_item->setText("Убрать из списка");
             }
          if (temp_v == "ord"){
              QAction *edit_ord = new QAction(trUtf8("Редактировать заявку"), this);
@@ -114,7 +118,7 @@ void MyTreeView::slot_delete()
     QVariant temp_v = this->indexAt(curs).data(Qt::UserRole);
     QString txxt;
     if (temp_v == "kli"){
-        txxt = "<b>Вы точно хотите закрыть клиента: " + this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_name();
+        txxt = "<b>Вы точно хотите убрать клиента из списка: " + this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_name();
       }
     if (temp_v == "ord"){
         txxt = "<b>Вы точно хотите удалить заявку: " + this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_o()->get_uniq();
@@ -336,5 +340,16 @@ void MyTreeView::slot_create_prot(){
     }
     tmpo = nullptr;
     }
+void MyTreeView::slot_del_klient()
+{
+    yes_no* pmbx = new yes_no("<b>Вы точно хотите удалить клиента: " + this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_name() + "?</b>");
+    if (pmbx->exec() == QDialog::Accepted)
+    {
+        QString patch = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_patch();
+        model()->removeRow(this->indexAt(curs).row(),this->indexAt(curs).parent());
+        model()->layoutChanged();
+        QFile(patch).remove();
+    }
+};
 void MyTreeView::slot_edit_prot(){;}
 void MyTreeView::slot_clone_prot(){;}

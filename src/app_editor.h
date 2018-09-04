@@ -44,7 +44,6 @@ private:
     bool flag_edit;
     QLabel* name_label;       // Название прибора
     QLabel* mdata_label;        // Дата... чего-то там, пока непонятно
-    QLabel* verification_label;   // Номер свидетельства о поверке, дата поверки, дата очередной поверки
     QLabel* cls_label;        // Класс прибора (Тип СИ)
     QLabel* mnom_label;       // Заводской номер
     QLabel* _clas_label;    // Класс точности

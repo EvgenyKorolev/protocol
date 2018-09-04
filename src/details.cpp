@@ -46,11 +46,6 @@ details& details::operator = (const details &arg)
     dir.second = arg.dir.second;
     return *this;
 }
-details details::null_details()
-{
-    details();
-    return *this;
-}
 int details::add_tel(QString* arg)
 {
     this->list_tel.append(*arg);

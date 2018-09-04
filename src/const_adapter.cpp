@@ -21,7 +21,7 @@ const_adapter::const_adapter(const_adapter&& arg)
     data = std::move(arg.data);
     valid =std::move(arg.valid);
 }
-const_adapter& const_adapter::operator=(const_adapter& arg)
+const_adapter& const_adapter::operator=(const const_adapter& arg)
 {
     data = arg.data;
     valid =arg.valid;

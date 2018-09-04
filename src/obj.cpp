@@ -2,18 +2,8 @@
 
 obj::obj()
 {
-    this->name = "";
-    QList<protocol*> tmpp;
-    this->p_list = tmpp;
-    this->adr = address();
-    this->sh = "";
-    this->status = "";
-    QList<QPair<QTime, QTime>> tmpo;
-    this->max_time = tmpo;
-    this->min_time = tmpo;
     this->up = nullptr;
     this->ups = nullptr;
-    this->voltage = 0;
 }
 obj::obj(order *arg)
 {
@@ -28,6 +18,12 @@ obj::obj(const obj &arg)
     while (!(it1 == tmp_prt.end())){
         this->p_list.append(*it1);
         ++it1;
+    }
+    QList<apparaturs*> tmp_app = arg.get_app_list();
+    QList<apparaturs*>::iterator it3 = tmp_app.begin();
+    while (it3 != tmp_app.end()){
+        this->appr.append(*it3);
+        ++it3;
     }
     this->adr = arg.get_adr();
     this->sh = arg.get_sh();
@@ -136,20 +132,11 @@ obj* obj::get_ups() const
 {
     return nullptr;
 }
-int obj::set_name(QString *arg)
-{
-    if (arg->size() < 1000)
-    {
-        this->name = *arg;
-        return 0;
-    }
-    return 1;
-}
-int obj::set_name(QString arg)
+int obj::set_name(const QString &arg)
 {
     if (arg.size() < 1000)
     {
-        this->name = arg;
+        name = arg;
         return 0;
     }
     return 1;
@@ -210,18 +197,10 @@ address obj::get_adr() const
 {
     return this->adr;
 }
-int obj::set_sh(QString *arg)
-{
-    if (arg->size() < 1000){
-        this->sh = *arg;
-        return 0;
-    }
-    return 1;
-}
-int obj::set_sh(QString arg)
+int obj::set_sh(const QString& arg)
 {
     if (arg.size() < 1000){
-        this->sh = arg;
+        sh = arg;
         return 0;
     }
     return 1;
@@ -230,7 +209,14 @@ QString obj::get_sh() const
 {
     return this->sh;
 }
-
+void obj::set_schema(const QString& arg)
+{
+    schema = arg;
+}
+QString obj::get_schema() const
+{
+    return  schema;
+}
 int obj::set_cp()
 {
     this->status = "cp";
@@ -359,7 +345,10 @@ QDomElement obj::make_xml_1()
         QDomText xml_name_text = ret_xml.createTextNode(this->name);
         root.appendChild(xml_name);
         xml_name.appendChild(xml_name_text);
-
+   QDomElement xml_schema = ret_xml.createElement("schema");
+       QDomText xml_schema_text = ret_xml.createTextNode(schema);
+       root.appendChild(xml_schema);
+       xml_schema.appendChild(xml_schema_text);
     QDomElement xml_prol = ret_xml.createElement("protocols");
         root.appendChild(xml_prol);
         QList<protocol*>::iterator it1 = this->p_list.begin();
@@ -420,7 +409,6 @@ QDomElement obj::make_xml_1()
               i++;
               it3++;
         }
-
         // Аппаратура
         QDomElement xml_app_list = ret_xml.createElement("applist");
             root.appendChild(xml_app_list);
@@ -440,12 +428,13 @@ int obj::load_xml_1(QDomNode *arg)
 {
     QDomNode root = *arg;
 
-    this->name = root.firstChildElement("name").text();
-    this->sh = root.firstChildElement("sh").text();
-    this->status = root.firstChildElement("status").text();
-    this->voltage = root.firstChildElement("volt").text().toInt();
+    name = root.firstChildElement("name").text();
+    schema = root.firstChildElement("schema").text();
+    sh = root.firstChildElement("sh").text();
+    status = root.firstChildElement("status").text();
+    voltage = root.firstChildElement("volt").text().toInt();
     auto lx = root.firstChildElement("address");
-    this->adr.load_xml(&lx);
+    adr.load_xml(&lx);
 
 //    lxml->appendChild(root.firstChildElement("protocols"));
 //    QDomDocument* tmpd = new QDomDocument;

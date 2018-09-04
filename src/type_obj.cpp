@@ -86,7 +86,7 @@ QString type_obj::get_vdata(const QString &key) const
     // имя переменной, описание, значение, тип переменной
     auto it = std::find_if(data.begin(), data.end(), [key](const std::tuple<QString, QString, QString, QString>& pred)->bool{
             return std::get<0>(pred) == key; });
-    if (it == data.end()) return "";
+    if (it == data.end()) return "NULL";
     return  std::get<3>(*it);
 }
 void type_obj::removeAt(int arg)

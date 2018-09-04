@@ -3,6 +3,7 @@
 editor_ktp::~editor_ktp()
 {
     delete name_label;
+    delete schema_label;
     delete adr_label;
     delete sh_label;
     delete volt_label;
@@ -31,6 +32,19 @@ editor_ktp::editor_ktp(obj *arg, QWidget *parent) : QDialog(parent)
     name_lay->addWidget(name_cp);
     name_lay->addWidget(this->name_label);
     name_lay->addWidget(name_ed);
+//QString schema;        // Место обозначения на схеме
+    schema_label = new QLabel;
+    schema_label->setText(this->main_data->get_schema());
+    QLabel *schema_cp = new QLabel();
+    schema_cp->setText("<b>Место обозначения на схеме: </b>");
+    QPushButton *schema_ed = new QPushButton("Изменить...");
+    schema_ed->setMaximumWidth(100);
+    schema_ed->setMinimumWidth(100);
+    QObject::connect(schema_ed, SIGNAL(clicked()), this, SLOT(slot_schema_edit()));
+    QBoxLayout *schema_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    schema_lay->addWidget(schema_cp);
+    schema_lay->addWidget(schema_label);
+    schema_lay->addWidget(schema_ed);
 //int voltage;                             // Напряжение номинальное
     this->volt_label = new QLabel;
     QString tmps;
@@ -79,7 +93,6 @@ editor_ktp::editor_ktp(obj *arg, QWidget *parent) : QDialog(parent)
     sh_lay->addWidget(sh_cp);
     sh_lay->addWidget(this->sh_label);
     sh_lay->addWidget(sh_ed);
-
     // Области списков (максимальные и минимаотные диапазоны)
         QBoxLayout *main_time_lay = new QBoxLayout(QBoxLayout::LeftToRight);
             QBoxLayout *time_lay = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -145,6 +158,7 @@ editor_ktp::editor_ktp(obj *arg, QWidget *parent) : QDialog(parent)
 // Расставляем виджеты
     QBoxLayout *main_lay = new QBoxLayout(QBoxLayout::TopToBottom);
     main_lay->addLayout(name_lay);
+    main_lay->addLayout(schema_lay);
     main_lay->addLayout(volt_lay);
     main_lay->addWidget(adr_txt);
     main_lay->addLayout(adr_l);
@@ -171,6 +185,19 @@ void editor_ktp::slot_name_edit()
     }
     delete stred;
 }
+void editor_ktp::slot_schema_edit()
+{
+    QString tmp1 = "Место обозначения на схеме: ";
+    QString tmp2 = this->main_data->get_schema();
+    string_edit *stred = new string_edit(&tmp2, &tmp1, 300);
+    if (stred->exec() == QDialog::Accepted){
+        main_data->set_schema(stred->result());
+        schema_label->setText(main_data->get_schema());
+        schema_label->adjustSize();
+      edited = true;
+    }
+    delete stred;
+}
 void editor_ktp::slot_save_cp()
 {
     if (this->main_data->get_name() != "") {
@@ -190,9 +217,9 @@ void editor_ktp::slot_save_cp()
 void editor_ktp::slot_volt_edit()
 {
     QString tmp1 = "Напряжение: ";
-    int_editor *ined = new int_editor(this->main_data->get_voltage(), &tmp1, 7);
+    int_editor *ined = new int_editor(static_cast<unsigned long long>(main_data->get_voltage()), &tmp1, 7);
     if (ined->exec() == QDialog::Accepted){
-        this->main_data->set_voltage(ined->result());
+        this->main_data->set_voltage(static_cast<int>(ined->result()));
         this->volt_label->setText(tmp1.setNum(main_data->get_voltage()));
         this->volt_label->adjustSize();
       this->edited = true;

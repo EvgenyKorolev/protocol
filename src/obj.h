@@ -1,17 +1,17 @@
 #ifndef OBJ_H
 #define OBJ_H
-#include <QDomDocument>
-#include <QDomElement>
-#include <QDomText>
-#include <QList>
-#include <QPair>
-#include <QTime>
 #include "apparaturs.h"
 #include "protocol.h"
 #include "address.h"
 #include "my_function.h"
 #include "transformator.h"
 #include "fab_app.h"
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomText>
+#include <QList>
+#include <QPair>
+#include <QTime>
 class order;
 class protocol;
 
@@ -35,8 +35,7 @@ public:
     virtual order* get_up() const;                           // Возвращает ссылку на родителя (заказ)
     virtual obj* get_ups() const;                        // Возвращает ссылку на родителя (ЦП)
 
-    virtual int set_name(QString *arg);                     // Устанавливает имя объекта
-    virtual int set_name(QString arg);                     // Устанавливает имя объекта
+    virtual int set_name(const QString& arg);                     // Устанавливает имя объекта
     virtual QString get_name() const;                             // Возвращает имя объекта
 
     virtual int set_voltage(int arg);                      // Устанавливает номинальное напряжение
@@ -51,9 +50,10 @@ public:
     virtual int set_adr(address *arg);                      // Устанавливает адрес объекта
     virtual int set_adr(address arg);                      // Устанавливает адрес объекта (Перегруженная)
     virtual address get_adr() const;                              // Возвращает адрес объекта
-    virtual int set_sh(QString *arg);                       // Устанавливает параметр СШ
-    virtual int set_sh(QString arg);                       // Устанавливает параметр СШ (Перегруженная)
+    virtual int set_sh(const QString& arg);                       // Устанавливает параметр СШ
     virtual QString get_sh() const;                               // Возвращает параметр СШ
+    virtual void set_schema(const QString& arg);                       // Устанавливает место обозначения в схеме
+    virtual QString get_schema() const;                               // Возвращает место обозначения в схеме
 
     virtual int set_cp();                                   // Устанавливает статус объекта как ЦП
     virtual int set_ktp();                                  // Устанавливает статус объекта как КТП
@@ -104,14 +104,15 @@ public:
     virtual void time_ktp();                // Устанавливает у все ктп интервалы соотвествующие ЦП
 
 protected:
-   QString name;                            // Название объекта
-   QList<protocol*> p_list;            // Список протоколов на объекте
-   address adr;                             // Адрес объекта
-   QString sh;                              // Строковой параметр СШ
-   QString status;                          // Вид объекта
-   QList<QPair<QTime, QTime>> max_time;     // Список периодов максимальной нагрузки
-   QList<QPair<QTime, QTime>> min_time;     // Список периодов минимальной нагрузки
-   int voltage;                             // Напряжение номинальное
+   QString name{""};                            // Название объекта
+   QList<protocol*> p_list{QList<protocol*>()};            // Список протоколов на объекте
+   address adr{address()};                             // Адрес объекта
+   QString sh{""};                              // Строковой параметр СШ
+   QString schema{""};        // Место обозначения в схеме
+   QString status{""};                          // Вид объекта
+   QList<QPair<QTime, QTime>> max_time{QList<QPair<QTime, QTime>>()};     // Список периодов максимальной нагрузки
+   QList<QPair<QTime, QTime>> min_time{QList<QPair<QTime, QTime>>()};     // Список периодов минимальной нагрузки
+   int voltage{0};                             // Напряжение номинальное
    QList<apparaturs*> appr;                  // Список приборов
    order *up;                               // Ссылка на родиеля объекта (заказ)
    obj *ups;            // Ссылка на родиеля объекта (ЦП)
