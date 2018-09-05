@@ -197,7 +197,7 @@ QDomElement order::make_xml()
           root.appendChild(xml_number);
            xml_number.appendChild(xml_number_text);
 
-        root.appendChild(my_fnc::date_to_xml(this->date));
+        root.appendChild(my_fnc::date_to_xml(date));
     QDomElement xml_obj = ret_xml.createElement("objects");
         root.appendChild(xml_obj);
         QList<obj*>::iterator it = this->obj_list.begin();

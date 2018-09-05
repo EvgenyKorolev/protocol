@@ -16,7 +16,7 @@
 namespace my_fnc
 {
    int xml_to_date(QDomElement arg, QDate &dat);  // Превращает дату в формате xml в дату в формате QDate
-   QDomElement date_to_xml(QDate &arg);           // Превращает дату в формате QDate в дату в формате xml
+   QDomElement date_to_xml(const QDate &arg);           // Превращает дату в формате QDate в дату в формате xml
    int xml_to_time(QDomElement arg, QTime &tim);  // Превращает время в формате xml во время в формате QDate
    QDomElement time_to_xml(QTime &arg);           // Превращает время в формате QDate во время в формате xml
    std::pair<int, int> serch_teg(const QString& arg, const QString& substr, int pos = 0);           // Возврещет первую и последнюю позицию тега <substr......> поиск начинается с позиции pos

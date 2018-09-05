@@ -7,7 +7,7 @@ int my_fnc::xml_to_date(QDomElement arg, QDate &dat)
         arg.firstChildElement("day").text().toInt());
     return 0;
     }
-QDomElement my_fnc::date_to_xml(QDate &arg)
+QDomElement my_fnc::date_to_xml(const QDate &arg)
     {
     QDomDocument xml_ret;
     QDomElement xml_date = xml_ret.createElement("date");

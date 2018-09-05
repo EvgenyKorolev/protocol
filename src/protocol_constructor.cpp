@@ -284,8 +284,9 @@ void protocol_constructor::slot_test()
     tmpw->setHtml(html_text);
     tmpw->show();
 
-//    QWebEnginePage* tmppage = new QWebEnginePage();
+//    QWebEnginePage* tmppage = tmpw->page();
 //    tmppage->setHtml(html_text);
+//    QWebEngineScriptCollection tmpscr = tmppage->scripts();
 //    tmppage->printToPdf(QString("result/test.pdf"));
 
 //    QTextDocument tdd;

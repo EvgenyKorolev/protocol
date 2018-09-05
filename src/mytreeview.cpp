@@ -328,7 +328,7 @@ void MyTreeView::slot_create_prot(){
        tmpo = nullptr; // tmpo = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot();
     } else tmpo = nullptr;
     if (tmpo != nullptr){
-        protocol* prt = new protocol(tmpo);
+        protocol* prt = new protocol(tmpo, "/");
         protocol_constructor *prtconst = new protocol_constructor(prt);
         if (prtconst->exec() == QDialog::Accepted){
          // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

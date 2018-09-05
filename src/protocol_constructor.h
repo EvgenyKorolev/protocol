@@ -32,7 +32,7 @@
 #include <QGridLayout>
 #include <QLineEdit>
 
-
+#include <QWebEngineScriptCollection>
 #include <QTextDocumentWriter>
 #include <QPrinter>
 
