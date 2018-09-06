@@ -198,9 +198,14 @@ QDomDocument klient::make_xml()
     QDomElement root = ret_xml.createElement("klient");
 
     QDomElement xml_name = ret_xml.createElement("name");
-        QDomText xml_name_text = ret_xml.createTextNode(this->name);
+        QDomText xml_name_text = ret_xml.createTextNode(name);
         root.appendChild(xml_name);
         xml_name.appendChild(xml_name_text);
+
+    QDomElement xml_pdirname = ret_xml.createElement("pdirname");
+        QDomText xml_pdirname_text = ret_xml.createTextNode(pdirname);
+        root.appendChild(xml_pdirname);
+        xml_pdirname.appendChild(xml_pdirname_text);
 
        root.appendChild(this->det.make_xml());
 
@@ -225,7 +230,8 @@ QDomDocument klient::make_xml()
 void klient::load_xml(QDomDocument *arg)
 {
     QDomElement root = arg->firstChildElement("klient");
-    this->name = root.firstChildElement("name").text();
+    name = root.firstChildElement("name").text();
+    pdirname = root.firstChildElement("pdirname").text();
 
     auto treg0 = root.firstChildElement("details");
     this->det.load_xml(&treg0);
@@ -257,6 +263,14 @@ void klient::set_fname(const QString &arg)
 QString klient::get_fname() const
 {
     return this->fname;
+}
+void klient::set_pdirname(const QString& arg)
+{
+    pdirname =arg;
+}
+QString klient::get_pdirname() const
+{
+    return pdirname;
 }
 int klient::load_db(){return 0;}
 int klient::save_db(){return 0;}

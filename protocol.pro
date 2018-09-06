@@ -95,7 +95,6 @@ SOURCES += src/address.cpp \
     src/p_types_model.cpp \
     src/pair_plus_editor.cpp \
     src/p_type_select.cpp \
-    src/p_tyo_select_view.cpp \
     src/type_in_direct.cpp \
     src/type_in_view.cpp \
     src/lab_adapter.cpp \
@@ -103,7 +102,8 @@ SOURCES += src/address.cpp \
     src/ask_editor.cpp \
     src/ask_view.cpp \
     src/ask_model.cpp \
-    src/ask_delegat.cpp
+    src/ask_delegat.cpp \
+    src/create_klent_menu.cpp
 
 HEADERS  += src/address.h \
     src/app_data_model.h \
@@ -189,7 +189,6 @@ HEADERS  += src/address.h \
     src/p_types_model.h \
     src/pair_plus_editor.h \
     src/p_type_select.h \
-    src/p_tyo_select_view.h \
     src/type_in_direct.h \
     src/type_in_view.h \
     src/lab_adapter.h \
@@ -197,7 +196,8 @@ HEADERS  += src/address.h \
     src/ask_editor.h \
     src/ask_view.h \
     src/ask_model.h \
-    src/ask_delegat.h
+    src/ask_delegat.h \
+    src/create_klent_menu.h
 
 RESOURCES += \
     icons.qrc \

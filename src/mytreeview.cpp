@@ -178,14 +178,21 @@ void MyTreeView::edit_ktp(ktp *arg)
 }
 void MyTreeView::slot_create_klient()
 {
-    klient *cre_klient = new klient();
+    fab_klient fabkl;
+    klient *cre_klient = fabkl.create_new();
+    if (cre_klient == nullptr) return;
+
     editor_klient *editor = new editor_klient(cre_klient);
     if (editor->exec() == QDialog::Accepted && editor->is_edit()){
        int i = model()->rowCount();
-      model()->setData(model()->index(i, 0, QModelIndex()), QVariant::fromValue(cre_klient), Qt::EditRole);
-        model()->layoutChanged();
+       model()->setData(model()->index(i, 0, QModelIndex()), QVariant::fromValue(cre_klient), Qt::EditRole);
+       model()->layoutChanged();
     }
     delete editor;
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!! тут нужен код для создания папки с протоколаим и сохранения клиента
+
+
 }
 void MyTreeView::slot_create_order()
 {
@@ -250,6 +257,9 @@ void MyTreeView::slot_save_klient()
     do{
     my_file = QFileDialog::getSaveFileName(this->parent, tr("Сохранить как"), my_file);
     } while ((!sv.save(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k(), my_file) && (my_file == "")));
+
+
+    // !!!!!!!!!!!!!!!!!!!!! Тут нужен код который переносит и папку с протоколами с её содержимым
 }
 void MyTreeView::slot_load_klient()
 {
@@ -298,6 +308,9 @@ void MyTreeView::save_all_klient()
        sv.save(model()->data(model()->index(i, 0, QModelIndex()), Qt::EditRole).value<tree_item*>()->ret_k(), my_file);
 
     }
+
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!! И сюда сохранение протоколов
 }
 void MyTreeView::slot_edit_cp()
 {
@@ -349,6 +362,9 @@ void MyTreeView::slot_del_klient()
         model()->removeRow(this->indexAt(curs).row(),this->indexAt(curs).parent());
         model()->layoutChanged();
         QFile(patch).remove();
+
+
+        // !!!!!!!!!!!!!!!!!! тут нужен код для удаления папки с протоколами
     }
 };
 void MyTreeView::slot_edit_prot(){;}

@@ -66,10 +66,12 @@ public:
     klient ret(){return *this;}             // Возвращает значение объекта
     void init(klient *arg);                  // Инициализирует объект другим объектом
 
-    void set_patch(const QString& arg);         // Задатьб путь к файлу
+    void set_patch(const QString& arg);         // Задать путь к файлу
     QString get_patch() const;                 // Узнать путь к файлу
-    void set_fname(const QString& arg);         // Задатьб имя файла
+    void set_fname(const QString& arg);         // Задать имя файла
     QString get_fname() const;                 // Узнать имя файла
+    void set_pdirname(const QString& arg);         // Задать имя директории с протоколами
+    QString get_pdirname() const;                 // Узнать имя директории с протоколами
 
 private:
     QString name{""};           // Название
@@ -78,6 +80,7 @@ private:
     QList<order*> orders;   // Список заявок
     QString pth{""};            // Путь к файлу
     QString fname{""};          // Имя файла
+    QString pdirname{""};       // Имя директории с протоколами которая должна лежать в том же каталоге
 };
 Q_DECLARE_METATYPE(klient*)
 #endif // KLIENT_H
