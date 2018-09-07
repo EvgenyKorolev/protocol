@@ -2,10 +2,11 @@
 
 directory_app::directory_app()
 {
+    settings& tmps = settings::GetInstance();
     _db = QSqlDatabase::addDatabase("QSQLITE");
-    _db.setDatabaseName("data/data.db3");
+    _db.setDatabaseName(tmps.get_data_patch() + tmps.get_data_dir() + "/data.db3");
     if (!_db.open()){
-    QMessageBox::information(0, "Отладка", "Не открывается справочник приборов");
+    QMessageBox::information(nullptr, "Отладка", "Не открывается справочник приборов");
     } else {
         fab_app tmp_fap;
         QSqlQuery app_query(_db);
@@ -28,7 +29,7 @@ directory_app::directory_app()
             tmp->set_name(app_query.value(rec_1.indexOf("name")).toString());
             tmp->set_uniq(app_query.value(rec_1.indexOf("pr_in")).toString());
             if (!ver_query.exec("SELECT * FROM ver WHERE pr_in = '" + tmp->get_uniq() + "';")){
-                QMessageBox::information(0, "Отладка", "Проблема со обращением к справочнику приборов, таблица поверки");
+                QMessageBox::information(nullptr, "Отладка", "Проблема со обращением к справочнику приборов, таблица поверки");
             }
             rec_2 = ver_query.record();
             while (ver_query.next()) {
@@ -56,7 +57,7 @@ void directory_app::append(apparaturs arg)
     QSqlQuery add_app_query(_db);
     QSqlQuery add_ver_query(_db);
     if (this->is_made_num(arg.get_mnom())){
-        QMessageBox::information(0, "Отладка", "Прибор с таким заводским номером уже существует");
+        QMessageBox::information(nullptr, "Отладка", "Прибор с таким заводским номером уже существует");
         return;
     }
      if (add_app_query.exec("INSERT INTO app(name, mdata, type, mnom, cls) VALUES ('" +
@@ -85,7 +86,7 @@ void directory_app::append(apparaturs arg)
           tmp->init(&arg);
          _data.append(tmp);
       } else {
-         QMessageBox::information(0, "Отладка", "Что-то пошло совсем не так при добавлении записи о приборе");
+         QMessageBox::information(nullptr, "Отладка", "Что-то пошло совсем не так при добавлении записи о приборе");
      }
 }
 void directory_app::replace(int row, apparaturs arg)
@@ -104,7 +105,7 @@ void directory_app::replace(int row, apparaturs arg)
         QList<QPair<QPair<QString, QDate>, QDate>>::iterator it = tmp_vlist.begin();
         QString ver_prep = "DELETE FROM ver WHERE pr_in = '" + arg.get_uniq() + "';"; // Просто удалим нафиг все записи о поверки и запишем те, что есть в переданном объекте. Нерационально с виду, затьо сильно проще чем следить за изменениями :)
         if(!tmp_query.exec(ver_prep)) {
-            QMessageBox::information(0, "Отладка", "Что-то пошло не так при удалении записи о поверке");
+            QMessageBox::information(nullptr, "Отладка", "Что-то пошло не так при удалении записи о поверке");
         }
         while (it != tmp_vlist.end()){
             date_tmp.setDate((*it).first.second);
@@ -114,7 +115,7 @@ void directory_app::replace(int row, apparaturs arg)
                     QString::number(date_tmp2.toMSecsSinceEpoch()) + "', '" +
                     arg.get_mnom() + "', '" + arg.get_uniq() + "');";
               if (!add_ver_query.exec(ver_prep)){
-                     QMessageBox::information(0, "Отладка", "Что-то пошло не так при добовлении записи о поверке");
+                     QMessageBox::information(nullptr, "Отладка", "Что-то пошло не так при добовлении записи о поверке");
              }
             ++it;
         }
@@ -123,7 +124,7 @@ void directory_app::replace(int row, apparaturs arg)
         tmp->init(&arg);
         _data.replace(row, tmp);
     } else {
-        QMessageBox::information(0, "Отладка", "Что-то пошло совсем не так при обновлении записи о приборе");
+        QMessageBox::information(nullptr, "Отладка", "Что-то пошло совсем не так при обновлении записи о приборе");
     }
 }
 apparaturs directory_app::search_made_num(QString arg) const
@@ -146,7 +147,7 @@ apparaturs directory_app::search_made_num(QString arg) const
         tmp.set_name(app_query.value(rec_1.indexOf("name")).toString());
         tmp.set_uniq(app_query.value(rec_1.indexOf("pr_in")).toString());
         if (!ver_query.exec("SELECT * FROM ver WHERE pr_in = '" + tmp.get_uniq() + "';")){
-            QMessageBox::information(0, "Отладка", "Проблема со обращением к справочнику приборов, таблица поверки");
+            QMessageBox::information(nullptr, "Отладка", "Проблема со обращением к справочнику приборов, таблица поверки");
         }
         rec_2 = ver_query.record();
         while (ver_query.next()) {
@@ -196,12 +197,12 @@ void directory_app::removeAt(int row)
     QString mun = _data.at(row)->get_uniq();
     rem_prep = "DELETE FROM app WHERE pr_in = '" + mun + "';";
     if (!rem_query.exec(rem_prep)) {
-        QMessageBox::information(0, "Отладка", "Что-то пошло совсем не так при удалении записи о приборе");
+        QMessageBox::information(nullptr, "Отладка", "Что-то пошло совсем не так при удалении записи о приборе");
     } else {
         _data.removeAt(row);
         rem_prep = "DELETE FROM ver WHERE pr_in = '" + mun + "';";
         if (!rem_query.exec(rem_prep)){
-            QMessageBox::information(0, "Отладка", "Что-то пошло совсем не так при удалении записи о поверке");
+            QMessageBox::information(nullptr, "Отладка", "Что-то пошло совсем не так при удалении записи о поверке");
         }
     }
 }
@@ -227,9 +228,9 @@ void directory_app::create_db()
     QSqlQuery ver_query(_db);
 
     if (!app_query.exec("CREATE TABLE app (name TEXT NOT NULL, mdata INTEGER, type TEXT, mnom TEXT NOT NULL UNIQUE, cls TEXT, pr_in INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL);")){
-        QMessageBox::information(0, "Отладка", "Проблема со обращением к справочнику приборов");
+        QMessageBox::information(nullptr, "Отладка", "Проблема со обращением к справочнику приборов");
     }
     if (!ver_query.exec("CREATE TABLE ver (vernom TEXT UNIQUE NOT NULL, date INTEGER, nextdate INTEGER, mnom TEXT NOT NULL, pr_in INTEGER NOT NULL DEFAULT (0));")){
-        QMessageBox::information(0, "Отладка", "Проблема со обращением к справочнику приборов");
+        QMessageBox::information(nullptr, "Отладка", "Проблема со обращением к справочнику приборов");
     }
 }

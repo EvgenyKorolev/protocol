@@ -158,6 +158,8 @@ void type_data_listing::add_lst()
         var_list = temp_set.get_var_list();
         select_type->addItem(std::get<0>(stred->result()));
         select_type->setCurrentText(std::get<0>(stred->result()));
+        set_select_lst();
+        target_object = temp_set.get_obj(std::get<0>(stred->result()));
     }
     delete stred;
 }
@@ -193,6 +195,8 @@ void type_data_listing::copy_list()
         var_list = temp_set.get_var_list();
         select_type->addItem(std::get<0>(stred->result()));
         select_type->setCurrentText(std::get<0>(stred->result()));
+        set_select_lst();
+        target_object = temp_set.get_obj(std::get<0>(stred->result()));
     }
     delete stred;
 }
@@ -271,8 +275,8 @@ void type_data_listing::del()
              * в data_list вставляются данные из модели */
             type_model->set_source_data(target_object);
             type_model->layoutChanged();
-            proxy_mod->setDynamicSortFilter(true);
             proxy_mod->setSourceModel(type_model);
+            //proxy_mod->setDynamicSortFilter(true);
             type_view->setModel(proxy_mod);
             select_type->clear();
             select_type->addItems(key_list);
@@ -286,7 +290,7 @@ void type_data_listing::del()
              * в data_list вставляются данные из модели */
             type_model->set_source_data(target_object);
             type_model->layoutChanged();
-            proxy_mod->setDynamicSortFilter(true);
+            //proxy_mod->setDynamicSortFilter(true);
             proxy_mod->setSourceModel(type_model);
             type_view->setModel(proxy_mod);
             select_type->clear();

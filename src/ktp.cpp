@@ -1,16 +1,8 @@
 #include "ktp.h"
-
-ktp::ktp()
+#include "order.h"
+ktp::ktp() : obj()
 {
-    this->name = "";
-    this->p_list = QList<protocol*>();
-    this->adr = address();
-    this->sh = "";
-    this->status = "ktp";
-    this->max_time = QList<QPair<QTime, QTime>>();
-    this->min_time = QList<QPair<QTime, QTime>>();
     this->up = nullptr;
-    this->voltage = 0;
     this->ups = nullptr;
 }
 ktp::ktp(obj *arg)

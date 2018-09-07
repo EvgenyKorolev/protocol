@@ -1,17 +1,5 @@
 #ifndef MYTREEVIEW_H
 #define MYTREEVIEW_H
-#include <QWidget>
-#include <QErrorMessage>
-#include <QTreeView>
-#include <QMouseEvent>
-#include <QMenu>
-#include <QObject>
-#include <QDialog>
-#include <QFileDialog>
-#include <QString>
-#include <QMessageBox>
-#include <vector>
-#include <random>
 #include "treeitem.h"
 #include "treemodel.h"
 #include "address.h"
@@ -36,6 +24,19 @@
 #include "yes_no.h"
 #include "protocol_constructor.h"
 #include "protocol.h"
+#include "settings.h"
+#include <QWidget>
+#include <QErrorMessage>
+#include <QTreeView>
+#include <QMouseEvent>
+#include <QMenu>
+#include <QObject>
+#include <QDialog>
+#include <QFileDialog>
+#include <QString>
+#include <QMessageBox>
+#include <vector>
+#include <random>
 // Представление для отображения главного дерева
 class MyTreeView : public QTreeView
 {

@@ -1,19 +1,17 @@
 #ifndef KTP_H
 #define KTP_H
 
-#include "order.h"
 #include "obj.h"
 
 class order;
 class obj;
-
 // Класс представляющий КТП
 class ktp : public obj
 {
 public:
     ktp();
     ktp(obj *arg);
-    ~ktp();
+    ~ktp() override;
     QString type() const override;           // Возвращает тип записи
     void init(ktp *arg);            // Инициализирует объект другим объектом
     void init(obj *arg);            // Инициализирует объект другим объектом

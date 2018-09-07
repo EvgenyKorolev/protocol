@@ -1,6 +1,17 @@
 #ifndef EDITOR_LABORATORY_H
 #define EDITOR_LABORATORY_H
 
+#include "my_date_edit.h"
+#include "laboratory.h"
+#include "address.h"
+#include "worker.h"
+#include "details.h"
+#include "int_editor.h"
+#include "pair_editor.h"
+#include "editor_address.h"
+#include "workers_data.h"
+#include "workers_view.h"
+#include "settings.h"
 #include <QObject>
 #include <QWidget>
 #include <QDialog>
@@ -14,17 +25,6 @@
 #include <QHeaderView>
 #include <QDateEdit>
 #include <QScrollArea>
-#include "my_date_edit.h"
-#include "laboratory.h"
-#include "address.h"
-#include "worker.h"
-#include "details.h"
-#include "int_editor.h"
-#include "pair_editor.h"
-#include "editor_address.h"
-#include "workers_data.h"
-#include "workers_view.h"
-
 // Виджет - редактор данных лаборатории
 class editor_laboratory : public QDialog
 {

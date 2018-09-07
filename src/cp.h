@@ -1,13 +1,12 @@
 #ifndef CP_H
 #define CP_H
 #include "obj.h"
-#include "order.h"
 #include "transformator.h"
-#include "ktp.h"
 #include <QVariant>
 #include <QList>
-
 // Этот класс - Центр питания
+class order;
+class ktp;
 class obj;
 class cp : public obj
 {
@@ -16,7 +15,7 @@ public:
     cp(order *arg);                     // Конструктор со ссылкой на родителя (заказ)
     cp(const cp &arg);                  // Конструтор копировщик
     cp(obj *arg);                       // Конструтор перегруженный
-    ~cp();                              // Деструктор
+    ~cp() override;                     // Деструктор
     cp null_cp();                       // Очищает объект от данных и возвращает пустой объект
 
     int add_ktp(obj *arg) override;              // Добавить КТП

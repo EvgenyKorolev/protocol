@@ -1,13 +1,13 @@
 #include "mainwindow.h"
-#include <QApplication>
-#include <QSplashScreen>
-#include <QDir>
-#include <QStyleFactory>
 #include "laboratory.h"
 #include "directory_app.h"
 #include "logger.h"
 #include "const_loader.h"
-
+#include "settings.h"
+#include <QApplication>
+#include <QSplashScreen>
+#include <QDir>
+#include <QStyleFactory>
 #include <string>
 #include <vector>
 
@@ -18,12 +18,13 @@ int main(int argc, char *argv[])
     splash.show();
 // ----------------------------------------------------------------
     a.setStyle(QStyleFactory::create("motif"));
+    settings& tmps = settings::GetInstance();
     QDir* tmpd = new QDir();
-    if (!tmpd->exists("data")){
-        tmpd->mkdir("data");
+    if (!tmpd->exists(tmps.get_data_patch() + tmps.get_data_dir())){
+        tmpd->mkdir(tmps.get_data_patch() + tmps.get_data_dir());
     }
-    if (!tmpd->exists("customers")){
-        tmpd->mkdir("customers");
+    if (!tmpd->exists(tmps.get_data_patch() + tmps.get_customers_dir())){
+        tmpd->mkdir(tmps.get_data_patch() + tmps.get_customers_dir());
     }
     delete tmpd;
     type_const_loader::getInstance();

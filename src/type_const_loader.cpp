@@ -2,8 +2,9 @@
 
 type_const_loader::type_const_loader()
 {
+    settings& tmps = settings::GetInstance();
     QDomDocument open_const_lst;
-    QFile con_f("./data/type.dat");
+    QFile con_f(tmps.get_data_patch() + tmps.get_data_dir() + "/type.dat");
     if (!con_f.exists()){
         con_f.open(QIODevice::WriteOnly);
         con_f.close();
@@ -26,8 +27,9 @@ type_const_loader::type_const_loader()
 }
 void type_const_loader::save()
 {
-    QFile con_f("./data/type.dat");
-    con_f.copy("./data/type.bak");
+    settings& tmps = settings::GetInstance();
+    QFile con_f(tmps.get_data_patch() + tmps.get_data_dir() + "/type.dat");
+    con_f.copy(tmps.get_data_patch() + tmps.get_data_dir() + "/type.bak");
     if (con_f.open(QIODevice::WriteOnly)){
         QDomDocument save_list;
         QDomElement root = save_list.createElement("typs");

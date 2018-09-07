@@ -205,6 +205,7 @@ void app_editor::save_app()
         else {
             QMessageBox *tmoer = new QMessageBox();
             tmoer->setWindowTitle("Внимание!");
+            tmoer->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
             tmoer->setText("Нельзя создавать прибор совсем без заводского номера");
             tmoer->exec();
             delete tmoer;
@@ -213,6 +214,7 @@ void app_editor::save_app()
     else {
         QMessageBox *tmoer = new QMessageBox();
         tmoer->setWindowTitle("Внимание!");
+        tmoer->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
         tmoer->setText("Нельзя создавать прибор совсем без названия");
         tmoer->exec();
         delete tmoer;
@@ -233,6 +235,7 @@ void app_editor::slot_add_list()
         else {
             QMessageBox *tmoer = new QMessageBox();
             tmoer->setWindowTitle("Внимание!");
+            tmoer->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
             tmoer->setText("Нельзя добавить в справочник прибор совсем без заводского номера");
             tmoer->exec();
             delete tmoer;
@@ -241,6 +244,7 @@ void app_editor::slot_add_list()
     else {
         QMessageBox *tmoer = new QMessageBox();
         tmoer->setWindowTitle("Внимание!");
+        tmoer->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
         tmoer->setText("Нельзя добавить в справочник прибор совсем без названия");
         tmoer->exec();
         delete tmoer;

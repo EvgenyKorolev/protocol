@@ -1,6 +1,13 @@
 #ifndef CONST_DATA_LISTING_H
 #define CONST_DATA_LISTING_H
 
+#include "edit_html.h"
+#include "const_data_model.h"
+#include "const_data_view.h"
+#include "const_loader.h"
+#include "pair_editor.h"
+#include "yes_no.h"
+#include "settings.h"
 #include <QObject>
 #include <QDialog>
 #include <QLabel>
@@ -16,13 +23,6 @@
 #include <QRegExp>
 #include <QRegExpValidator>
 #include <QFile>
-#include "edit_html.h"
-#include "const_data_model.h"
-#include "const_data_view.h"
-#include "const_loader.h"
-#include "pair_editor.h"
-#include "yes_no.h"
-
 class const_data_listing : public QDialog
 {
     Q_OBJECT

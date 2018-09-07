@@ -7,6 +7,9 @@
 #include <QBoxLayout>
 #include <QPushButton>
 #include <QLineEdit>
+#include <QDir>
+#include <QMessageBox>
+#include <QFileDialog>
 #include <tuple>
 
 class create_klent_menu : public QDialog
@@ -19,9 +22,12 @@ public:
 public slots:
     void slot_ok();
     void slot_edit_txt();
+    void slot_dir_change();
+    void slot_dir_edit();
 private:
     QLineEdit* name_edit;
     QLineEdit* fail_name_edit;
+    QLabel* dirp_lab;
     bool def_fname{true};
 };
 

@@ -81,6 +81,7 @@ void editor_order::save_order()
     else {
         QMessageBox *tmoer = new QMessageBox();
         tmoer->setWindowTitle("Внимание!");
+        tmoer->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
         tmoer->setText("Нельзя создавать заявку совсем без имени");
         tmoer->exec();
         delete tmoer;

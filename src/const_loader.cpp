@@ -2,8 +2,9 @@
 
 const_loader::const_loader()
 {
+    settings& tmps = settings::GetInstance();
     QDomDocument open_const_lst;
-    QFile con_f("./data/const.dat");
+    QFile con_f(tmps.get_data_patch() + tmps.get_data_dir() + "/const.dat");
     if (!con_f.exists()){
         con_f.open(QIODevice::WriteOnly);
         con_f.close();
@@ -26,8 +27,9 @@ const_loader::const_loader()
 }
 void const_loader::save()
 {
-    QFile con_f("./data/const.dat");
-    con_f.copy("./data/const.bak");
+    settings& tmps = settings::GetInstance();
+    QFile con_f(tmps.get_data_patch() + tmps.get_data_dir() + "/const.dat");
+    con_f.copy(tmps.get_data_patch() + tmps.get_data_dir() + "/const.bak");
     if (con_f.open(QIODevice::WriteOnly)){
         QDomDocument save_list;
         QDomElement root = save_list.createElement("typs");
@@ -98,7 +100,6 @@ bool const_loader::add_obj(const_obj& arg)
         *(*ret_it) = arg;
         return true;
     }
-    return false;
 }
 bool const_loader::del_obj(const QString& key)
 {
@@ -125,5 +126,4 @@ bool const_loader::change_obj(const_obj& arg, QString key)
         *(*ret_it) = arg;
         return true;
     }
-    return false;
 }

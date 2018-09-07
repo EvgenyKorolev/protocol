@@ -291,7 +291,8 @@ void MyTreeView::load_klient(std::vector<QString>& arg)
 }
 void MyTreeView::save_all_klient()
 {
-    QDir tmp_dir("customers");
+    settings& tmpss = settings::GetInstance();
+    QDir tmp_dir(tmpss.get_data_patch() + tmpss.get_customers_dir());
     save_klient sv;
     QString abs_path = tmp_dir.absolutePath();
     QString my_file{""};

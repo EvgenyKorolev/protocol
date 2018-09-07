@@ -29,7 +29,8 @@ MainWindow::MainWindow(QWidget *parent)
     QWidget *main_l = new QWidget;
     QMainWindow::setCentralWidget(main_l);
 // Загрузим клиентов из директории по умолчанию.
-    QDir tmp_dir("customers");
+    settings& tmpss = settings::GetInstance();
+    QDir tmp_dir(tmpss.get_data_patch() + tmpss.get_customers_dir());
     QStringList name_filtr;
     name_filtr << "*.pk" << "*.ppk";
     QStringList tmpl = tmp_dir.entryList(name_filtr, QDir::Files);
@@ -184,10 +185,11 @@ void MainWindow::slot_edit_typs()
 }
 void MainWindow::slot_help()
 {
+    settings& tmpss = settings::GetInstance();
     QWebEngineView* hlp = new QWebEngineView(nullptr);
     hlp->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
     hlp->setWindowTitle("Справка программы протокол");
-    hlp->setUrl(QUrl("file://" + QDir::currentPath() + "/help/main.html"));
+    hlp->setUrl(QUrl("file://" + tmpss.get_data_patch() + tmpss.get_help_dir() + "/main.html"));
     hlp->show();
 }
 void MainWindow::closeEvent(QCloseEvent *event)

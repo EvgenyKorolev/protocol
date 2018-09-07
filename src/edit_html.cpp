@@ -4,7 +4,8 @@ edit_html::edit_html(QString& set_var, QString &set_name, QWidget *par) : QDialo
 {
     this->setWindowTitle("Текст протокола " + set_name);
     this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
-    fname = "./data/prt_" + set_var +".html";
+    settings& tmpss = settings::GetInstance();
+    fname = tmpss.get_data_patch() + tmpss.get_data_dir() + "/prt_" + set_var +".html";
     QFile con_f(fname);
     if (!con_f.exists()){
         con_f.open(QIODevice::WriteOnly);

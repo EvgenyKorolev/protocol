@@ -20,6 +20,7 @@
 #include "const_data_listing.h"
 #include "type_data_listing.h"
 #include "close_class.h"
+#include "settings.h"
 #include <QLabel>
 #include <QDockWidget>
 #include <QWidget>

@@ -22,22 +22,16 @@ QVariant direct_app_model::data(const QModelIndex &index, int role) const
             switch (index.column()) {
             case 0:
                 return QVariant(directory_app::getInstance().at(index.row()).get_name());
-                break;
             case 1:
                 return QVariant(directory_app::getInstance().at(index.row()).get_mdata());
-                break;
             case 2:
                 return QVariant(directory_app::getInstance().at(index.row()).get_type());
-                break;
             case 3:
                 return QVariant(directory_app::getInstance().at(index.row()).get_mnom());
-                break;
             case 4:
                 return QVariant(directory_app::getInstance().at(index.row()).get_clas());
-                break;
             case 5:
                 return QVariant(directory_app::getInstance().at(index.row()).get_real_ver());
-                break;
             default:
                 return QVariant();
             }
@@ -74,22 +68,16 @@ QVariant direct_app_model::headerData(int section, Qt::Orientation orientation, 
         switch (section){
             case 0:
                     return QVariant("Название:");
-            break;
             case 1:
                      return QVariant("Дата Выпуска:");
-            break;
             case 2:
                     return QVariant("Тип:");
-            break;
             case 3:
                  return QVariant("Заводской №:");
-            break;
             case 4:
                  return QVariant("Класс точ.:");
-            break;
             case 5:
                 return QVariant("Дата Поверки:");
-            break;
         }
     }
     return QVariant();

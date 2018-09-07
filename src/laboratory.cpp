@@ -2,8 +2,9 @@
 
 laboratory::laboratory()
 {
+    settings& tmps = settings::GetInstance();
     QDomDocument openlab;
-    QFile labf("./data/lab.dat");
+    QFile labf(tmps.get_data_patch() + tmps.get_data_dir() + "/lab.dat");
     if (!labf.exists()){
         labf.open(QIODevice::WriteOnly);
         labf.close();

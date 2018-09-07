@@ -430,7 +430,8 @@ void editor_laboratory::save_lab()
     this->main_obj->set_tel_list(*(this->tellist));
     this->main_obj->set_fax_list(*(this->faxlist));
     QDomDocument openlab = this->main_obj->make_xml();
-    QFile labf("./data/lab.dat");
+    settings& tmpss = settings::GetInstance();
+    QFile labf(tmpss.get_data_patch() + tmpss.get_data_dir() + "/lab.dat");
     if (labf.open(QIODevice::WriteOnly)){
         QTextStream stream(&labf);
         openlab.save(stream, 1);

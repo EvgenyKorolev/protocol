@@ -4,6 +4,7 @@
 #include "address.h"
 #include "details.h"
 #include "worker.h"
+#include "settings.h"
 #include "my_function.h"
 #include <QString>
 #include <QFile>

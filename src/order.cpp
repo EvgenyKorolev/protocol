@@ -78,17 +78,17 @@ void order::init(order arg)
     this->uniq = arg.get_uniq();
     this->date = arg.get_date();
     this->number = arg.get_num();
-    fab_obj *fabob;
+    fab_obj fabob;
     QList<obj*> tmpo = arg.get_obj_list();
     QList<obj*>::iterator it = tmpo.begin();
     while (it != tmpo.end()){
         if ((*it)->get_status() == "cp"){
-            obj* tmpo1 = fabob->create_cp();
+            obj* tmpo1 = fabob.create_cp();
             tmpo1->init(*it);
             this->add_obj(tmpo1);
         }
         if ((*it)->get_status() == "ktp"){
-            obj* tmpo2 = fabob->create_ktp();
+            obj* tmpo2 = fabob.create_ktp();
             tmpo2->init(*it);
             this->add_obj(tmpo2);
         }

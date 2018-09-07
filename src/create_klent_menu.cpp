@@ -23,13 +23,24 @@ create_klent_menu::create_klent_menu()
     QBoxLayout* fname_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     fname_lay->addWidget(setfname);
     fname_lay->addWidget(fail_name_edit);
-
-
-
+    connect(name_edit, SIGNAL(textChanged(const QString&)), this, SLOT(slot_edit_txt()));
+    connect(fail_name_edit, SIGNAL(textEdited(const QString&)), this, SLOT(slot_dir_edit()));
+// Наша директория по умолчанияю
+    QDir tmp_dir("customers");
+    QString abs_path = tmp_dir.absolutePath();
+// блок выбора директории
     QLabel* setdir = new QLabel();
-    connect(name_edit, SIGNAL(textChanged(name_edit->text())), this, SLOT(slot_edit_txt()));
-    setdir->setText("<HTML>Рабочая папка (При запуске программы атоматически доступны <br> только клиенты сохранённые в папку по умолчанию): <HTML>");
-
+    setdir->setText("<HTML>Рабочая папка (При запуске программы атоматически доступны только клиенты сохранённые в папку по умолчанию): <HTML>");
+    dirp_lab = new QLabel();
+    dirp_lab->setText(abs_path);
+    QPushButton* change_path = new QPushButton("Изменить");
+    connect(change_path, SIGNAL(clicked()), this, SLOT(slot_dir_change()));
+    QBoxLayout* dir_path_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    dir_path_lay->addWidget(dirp_lab);
+    dir_path_lay->addWidget(change_path);
+    QBoxLayout* dir_lay = new QBoxLayout(QBoxLayout::TopToBottom);
+    dir_lay->addWidget(setdir);
+    dir_lay->addLayout(dir_path_lay);
     QBoxLayout* but_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QPushButton* but_ok = new QPushButton("Готово");
     QPushButton* but_cancel = new QPushButton("Отмена");
@@ -39,13 +50,18 @@ create_klent_menu::create_klent_menu()
     but_lay->addWidget(but_cancel);
     main_lay->addLayout(name_lay);
     main_lay->addLayout(fname_lay);
-
+    main_lay->addLayout(dir_lay);
     main_lay->addLayout(but_lay);
     this->setLayout(main_lay);
 }
+void create_klent_menu::slot_dir_change()
+{
+    dirp_lab->setText(QFileDialog::getExistingDirectory());
+    dirp_lab->adjustSize();
+}
 std::tuple<QString, QString, QString> create_klent_menu::result() const
 {
-    return std::make_tuple(name_edit->text(), name_edit->text(), fail_name_edit->text());
+    return std::make_tuple(name_edit->text(), dirp_lab->text(), fail_name_edit->text());
 }
 void create_klent_menu::slot_edit_txt()
 {
@@ -53,8 +69,34 @@ void create_klent_menu::slot_edit_txt()
         fail_name_edit->setText(name_edit->text() + ".ppk");
     }
 }
+void create_klent_menu::slot_dir_edit()
+{
+    def_fname = false;
+}
 void create_klent_menu::slot_ok()
 {
+    if (dirp_lab->text() == ""){
+        QDir tmp_dir("customers");
+        dirp_lab->setText(tmp_dir.absolutePath());
+    }
+    if (name_edit->text() == ""){
+        QMessageBox *tmoer = new QMessageBox();
+        tmoer->setWindowTitle("Внимание!");
+        tmoer->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
+        tmoer->setText("Нельзя оставить клиента без названия");
+        tmoer->exec();
+        delete tmoer;
+        return;
+    }
+    if (fail_name_edit->text() == ""){
+        QMessageBox *tmoer = new QMessageBox();
+        tmoer->setWindowTitle("Внимание!");
+        tmoer->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
+        tmoer->setText("Нельзя оставить файл клиента без названия");
+        tmoer->exec();
+        delete tmoer;
+        return;
+    }
     emit accept();
 }
 

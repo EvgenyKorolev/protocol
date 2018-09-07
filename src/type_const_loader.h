@@ -1,6 +1,8 @@
 #ifndef TYPE_CONST_LOADER_H
 #define TYPE_CONST_LOADER_H
 
+#include "type_obj.h"
+#include "settings.h"
 #include <QList>
 #include <QString>
 #include <QFile>
@@ -8,8 +10,6 @@
 #include <QDomDocument>
 #include <QMessageBox>
 #include <algorithm>
-#include "type_obj.h"
-
 /* Этот класс - одиночка читает список переменных из файла,
  хранит их и выдаёт для устаноки в модель и иных нужд а так же умеет сохранять */
 class type_const_loader

@@ -1,6 +1,7 @@
 #ifndef CONST_LOADER_H
 #define CONST_LOADER_H
 
+#include "settings.h"
 #include <QList>
 #include <QString>
 #include <QPair>
@@ -10,7 +11,6 @@
 #include <QTextStream>
 #include "const_obj.h"
 #include <algorithm>
-
 /* Этот класс - одиночка читает список констант (текстов) из файла,
  хранит их и выдаёт для устаноки в модель и иных нужд а так же умеет сохранять*/
 class const_loader

@@ -1,6 +1,7 @@
 #ifndef EDIT_HTML_H
 #define EDIT_HTML_H
 
+#include "settings.h"
 #include <QObject>
 #include <QDialog>
 #include <QString>
@@ -12,7 +13,6 @@
 #include <QTextDocumentWriter>
 #include <QByteArray>
 #include <QTextStream>
-
 class edit_html : public QDialog
 {
     Q_OBJECT

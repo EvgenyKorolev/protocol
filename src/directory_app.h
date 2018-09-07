@@ -1,6 +1,9 @@
 #ifndef DIRECTORY_APP_H
 #define DIRECTORY_APP_H
 
+#include "settings.h"
+#include "apparaturs.h"
+#include "fab_app.h"
 #include <QList>
 #include <QString>
 #include <QSql>
@@ -12,8 +15,6 @@
 #include <QDateTime>
 #include <QPair>
 #include <memory>
-#include "apparaturs.h"
-#include "fab_app.h"
 
 class directory_app
 {
