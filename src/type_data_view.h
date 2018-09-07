@@ -21,6 +21,8 @@ public slots:
     void slot_edit();  // Редактировать
     void slot_delete();// Удалить
     void slot_add();   // Добавить
+signals:
+    void signal_new();
 private:
     QPoint _curs;   // Позиция курора
     QSortFilterProxyModel* pat_mod;

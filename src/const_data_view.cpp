@@ -58,6 +58,7 @@ void const_data_view::slot_delete()
 {
     model()->removeRow(this->indexAt(_curs).row(),QModelIndex());
     model()->layoutChanged();
+    emit signal_new();
 }
 void const_data_view::slot_add()
 {
@@ -73,4 +74,5 @@ void const_data_view::slot_add()
         pat_mod->invalidate();
     }
     delete cedit;
+    emit signal_new();
 }

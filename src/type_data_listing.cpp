@@ -28,7 +28,7 @@ type_data_listing::type_data_listing()
     cls_lay->addWidget(cls_lb);
     select_type = new QComboBox();
     select_type->addItems(key_list);
-    proxy_mod = new QSortFilterProxyModel();
+    QSortFilterProxyModel* proxy_mod = new QSortFilterProxyModel();
     proxy_mod->setDynamicSortFilter(true);
     QObject::connect(select_type, SIGNAL(currentTextChanged(QString)), this, SLOT(set_select_lst()));
     QPushButton* button_edit = new QPushButton("Изменить набор...");
@@ -87,6 +87,7 @@ type_data_listing::type_data_listing()
     QObject::connect(cancel_but, SIGNAL(clicked()), this, SLOT(reject()));
     QPushButton* add_txt = new QPushButton("Добавить константу");
     QObject::connect(add_txt, SIGNAL(clicked()), type_view, SLOT(slot_add()));
+    QObject::connect(type_view, SIGNAL(signal_new()), this, SLOT(slot_new_list()));
     QBoxLayout* end_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     end_lay->addWidget(ok);
     end_lay->addWidget(cancel_but);
@@ -102,7 +103,6 @@ type_data_listing::~type_data_listing()
     delete type_model;
     delete type_view;
     delete select_type;
-    delete proxy_mod;
     delete description;
     delete cls_lb;
 }
@@ -115,12 +115,21 @@ void type_data_listing::set_lst(const QString &key)
     target_object = tmp_load.get_obj(current_key);
     type_model->set_source_data(target_object);
     type_model->layoutChanged();
+    QSortFilterProxyModel* proxy_mod = new QSortFilterProxyModel();
     proxy_mod->setDynamicSortFilter(true);
     proxy_mod->setSourceModel(type_model);
     type_view->setModel(proxy_mod);
     varname->setText(target_object.get_vname());
     description->setText(target_object.get_description());
     cls_lb->setText(target_object.get_cls());
+}
+void type_data_listing::slot_new_list()
+{
+    target_object = type_model->return_data();
+    QSortFilterProxyModel* proxy_mod2 = new QSortFilterProxyModel();
+    proxy_mod2->setSourceModel(type_model);
+    proxy_mod2->setDynamicSortFilter(true);
+    type_view->setModel(proxy_mod2);
 }
 void type_data_listing::set_select_lst()
 {
@@ -233,6 +242,7 @@ void type_data_listing::edit_lst()
         if (temp_set.change_obj(target_object, tmp_key)) {
             type_model->set_source_data(target_object);
             type_model->layoutChanged();
+            QSortFilterProxyModel* proxy_mod = new QSortFilterProxyModel();
             proxy_mod->setDynamicSortFilter(true);
             proxy_mod->setSourceModel(type_model);
             type_view->setModel(proxy_mod);
@@ -275,8 +285,9 @@ void type_data_listing::del()
              * в data_list вставляются данные из модели */
             type_model->set_source_data(target_object);
             type_model->layoutChanged();
+            QSortFilterProxyModel* proxy_mod = new QSortFilterProxyModel();
             proxy_mod->setSourceModel(type_model);
-            //proxy_mod->setDynamicSortFilter(true);
+            proxy_mod->setDynamicSortFilter(true);
             type_view->setModel(proxy_mod);
             select_type->clear();
             select_type->addItems(key_list);
@@ -290,7 +301,8 @@ void type_data_listing::del()
              * в data_list вставляются данные из модели */
             type_model->set_source_data(target_object);
             type_model->layoutChanged();
-            //proxy_mod->setDynamicSortFilter(true);
+            QSortFilterProxyModel* proxy_mod = new QSortFilterProxyModel();
+            proxy_mod->setDynamicSortFilter(true);
             proxy_mod->setSourceModel(type_model);
             type_view->setModel(proxy_mod);
             select_type->clear();

@@ -34,7 +34,6 @@ QVariant type_data_model::data(const QModelIndex &index, int role) const
             switch (index.column()) {
             case 0:
                 return QVariant(std::get<0>(data_list.at(i)));
-                break;
             case 1:
                 if (std::get<1>(data_list.at(i)) == "dig"){
                     ret_str = "число";
@@ -42,13 +41,10 @@ QVariant type_data_model::data(const QModelIndex &index, int role) const
                     ret_str = "строка";
                 }
                 return QVariant(ret_str);
-                break;
             case 2:
                 return QVariant(std::get<2>(data_list.at(i)));
-                break;
             case 3:
                 return QVariant(std::get<3>(data_list.at(i)));
-                break;
             default:
                 return QVariant();
             }
@@ -88,16 +84,12 @@ QVariant type_data_model::headerData(int section, Qt::Orientation orientation, i
         switch (section){
             case 0:
                     return QVariant("Имя:");
-            break;
             case 1:
                     return QVariant("Тип:");
-            break;
             case 2:
                      return QVariant("Описание:");
-            break;
             case 3:
                     return QVariant("Значение:");
-            break;
         }
     }
     return QVariant();

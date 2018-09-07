@@ -75,13 +75,10 @@ QVariant const_data_model::headerData(int section, Qt::Orientation orientation, 
         switch (section){
             case 0:
                     return QVariant("Переменная:");
-            break;
             case 1:
                      return QVariant("Описание:");
-            break;
             case 2:
                     return QVariant("Текст:");
-            break;
         }
     }
     return QVariant();

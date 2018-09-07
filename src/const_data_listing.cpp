@@ -16,8 +16,8 @@ const_data_listing::const_data_listing()
     for (auto it : key_list){
         select_type->addItem(it.first, it.second);
     }
-    proxy_mod = new QSortFilterProxyModel();
-    proxy_mod->setDynamicSortFilter(true);
+    QSortFilterProxyModel* proxy_mod2 = new QSortFilterProxyModel();
+    proxy_mod2->setDynamicSortFilter(true);
     QObject::connect(select_type, SIGNAL(currentTextChanged(QString)), this, SLOT(set_select_lst()));
     QPushButton* button_edit = new QPushButton("Изменить тип...");
     QObject::connect(button_edit, SIGNAL(clicked()), this, SLOT(edit_lst()));
@@ -39,14 +39,14 @@ const_data_listing::const_data_listing()
     QLabel* varname_lab = new QLabel();
     varname_lab->setText("Имя переменной:");
     const_obj tmp = const_obj();
-    const_view = new const_data_view(proxy_mod);
+    const_view = new const_data_view(proxy_mod2);
     const_model = new const_data_model(tmp);
     varname->setText(tmp.get_vname());
     if (key_list.size() > 0) {
         this->set_lst(key_list.at(0).second);
     }
-    proxy_mod->setSourceModel(const_model);
-    const_view->setModel(proxy_mod);
+    proxy_mod2->setSourceModel(const_model);
+    const_view->setModel(proxy_mod2);
     const_view->setSortingEnabled(true);
     const_view->setColumnWidth(0, 120);
     const_view->setColumnWidth(1, 250);
@@ -75,6 +75,7 @@ const_data_listing::const_data_listing()
     QObject::connect(cancel_but, SIGNAL(clicked()), this, SLOT(reject()));
     QPushButton* add_txt = new QPushButton("Добавить запись");
     QObject::connect(add_txt, SIGNAL(clicked()), const_view, SLOT(slot_add()));
+    QObject::connect(const_view, SIGNAL(signal_new()), this, SLOT(slot_new_list()));
     QPushButton* edit_html = new QPushButton("Редактировать текст");
     QObject::connect(edit_html, SIGNAL(clicked()), this, SLOT(slot_ed_html()));
     QBoxLayout* end_lay = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -91,7 +92,6 @@ const_data_listing::~const_data_listing(){
     delete const_model;
     delete const_view;
     delete select_type;
-    delete proxy_mod;
 }
 void const_data_listing::set_lst(const QString &key)
 {
@@ -102,10 +102,19 @@ void const_data_listing::set_lst(const QString &key)
     target_object = tmp_load.get_obj(current_key);
     const_model->set_source_data(target_object);
     const_model->layoutChanged();
-    proxy_mod->setDynamicSortFilter(true);
-    proxy_mod->setSourceModel(const_model);
-    const_view->setModel(proxy_mod);
+    QSortFilterProxyModel* proxy_mod2 = new QSortFilterProxyModel();
+    proxy_mod2->setDynamicSortFilter(true);
+    proxy_mod2->setSourceModel(const_model);
+    const_view->setModel(proxy_mod2);
     varname->setText(target_object.get_vname());
+}
+void const_data_listing::slot_new_list()
+{
+    target_object = const_model->return_data();
+    QSortFilterProxyModel* proxy_mod2 = new QSortFilterProxyModel();
+    proxy_mod2->setSourceModel(const_model);
+    proxy_mod2->setDynamicSortFilter(true);
+    const_view->setModel(proxy_mod2);
 }
 void const_data_listing::add_lst()
 {
@@ -211,11 +220,10 @@ void const_data_listing::edit_lst()
         if (temp_set.change_obj(target_object, tmp_key)) {
             const_model->set_source_data(target_object);
             const_model->layoutChanged();
-            delete proxy_mod;
-            proxy_mod = new QSortFilterProxyModel();
-            proxy_mod->setDynamicSortFilter(true);
-            proxy_mod->setSourceModel(const_model);
-            const_view->setModel(proxy_mod);
+            QSortFilterProxyModel* proxy_mod2 = new QSortFilterProxyModel();
+            proxy_mod2->setDynamicSortFilter(true);
+            proxy_mod2->setSourceModel(const_model);
+            const_view->setModel(proxy_mod2);
             key_list = temp_set.get_idv_list();
             select_type->clear();
             for (auto it : key_list){
@@ -260,9 +268,10 @@ void const_data_listing::del()
              * в data_list вставляются данные из модели */
             const_model->set_source_data(target_object);
             const_model->layoutChanged();
-            proxy_mod->setSourceModel(const_model);
-            //proxy_mod->setDynamicSortFilter(true);
-            const_view->setModel(proxy_mod);
+            QSortFilterProxyModel* proxy_mod2 = new QSortFilterProxyModel();
+            proxy_mod2->setSourceModel(const_model);
+            proxy_mod2->setDynamicSortFilter(true);
+            const_view->setModel(proxy_mod2);
             select_type->clear();
             for (auto it : key_list){
                 select_type->addItem(it.first, it.second);
@@ -277,9 +286,10 @@ void const_data_listing::del()
              * в data_list вставляются данные из модели */
             const_model->set_source_data(target_object);
             const_model->layoutChanged();
-            //proxy_mod->setDynamicSortFilter(true);
-            proxy_mod->setSourceModel(const_model);
-            const_view->setModel(proxy_mod);
+            QSortFilterProxyModel* proxy_mod2 = new QSortFilterProxyModel();
+            proxy_mod2->setDynamicSortFilter(true);
+            proxy_mod2->setSourceModel(const_model);
+            const_view->setModel(proxy_mod2);
             select_type->clear();
             for (auto it : key_list){
                 select_type->addItem(it.first, it.second);

@@ -38,6 +38,7 @@ public slots:
     void del();
     void slot_ed_html();
     void slot_copy_list();
+    void slot_new_list();
 private:
     const_data_model *const_model;
     const_data_view *const_view;
@@ -46,7 +47,6 @@ private:
     const_obj target_object;
     QLabel* varname;
     QString current_key;
-    QSortFilterProxyModel* proxy_mod;
 };
 
 #endif // CONST_DATA_LISTING_H

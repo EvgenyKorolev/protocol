@@ -38,6 +38,7 @@ public slots:
     void exit();
     void del();
     void copy_list();
+    void slot_new_list();
 private:
     type_data_model *type_model;
     type_data_view *type_view;
@@ -48,7 +49,6 @@ private:
     QLabel* varname;
     QLabel* cls_lb;
     QString current_key;
-    QSortFilterProxyModel* proxy_mod;
     QTextEdit* description;
 };
 
