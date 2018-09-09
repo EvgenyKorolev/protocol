@@ -21,17 +21,16 @@ order::order(const order &arg)
     this->uniq = arg.uniq;
     this->date = arg.date;
     this->number = arg.number;
-    fab_obj *fabob;
     QList<obj*> tmpo = arg.get_obj_list();
     QList<obj*>::iterator it = tmpo.begin();
     while (it != tmpo.end()){
         if ((*it)->get_status() == "cp"){
-            obj* tmpo1 = fabob->create_cp();
+            obj* tmpo1 = fab_obj::create_cp();
             tmpo1->init(*it);
             this->add_obj(tmpo1);
         }
         if ((*it)->get_status() == "ktp"){
-            obj* tmpo2 = fabob->create_ktp();
+            obj* tmpo2 = fab_obj::create_ktp();
             tmpo2->init(*it);
             this->add_obj(tmpo2);
         }

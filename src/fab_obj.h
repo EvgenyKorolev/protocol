@@ -8,8 +8,8 @@ class fab_obj
 {
 public:
     fab_obj();
-    obj* create_cp();
-    obj* create_ktp();
+    static obj* create_cp();
+    static obj* create_ktp();
 };
 
 #endif // FAB_OBJ_H

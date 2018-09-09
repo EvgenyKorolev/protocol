@@ -7,7 +7,7 @@ class fab_item
 {
 public:
     fab_item();
-    tree_item* create();
+    static tree_item* create();
 };
 
 #endif // FAB_ITEM_H

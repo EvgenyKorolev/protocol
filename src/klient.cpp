@@ -1,5 +1,6 @@
 ﻿#include "klient.h"
-
+#include "order.h"
+#include "ktp.h"
 klient::klient()
 {
     det = details();

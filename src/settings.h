@@ -1,10 +1,19 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
-
+#include <QMessageBox>
+#include <QDir>
 #include <QString>
 class settings
 {
-    settings() = default;
+    settings(){
+        QDir us_dir;
+        us_dir.mkdir(QDir::homePath() + "/.protocol/");
+        data_patch = QDir::homePath() + "/.protocol/";
+        QFile tester_ini(data_patch);
+        if (!tester_ini.open(QIODevice::ReadWrite | QIODevice::Text)){
+            QMessageBox::information(nullptr, "Внимание", "Невозможно найти или сохранить путь к директориис данными");
+        }
+    }
     settings(const settings&) = default;
     settings& operator=(const settings&) = default;
 

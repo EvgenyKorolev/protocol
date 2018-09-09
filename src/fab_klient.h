@@ -8,8 +8,8 @@ class fab_klient
 {
 public:
     fab_klient();
-    klient* create() const;
-    klient* create_new() const;
+    static klient* create();
+    static klient* create_new();
 };
 
 #endif // FAB_KLIENT_H

@@ -7,7 +7,7 @@ class fab_app
 {
 public:
     fab_app();
-    apparaturs* create_app();
+    static apparaturs* create_app();
 };
 
 #endif // FAB_APP_H
