@@ -47,7 +47,7 @@ obj::~obj()
         this->p_list.removeLast();
     }
 }
-void obj::init(const obj arg)
+void obj::init(const obj &arg)
 {
     this->init(&arg);
 }

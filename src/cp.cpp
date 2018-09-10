@@ -121,7 +121,7 @@ void cp::init(const cp *arg)
     }
    _tr = arg->get_tr();
 }
-void cp::init(const obj arg)
+void cp::init(const obj &arg)
 {
     this->init(&arg);
 }

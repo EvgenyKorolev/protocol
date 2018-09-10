@@ -32,7 +32,7 @@ public:
     int load_xml(QDomNode *arg) override;    // Создать объект из xml
     QString type() const override;               // Возвращает тип записи
     void init(const cp *arg);           // Инициализирует объект другим объектом
-    void init(const obj arg) override;           // Перегруженная функция инициализирует объект другим объектом
+    void init(const obj& arg) override;           // Перегруженная функция инициализирует объект другим объектом
     void init(const obj *arg) override;           // Перегруженная функция инициализирует объект другим объектом
 
 private:

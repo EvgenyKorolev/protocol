@@ -67,7 +67,7 @@ void ktp::init(ktp *arg)
         ++it3;
     }
 }
-void ktp::init(obj *arg)
+void ktp::init(const obj *arg)
 {
     if ("ktp" == arg->type()){
         this->name = arg->get_name();
@@ -91,7 +91,7 @@ void ktp::init(obj *arg)
         }
     }
 }
-void ktp::init(obj arg)
+void ktp::init(const obj& arg)
 {
     this->init(&arg);
 }

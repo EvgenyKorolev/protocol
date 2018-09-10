@@ -6,18 +6,16 @@
 class settings
 {
     settings(){
-        QDir us_dir;
-        us_dir.mkdir(QDir::homePath() + "/.protocol/");
         data_patch = QDir::homePath() + "/.protocol/";
-        QFile tester_ini(data_patch);
-        if (!tester_ini.open(QIODevice::ReadWrite | QIODevice::Text)){
-            QMessageBox::information(nullptr, "Внимание", "Невозможно найти или сохранить путь к директориис данными");
+        QDir tmpd;
+        if (!tmpd.exists(data_patch)){
+            QMessageBox::information(nullptr, "Внимание", "Невозможно найти или сохранить путь к директории с данными");
         }
     }
     settings(const settings&) = default;
     settings& operator=(const settings&) = default;
 
-    QString data_patch{"/home/admin/prg/test_data/"};
+    QString data_patch{QDir::homePath() + "/.protocol/"};
     QString customers_dir{"customers"};
     QString data_dir{"data"};
     QString help_dir{"help"};

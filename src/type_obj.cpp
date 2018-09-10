@@ -91,7 +91,9 @@ QString type_obj::get_vdata(const QString &key) const
 }
 void type_obj::removeAt(int arg)
 {
-    data.removeAt(arg);
+    if (arg < data.size()){
+        data.removeAt(arg);
+    }
 }
 void type_obj::replace(int row, std::tuple<QString, QString, QString, QString> arg)
 {

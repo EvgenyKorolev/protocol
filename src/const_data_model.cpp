@@ -93,9 +93,9 @@ Qt::ItemFlags const_data_model::flags(const QModelIndex &index) const
 }
 bool const_data_model::removeRows(int row, int count, const QModelIndex & parent)
 {
-    if (row + count - 1 > _data_list.count()) return false;
-    beginRemoveRows(parent, row, row + count - 1);
-    for (int i = row; i < row + count; i++){
+    if (row + count > _data_list.count()) return false;
+    beginRemoveRows(parent, row, row + count);
+    for (int i = row; i < row + count - 1; i++){
         _data_list.removeAt(row);
      }
      endRemoveRows();

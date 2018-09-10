@@ -31,16 +31,22 @@ var_adapter::~var_adapter()
 {
     delete labad;
 }
-var_adapter::var_adapter(const var_adapter&& arg)
+var_adapter::var_adapter(var_adapter&& arg)
 {
-    pather_obj = std::move(arg.pather_obj);
-    pather_cp = std::move(arg.pather_cp);
-    pather_order = std::move(arg.pather_order);
-    pather_klient = std::move(arg.pather_klient);
-    labad = std::move(arg.labad);
+    pather_obj = arg.pather_obj;
+    pather_cp = arg.pather_cp;
+    pather_order = arg.pather_order;
+    pather_klient = arg.pather_klient;
+    labad = arg.labad;
+    arg.pather_obj = nullptr;
+    arg.pather_cp = nullptr;
+    arg.pather_order = nullptr;
+    arg.pather_klient = nullptr;
+    arg.labad = nullptr;
 }
 QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname, const QString &style) const
 {
+    if (pather_obj == nullptr) return "NULL";
     if (arg_type == "lab"){
         return labad->get_var(arg_vname, style);
     }
@@ -425,19 +431,23 @@ QString var_adapter::get_var(const QString &arg_type, const QString &arg_vname, 
 }
 QList<QPair<QTime, QTime>> var_adapter::get_maxt_list() const
 {
+    if (pather_obj == nullptr) return QList<QPair<QTime, QTime>>();
     return pather_obj->get_maxt_list();
 }
 QList<QPair<QTime, QTime> > var_adapter::get_mint_list() const
 {
+    if (pather_obj == nullptr) return QList<QPair<QTime, QTime> >();
     return pather_obj->get_mint_list();
 
 }
 QList<apparaturs*> var_adapter::get_app_list() const
 {
+    if (pather_obj == nullptr) return QList<apparaturs*>();
     return  pather_obj->get_app_list();
 }
 QList<QList<QString> > var_adapter::get_app_table() const
 {
+    if (pather_obj == nullptr) return QList<QList<QString> >();
     QList<QList<QString> > ret;
     QList<apparaturs*> tmpap = pather_obj->get_app_list();
     for (auto it : tmpap){
@@ -465,6 +475,7 @@ QList<QList<QString> > var_adapter::get_app_table() const
 }
 QPair<QString, QString> var_adapter::get_maxt_int() const
 {
+    if (pather_obj == nullptr) return QPair<QString, QString>();
     QPair<QString, QString> ret;
     QList<QPair<QTime, QTime> > tmpint = pather_obj->get_maxt_list();
     QPair<QTime, QTime> tmpi = *std::max_element(tmpint.begin(), tmpint.end(), [](const QPair<QTime, QTime>& arg1,
@@ -475,6 +486,7 @@ QPair<QString, QString> var_adapter::get_maxt_int() const
 }
 QPair<QString, QString> var_adapter::get_mint_int() const
 {
+    if (pather_obj == nullptr) return QPair<QString, QString>();
     QPair<QString, QString> ret;
     QList<QPair<QTime, QTime> > tmpint = pather_obj->get_mint_list();
     QPair<QTime, QTime> tmpi = *std::max_element(tmpint.begin(), tmpint.end(), [](const QPair<QTime, QTime>& arg1,
@@ -485,6 +497,7 @@ QPair<QString, QString> var_adapter::get_mint_int() const
 }
 QString var_adapter::get_app_table(const QString& source, const QString& style) const
 {
+    if (pather_obj == nullptr) return "";
     QString ret{""};
     QString act_adta{""}, next_data{""};
     QList<apparaturs*> tmpap;

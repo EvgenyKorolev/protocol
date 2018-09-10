@@ -56,6 +56,7 @@ void const_data_view::slot_edit()
 }
 void const_data_view::slot_delete()
 {
+    emit signal_new();
     model()->removeRow(this->indexAt(_curs).row(),QModelIndex());
     model()->layoutChanged();
     emit signal_new();

@@ -18,7 +18,7 @@ class var_adapter
 public:
     var_adapter() = delete;
     var_adapter(const var_adapter& arg) = delete;
-    var_adapter(const var_adapter&& arg);
+    var_adapter(var_adapter&& arg);
     var_adapter(obj* pat);
     ~var_adapter();
     QString get_var(const QString& arg_type, const QString& arg_vname, const QString& style = "") const;
