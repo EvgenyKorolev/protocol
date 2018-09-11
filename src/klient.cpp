@@ -22,20 +22,19 @@ klient::klient(const klient &arg)
     }
     this->pth = arg.pth;
 }
-bool klient::operator == (const klient &arg)
+bool klient::operator==(const klient &arg)
 {
-    if (
-            name == arg.name &&
-            det == arg.det &&
-            fadr == arg.fadr
-            ) {return true;}
+    if (name == arg.name &&
+        det == arg.det &&
+        fadr == arg.fadr
+        ) {return true;}
     return false;
 }
-bool klient::operator != (const klient &arg)
+bool klient::operator!=(const klient &arg)
 {
     return !(*this == arg);
 }
-klient& klient::operator = (const klient &arg)
+klient& klient::operator=(const klient &arg)
 {
     name = arg.name;
     det = arg.det;

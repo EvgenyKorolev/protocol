@@ -26,13 +26,14 @@ class editor_klient : public QDialog
 {
     Q_OBJECT
 public:
-    explicit editor_klient(klient *arg, QWidget *parent = 0);
+    explicit editor_klient(klient *arg, QWidget *parent = nullptr);
     ~editor_klient();
     void adr_label_set(QLabel* argl, address* arga);                    // Устанвливает или обновляет надпись в разделе физического адреса
     QString get_adr_str(address *arg);                                  // Возвращает отформатированную строку для установки адреса в виджет
     address address_edit(address *arg);                                // Вызов редактора произвольного адреса
     klient result();                        // Фнкция возвращающая объект клиента
-    bool is_edit();                         // Были ли изменения
+    bool is_edit() const;                         // Были ли изменения
+    void edited();                          // Поднять флаг изменений
 public slots:
     void f_address_edit();                 // Слот вызывающий редактор фактического адреса
     void p_address_edit();                 // Слот вызывающий редактор почтового адреса

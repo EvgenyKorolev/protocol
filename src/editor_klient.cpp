@@ -94,7 +94,6 @@ editor_klient::editor_klient(klient *arg, QWidget *parent) : QDialog(parent)
     dir_lay->addWidget(dir_p_label);
     dir_lay->addWidget(dir_n_label);
     dir_lay->addWidget(dir_ed);
-
 // Реквизиты организации
     QBoxLayout *det_layout = new QBoxLayout(QBoxLayout::TopToBottom);
     // адреса
@@ -283,6 +282,7 @@ void editor_klient::name_edit()
         this->name_label->setText(main_obj->get_name());
         this->name_label->adjustSize();
       flag_edit = true;
+      main_obj->set_pdirname(stred->result());
     }
     delete stred;
 }
@@ -370,7 +370,11 @@ QString editor_klient::get_adr_str(address *arg)
         if (arg->get_post_index() != 0) {tmp_str.append("Индекс:"); tmp_str.append(" "); tmp_str.append(tmp1.setNum(arg->get_post_index())); tmp_str.append("<br>");}
         return tmp_str;
 }
-bool editor_klient::is_edit()
+bool editor_klient::is_edit() const
 {
     return flag_edit;
+}
+void editor_klient::edited()
+{
+    flag_edit = true;
 }

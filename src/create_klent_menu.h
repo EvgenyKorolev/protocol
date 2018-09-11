@@ -1,6 +1,7 @@
 #ifndef CREATE_KLENT_MENU_H
 #define CREATE_KLENT_MENU_H
 
+#include "settings.h"
 #include <QObject>
 #include <QDialog>
 #include <QLabel>

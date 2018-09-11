@@ -146,7 +146,8 @@ QString protocol_constructor::get_html()
 {
     const_loader& tmpcl = const_loader::getInstance();
     const_obj tmpco = tmpcl.get_obj(select_type->currentData().toString());
-     QString fname = "./data/prt_" + tmpco.get_vname() +".html";
+    settings& tmps = settings::GetInstance();
+     QString fname = tmps.get_data_patch() + tmps.get_data_dir() + "/prt_" + tmpco.get_vname() +".html";
      QFile con_f(fname);
      if (!con_f.exists()){
          con_f.open(QIODevice::WriteOnly);

@@ -26,8 +26,9 @@ create_klent_menu::create_klent_menu()
     connect(name_edit, SIGNAL(textChanged(const QString&)), this, SLOT(slot_edit_txt()));
     connect(fail_name_edit, SIGNAL(textEdited(const QString&)), this, SLOT(slot_dir_edit()));
 // Наша директория по умолчанияю
-    QDir tmp_dir("customers");
-    QString abs_path = tmp_dir.absolutePath();
+    settings& tmps = settings::GetInstance();
+    QDir tmp_dir(tmps.get_data_patch() + tmps.get_customers_dir());
+    QString abs_path = tmp_dir.path();
 // блок выбора директории
     QLabel* setdir = new QLabel();
     setdir->setText("<HTML>Рабочая папка (При запуске программы атоматически доступны только клиенты сохранённые в папку по умолчанию): <HTML>");
@@ -75,9 +76,10 @@ void create_klent_menu::slot_dir_edit()
 }
 void create_klent_menu::slot_ok()
 {
+    settings& tmps = settings::GetInstance();
     if (dirp_lab->text() == ""){
-        QDir tmp_dir("customers");
-        dirp_lab->setText(tmp_dir.absolutePath());
+        QDir tmp_dir(tmps.get_data_patch() + tmps.get_customers_dir());
+        dirp_lab->setText(tmp_dir.path());
     }
     if (name_edit->text() == ""){
         QMessageBox *tmoer = new QMessageBox();

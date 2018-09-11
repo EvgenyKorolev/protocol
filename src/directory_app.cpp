@@ -77,7 +77,7 @@ void directory_app::append(apparaturs arg)
                      QString::number(date_tmp.toMSecsSinceEpoch()) + "', '" +
                      QString::number(date_tmp2.toMSecsSinceEpoch()) + "', '" + arg.get_mnom() + "', '" + tmp_id  + "');";
              if (!add_ver_query.exec(ver_prep)){
-                  QMessageBox::information(0, "Отладка", "Что-то пошло не так при добавлении записи о поверки (при добавлении прибора)");
+                  QMessageBox::information(nullptr, "Отладка", "Что-то пошло не так при добавлении записи о поверки (при добавлении прибора)");
              }
              ++it;
          }

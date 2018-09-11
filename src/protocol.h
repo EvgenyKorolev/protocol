@@ -27,12 +27,16 @@ public:
     void set_prttxt(const QString& arg);
     void set_endtxt(const QString& arg);
     void set_dr(const QString& arg);
+    void set_file(const QString& arg);
+    void set_uin(const QString& arg);
     QString get_number() const;
     QDate get_date() const;
     QString get_type() const;
     QString get_prttxt() const;
     QString get_endtxt() const;
     QString get_dr() const;
+    QString get_file() const;
+    QString get_uin() const;
 
     QString ret_srctxt() const;  // Возвращает текст протокола как есть
     QString ret_endtxt() const;  // Возвращает текст протокола с выполненными скриптами
@@ -46,7 +50,9 @@ private:
     QString prt_type{""};  // Тип протокола
     QString prt_text{""};  // Текст протокола (адрес файла в котором он лежит)
     QString end_text{""};  // Текст протокола без скриптов (с результатом их работы) (адрес файла в котором он лежит)
+    QString file{""};  // Название файла хранящего протокол (или папки если хранится в папке)
     QString dr{""}; // Путь к папке в которой лежит протокол
+    QString uin{""}; // Уникальный в масштабах клиента номер (для хранения)
 };
 Q_DECLARE_METATYPE(protocol*)
 #endif // PROTOCOL_H

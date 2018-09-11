@@ -181,18 +181,23 @@ void MyTreeView::slot_create_klient()
     fab_klient fabkl;
     klient *cre_klient = fabkl.create_new();
     if (cre_klient == nullptr) return;
-
     editor_klient *editor = new editor_klient(cre_klient);
+    editor->edited();
     if (editor->exec() == QDialog::Accepted && editor->is_edit()){
+        QString tmpname = cre_klient->get_fname();
+        if (tmpname.right(4) == ".ppk"){
+            tmpname = tmpname.left(tmpname.size() - 3) + "db3";
+        } else if (tmpname.right(3) == ".pk"){
+            tmpname = tmpname.left(tmpname.size() - 2) + "db3";
+        } else tmpname += ".db3";
+       cre_klient->set_pdirname(tmpname);
+       save_klient::save_xml(cre_klient, cre_klient->get_patch() + "/" + cre_klient->get_fname());
+       prt_fun::create_base(cre_klient->get_patch(), tmpname);
        int i = model()->rowCount();
        model()->setData(model()->index(i, 0, QModelIndex()), QVariant::fromValue(cre_klient), Qt::EditRole);
        model()->layoutChanged();
     }
     delete editor;
-
-    // !!!!!!!!!!!!!!!!!!!!!!!!!! тут нужен код для создания папки с протоколаим и сохранения клиента
-
-
 }
 void MyTreeView::slot_create_order()
 {
@@ -256,7 +261,7 @@ void MyTreeView::slot_save_klient()
     QString my_file = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_patch();
     do{
     my_file = QFileDialog::getSaveFileName(this->parent, tr("Сохранить как"), my_file);
-    } while ((!sv.save(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k(), my_file) && (my_file == "")));
+    } while ((!sv.save_xml(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k(), my_file) && (my_file == "")));
 
 
     // !!!!!!!!!!!!!!!!!!!!! Тут нужен код который переносит и папку с протоколами с её содержимым
@@ -276,6 +281,9 @@ void MyTreeView::slot_load_klient()
        model()->setData(model()->index(i, 0, QModelIndex()), QVariant::fromValue(ret), Qt::EditRole);
        model()->layoutChanged();
     }
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 }
 void MyTreeView::load_klient(std::vector<QString>& arg)
 {
@@ -288,13 +296,19 @@ void MyTreeView::load_klient(std::vector<QString>& arg)
         model()->setData(model()->index(i, 0, QModelIndex()), QVariant::fromValue(ret), Qt::EditRole);
         ++i;
     }
+
+  Вот тут я затра должен написать правильную загрузку клиентов вместе с бд протоколов
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
 }
 void MyTreeView::save_all_klient()
 {
     settings& tmpss = settings::GetInstance();
     QDir tmp_dir(tmpss.get_data_patch() + tmpss.get_customers_dir());
     save_klient sv;
-    QString abs_path = tmp_dir.absolutePath();
+    QString abs_path = tmpss.get_data_patch() + tmpss.get_customers_dir();
     QString my_file{""};
     std::random_device gensc;
     std::mt19937 gen;
@@ -306,7 +320,7 @@ void MyTreeView::save_all_klient()
            my_file = abs_path + "/autoname_" + QString::number(gen()) + "_" +
                    model()->data(model()->index(i, 0, QModelIndex()), Qt::EditRole).value<tree_item*>()->ret_k()->get_name() + ".ppk";
        }
-       sv.save(model()->data(model()->index(i, 0, QModelIndex()), Qt::EditRole).value<tree_item*>()->ret_k(), my_file);
+       sv.save_xml(model()->data(model()->index(i, 0, QModelIndex()), Qt::EditRole).value<tree_item*>()->ret_k(), my_file);
 
     }
 
@@ -359,13 +373,12 @@ void MyTreeView::slot_del_klient()
     yes_no* pmbx = new yes_no("<b>Вы точно хотите удалить клиента: " + this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_name() + "?</b>");
     if (pmbx->exec() == QDialog::Accepted)
     {
-        QString patch = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_patch();
+        QString patch = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_patch() + "/" + this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_fname();
+        QString dpatch = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_patch() + "/" + this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_pdirname();
         model()->removeRow(this->indexAt(curs).row(),this->indexAt(curs).parent());
         model()->layoutChanged();
         QFile(patch).remove();
-
-
-        // !!!!!!!!!!!!!!!!!! тут нужен код для удаления папки с протоколами
+        QFile(dpatch).remove();
     }
 };
 void MyTreeView::slot_edit_prot(){;}

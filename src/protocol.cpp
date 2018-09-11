@@ -13,6 +13,8 @@ protocol::protocol(protocol& prt)
     prt_type = prt.prt_type;
     prt_text = prt.prt_text;
     end_text = prt.end_text;
+    file = prt.file;
+    uin = prt.uin;
 }
 protocol::protocol(protocol&& prt)
 {
@@ -22,6 +24,8 @@ protocol::protocol(protocol&& prt)
     prt_type = std::move(prt.prt_type);
     prt_text = std::move(prt.prt_text);
     end_text = std::move(prt.end_text);
+    file = std::move(prt.file);
+    uin = std::move(prt.uin);
 }
 protocol& protocol::operator=(protocol& prt)
 {
@@ -31,6 +35,8 @@ protocol& protocol::operator=(protocol& prt)
     prt_type = prt.prt_type;
     prt_text = prt.prt_text;
     end_text = prt.end_text;
+    file = prt.file;
+    uin = prt.uin;
     return *this;
 }
 protocol&& protocol::operator=(protocol&& prt)
@@ -41,6 +47,8 @@ protocol&& protocol::operator=(protocol&& prt)
     prt_type = std::move(prt.prt_type);
     prt_text = std::move(prt.prt_text);
     end_text = std::move(prt.end_text);
+    file = std::move(prt.file);
+    uin = std::move(prt.uin);
     return std::move(*this);
 }
 void protocol::set_parent(obj* par)
@@ -71,6 +79,14 @@ void protocol::set_endtxt(const QString& arg)
 {
     end_text = arg;
 }
+void protocol::set_file(const QString& arg)
+{
+    end_text = arg;
+}
+void protocol::set_uin(const QString& arg)
+{
+    end_text = arg;
+}
 QString protocol::get_number() const
 {
     return prt_number;
@@ -91,6 +107,14 @@ QString protocol::get_endtxt() const
 {
     return end_text;
 }
+QString protocol::get_file() const
+{
+    return file;
+}
+QString protocol::get_uin() const
+{
+    return uin;
+}
 QString protocol::ret_srctxt() const
 {
 
@@ -109,6 +133,16 @@ QDomElement protocol::make_xml() const
      QDomText xml_number_text = ret_xml.createTextNode(prt_number);
         root.appendChild(xml_number);
         xml_number.appendChild(xml_number_text);
+
+    QDomElement xml_file = ret_xml.createElement("file");
+     QDomText xml_file_text = ret_xml.createTextNode(file);
+        root.appendChild(xml_file);
+        xml_file.appendChild(xml_file_text);
+
+    QDomElement xml_uin = ret_xml.createElement("uin");
+     QDomText xml_uin_text = ret_xml.createTextNode(uin);
+        root.appendChild(xml_uin);
+        xml_uin.appendChild(xml_uin_text);
 
      QDomElement xml_type = ret_xml.createElement("prt_type");
        QDomText xml_type_text = ret_xml.createTextNode(prt_type);
@@ -142,6 +176,8 @@ int protocol::load_xml(QDomDocument *arg)
     prt_type = root.firstChildElement("prt_type").text();
     prt_text = root.firstChildElement("prt_text").text();
     end_text = root.firstChildElement("end_text").text();
+    file = root.firstChildElement("file").text();
+    uin = root.firstChildElement("uin").text();
     dr = root.firstChildElement("dr").text();
     return 0;
 }

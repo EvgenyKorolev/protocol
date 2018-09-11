@@ -104,7 +104,8 @@ SOURCES += src/address.cpp \
     src/ask_model.cpp \
     src/ask_delegat.cpp \
     src/create_klent_menu.cpp \
-    src/settings.cpp
+    src/settings.cpp \
+    src/protocol_list_load.cpp
 
 HEADERS  += src/address.h \
     src/app_data_model.h \
@@ -199,7 +200,8 @@ HEADERS  += src/address.h \
     src/ask_model.h \
     src/ask_delegat.h \
     src/create_klent_menu.h \
-    src/settings.h
+    src/settings.h \
+    src/protocol_list_load.h
 
 RESOURCES += \
     icons.qrc \

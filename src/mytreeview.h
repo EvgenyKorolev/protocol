@@ -10,6 +10,7 @@
 #include "order.h"
 #include "cp.h"
 #include "ktp.h"
+#include "protocol_list_load.h"
 #include "editor_address.h"
 #include "editor_cp.h"
 #include "editor_klient.h"

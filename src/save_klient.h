@@ -11,8 +11,10 @@
 class save_klient
 {
 public:
-    save_klient();
-    bool save(klient* arg, QString p);
+    save_klient() = default;
+    static bool save_xml(klient* arg, QString p);
+    static bool save_db(klient* arg, QString p);
+    static bool save_all(klient* arg, QString p);
 };
 
 #endif // SAVE_KLIENT_H
