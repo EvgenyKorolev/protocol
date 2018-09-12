@@ -21,6 +21,7 @@ klient::klient(const klient &arg)
         ++it;
     }
     this->pth = arg.pth;
+    fname = arg.fname;
 }
 bool klient::operator==(const klient &arg)
 {
@@ -47,6 +48,8 @@ klient& klient::operator=(const klient &arg)
         this->add_orders(tmpord);
         ++it;
     }
+    pth = arg.pth;
+    fname = arg.fname;
     return (*this);
 }
 klient klient::null_klient()
@@ -58,8 +61,9 @@ klient::~klient()
 {
     QList<order*>::iterator start = orders.begin();
     while (start != orders.end()){
-        (*start)->~order();
-        ++start;
+        delete *(start++);
+        // (*start)->~order();
+        //++start;
     }
     this->orders.clear();
 }
@@ -77,6 +81,8 @@ void klient::init(klient *arg)
         this->add_orders(tmpo_2);
         ++it;
     }
+    pth = arg->pth;
+    fname = arg->fname;
 }
 void klient::set_email(const QString &arg)
 {
@@ -202,6 +208,11 @@ QDomDocument klient::make_xml()
         root.appendChild(xml_name);
         xml_name.appendChild(xml_name_text);
 
+    QDomElement xml_fname = ret_xml.createElement("fname");
+        QDomText xml_fname_text = ret_xml.createTextNode(fname);
+        root.appendChild(xml_fname);
+        xml_fname.appendChild(xml_fname_text);
+
     QDomElement xml_pdirname = ret_xml.createElement("pdirname");
         QDomText xml_pdirname_text = ret_xml.createTextNode(pdirname);
         root.appendChild(xml_pdirname);
@@ -232,6 +243,7 @@ void klient::load_xml(QDomDocument *arg)
     QDomElement root = arg->firstChildElement("klient");
     name = root.firstChildElement("name").text();
     pdirname = root.firstChildElement("pdirname").text();
+    fname = root.firstChildElement("fname").text();
 
     auto treg0 = root.firstChildElement("details");
     this->det.load_xml(&treg0);

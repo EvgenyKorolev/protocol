@@ -19,7 +19,6 @@ class settings
     QString customers_dir{"customers"};
     QString data_dir{"data"};
     QString help_dir{"help"};
-
 public:
     static settings& GetInstance(){
         static settings instance;

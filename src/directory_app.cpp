@@ -99,7 +99,7 @@ void directory_app::replace(int row, apparaturs arg)
     QString old_mnom = _data.at(row)->get_mnom();
     QString app_prep = "UPDATE app SET name = '" + arg.get_name() + "', mdata = '" +
             QString::number(date_tmp.toMSecsSinceEpoch()) + "', type = '" + arg.get_type() + "', mnom = '" +
-            arg.get_mnom() + "', cls = '" + arg.get_clas() + "' WHERE mnom ='" + old_mnom + "';" ;
+            arg.get_mnom() + "', cls = '" + arg.get_clas() + "' WHERE mnom ='" + old_mnom + "';";
     if (add_app_query.exec(app_prep)){
         QList<QPair<QPair<QString, QDate>, QDate>> tmp_vlist = arg.get_verification_list();
         QList<QPair<QPair<QString, QDate>, QDate>>::iterator it = tmp_vlist.begin();

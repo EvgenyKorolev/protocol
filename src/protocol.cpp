@@ -5,6 +5,22 @@ protocol::protocol(obj *par, const QString &arg)
     parent = par;
     dr = arg;
 }
+protocol::protocol(const QString& uin)
+{
+    parent = nullptr;
+    this->uin = uin;
+}
+protocol::protocol(protocol* prt)
+{
+    parent = prt->parent;
+    prt_number = prt->prt_number;
+    prt_date = prt->prt_date;
+    prt_type = prt->prt_type;
+    prt_text = prt->prt_text;
+    end_text = prt->end_text;
+    file = prt->file;
+    uin = prt->uin;
+}
 protocol::protocol(protocol& prt)
 {
     parent = prt.parent;

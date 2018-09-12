@@ -1,4 +1,4 @@
-#ifndef KLIENT_H
+﻿#ifndef KLIENT_H
 #define KLIENT_H
 
 #include "address.h"
@@ -75,11 +75,11 @@ public:
     QString get_pdirname() const;                 // Узнать имя директории с протоколами
 
 private:
-    QString pth{""};            // Путь к файлу
     QString name{""};           // Название
     details det;            // Реквезиты
     address fadr;           // Фактический адрес
     QList<order*> orders;   // Список заявок
+    QString pth{""};            // Путь к файлу
     QString fname{""};          // Имя файла
     QString pdirname{""};       // Имя файла с протоколами которая должна лежать в том же каталоге
 };

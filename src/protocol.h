@@ -14,8 +14,10 @@ class protocol
 {
 public:
     protocol(obj* par, const QString& arg);
+    protocol(const QString& uin);
     ~protocol() = default;
     protocol(protocol& prt);
+    protocol(protocol* prt);
     protocol(protocol&& prt);
     protocol& operator=(protocol& prt);
     protocol&& operator=(protocol&& prt);

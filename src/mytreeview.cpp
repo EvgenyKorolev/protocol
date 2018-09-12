@@ -287,17 +287,19 @@ void MyTreeView::slot_load_klient()
 }
 void MyTreeView::load_klient(std::vector<QString>& arg)
 {
-    fab_klient fabr_kli;
     open_klient opn;
     int i{model()->rowCount()};
     for (auto it : arg) {
         klient *ret = opn.load(it);
         ret->set_patch(it);
+
+
+
         model()->setData(model()->index(i, 0, QModelIndex()), QVariant::fromValue(ret), Qt::EditRole);
         ++i;
     }
 
-  Вот тут я затра должен написать правильную загрузку клиентов вместе с бд протоколов
+//  Вот тут я затра должен написать правильную загрузку клиентов вместе с бд протоколов
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
