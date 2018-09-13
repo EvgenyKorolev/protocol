@@ -12,7 +12,7 @@ order::order(klient *arg)
 {
     this->uniq = "";
     this->number = 0;
-    this->date.setDate(0, 0, 0);
+    this->date.setDate(1984, 01, 9);
     this->obj_list = QList<obj*>();
     this->up = arg;
 }
@@ -47,8 +47,7 @@ order::~order()
     up = nullptr;
     QList<obj*>::iterator start = obj_list.begin();
     while (start != obj_list.begin()){
-        delete (*start);
-        ++start;
+        delete (*start)++;
     }
     this->obj_list.clear();
 }
@@ -179,6 +178,11 @@ int order::set_num(unsigned int arg)
 unsigned int order::get_num()
 {
     return this->number;
+}
+QString order::get_bd_name() const
+{
+    if (up == nullptr) return "";
+    return up->get_patch() + "/" + up->get_pdirname();
 }
 QDomElement order::make_xml()
 {

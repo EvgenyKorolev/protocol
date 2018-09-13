@@ -4,7 +4,7 @@ QList<protocol*> prt_fun::loap_p_list(const QString& path)
 {
     QList<protocol*> ret = QList<protocol*>();
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB");
+    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDBloap_p_list");
     db.setDatabaseName(path);
     if (!db.open()){
         QMessageBox::information(nullptr, "Отладка", "Не открывается база протоколов клиента: <br>"
@@ -20,7 +20,6 @@ QList<protocol*> prt_fun::loap_p_list(const QString& path)
             protocol* tmpp = new protocol(prt_query.value(rec.indexOf("uin")).toString());
             tmpp->set_prttxt(prt_query.value(rec.indexOf("prt_text")).toString());
             tmpp->set_endtxt(prt_query.value(rec.indexOf("end_text")).toString());
-            tmpp->set_type(prt_query.value(rec.indexOf("prt_type")).toString());
             ret.append(tmpp);
         }
     }
@@ -30,7 +29,7 @@ QList<protocol*> prt_fun::loap_p_list(const QString& path)
 std::unique_ptr<protocol> loap_prot(const QString& path, const QString& uin)
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB");
+    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_prot");
     db.setDatabaseName(path);
     if (!db.open()){
         QMessageBox::information(nullptr, "Отладка", "Не открывается база протоколов клиента: <br>"
@@ -49,11 +48,10 @@ std::unique_ptr<protocol> loap_prot(const QString& path, const QString& uin)
     std::unique_ptr<protocol> ret(new protocol(uin));
     ret->set_prttxt(prt_query.value(rec.indexOf("prt_text")).toString());
     ret->set_endtxt(prt_query.value(rec.indexOf("end_text")).toString());
-    ret->set_type(prt_query.value(rec.indexOf("prt_type")).toString());
     db.close();
     return ret;
 }
-QString prt_fun::add_prt(const QString& path, const protocol& prt)
+QString prt_fun::add_prt(const QString& path, const protocol& prt, const QString& prttxt, const QString& endtxt)
 {
     QSqlDatabase db;
     db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB");
@@ -64,33 +62,45 @@ QString prt_fun::add_prt(const QString& path, const protocol& prt)
         prt_fun::create_base(path.right(path.size() - path.lastIndexOf("/") - 1),
                              path.left(path.size() - path.lastIndexOf("/")));
     }
+    QString ret = prt_fun::add_prt_l(db, prt, prttxt, endtxt);
+    db.close();
+    return ret;
+}
+QString prt_fun::add_prt_l(QSqlDatabase& db, const protocol& prt, const QString &prttxt, const QString &endtxt)
+{
     QSqlQuery prt_query(db);
     QString query_str{""};
-    if (!prt_query.exec("SELECT * FROM prot WHERE uin = '" + prt.get_uin() + "';")) {
-        query_str = "INSERT INTO prot(uin, prt_text, end_text, prt_type) VALUES('" + prt.get_uin() + "', '" +
-                prt.get_prttxt() + "', '" + prt.get_endtxt() + "', '" + prt.get_type() + "');";
+        query_str = "INSERT INTO prot(uin, prt_text, end_text) VALUES('" + prt.get_uin() + "', '" + prttxt + "', '" + endtxt + "');";
         if (!prt_query.exec(query_str)){
             QMessageBox::information(nullptr, "Отладка", "Не получается добавить протокол");
         }
-    } else {
-        query_str = "UPDATE prot SET prt_text = '" + prt.get_prttxt() + "', end_text = '" +
-                    prt.get_endtxt() + "', prt_type = '" + prt.get_type() + "' WHERE uin ='" + prt.get_uin() + "';";
-        if (!prt_query.exec(query_str)){
-            QMessageBox::information(nullptr, "Отладка", "Не получается обновить протокол");
-        }
-    }
-    db.close();
     return prt.get_uin();
 }
-bool prt_fun::save_p_list(const QList<protocol*>& arg)
+bool prt_fun::save_p_list(const QString& path, const QList<protocol*>& arg)
 {
-    for (auto it : arg)
-    return false;
+//    QSqlDatabase db;
+//    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_p_list");
+//    db.setDatabaseName(path);
+//    if (!db.open()){
+//        QMessageBox::information(nullptr, "Отладка", "Не открывается база протоколов клиента: <br>"
+//                                 + path + "<br> Будет создан пустой файл протоколов");
+//        prt_fun::create_base(path.right(path.size() - path.lastIndexOf("/") - 1),
+//                             path.left(path.size() - path.lastIndexOf("/")));
+//        if (!db.open()){
+//            QMessageBox::information(nullptr, "Отладка", "Что-то совсем не так с базой данных");
+//            return false;
+//        }
+//    }
+//    for (auto it : arg){
+//        prt_fun::add_prt_l(db, *it);
+//    }
+//    db.close();
+//    return true;
 }
-    bool prt_fun::create_base(const QString& path, const QString& name)
+bool prt_fun::create_base(const QString& path, const QString& name)
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB");
+    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_base");
     db.setDatabaseName(path + "/" + name);
     if (!db.open()){
         QMessageBox::information(nullptr, "Отладка", "Не открывается база протоколов клиента");
@@ -101,7 +111,7 @@ bool prt_fun::save_p_list(const QList<protocol*>& arg)
         return true;
     }
 
-    if (!prt_query.exec("CREATE TABLE prot (uin TEXT UNIQUE NOT NULL, prt_text TEXT, end_text TEXT, prt_type TEXT, id_ INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL);")){
+    if (!prt_query.exec("CREATE TABLE prot (uin TEXT UNIQUE NOT NULL, prt_text VARCHAR, end_text VARCHAR, id_ INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL);")){
         QMessageBox::information(nullptr, "Отладка", "Проблема со обращением к базе протоколов клиента");
         return false;
     }
@@ -118,8 +128,41 @@ QString prt_fun::create_uin()
     _hash_label.append(QString::number(gen()));
     return  _hash_label;
 }
-QString prt_fun::getnum()
+QString prt_fun::get_prt_l(QSqlDatabase& db, const QString& uin, const QString& arg)
 {
-    static unsigned int nm{0};
-    return QString::number(nm++);
+    QSqlQuery prt_query(db);
+    QSqlRecord rec;
+    if (!prt_query.exec("SELECT * FROM prot WHERE uin = '" + uin + "';")) {
+        QMessageBox::information(nullptr, "Отладка", "Нет такого протокола");
+        return "";
+    }
+    rec = prt_query.record();
+    prt_query.first();
+    return prt_query.value(rec.indexOf(arg)).toString();
+}
+bool prt_fun::set_prt_l(QSqlDatabase& db, const QString& uin, const QString& text, const QString& arg)
+{
+    QSqlQuery prt_query(db);
+    QSqlRecord rec;
+    if (!prt_query.exec("UPDATE prot SET " + arg+  "= '" + text + "' WHERE uin ='" + uin + "';")) {
+        QMessageBox::information(nullptr, "Отладка", "Нет такого протокола");
+        return false;
+    }
+    return true;
+}
+QString prt_fun::get_prt_text(QSqlDatabase& db, const QString& uin)
+{
+    return prt_fun::get_prt_l(db, uin, "prt_text");
+}
+QString prt_fun::get_end_text(QSqlDatabase& db, const QString& uin)
+{
+    return prt_fun::get_prt_l(db, uin, "end_text");
+}
+bool prt_fun::set_prt_text(QSqlDatabase& db, const QString& uin, const QString& text)
+{
+    return prt_fun::set_prt_l(db, uin, text, "prt_text");
+}
+bool prt_fun::set_end_text(QSqlDatabase& db, const QString& uin, const QString& text)
+{
+    return prt_fun::set_prt_l(db, uin, text, "end_text");
 }

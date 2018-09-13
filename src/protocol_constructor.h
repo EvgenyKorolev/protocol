@@ -13,6 +13,7 @@
 #include "app_data_model.h"
 #include "app_data_view.h"
 #include "prot_act_adapter.h"
+#include "protocol_list_load.h"
 #include "ask_editor.h"
 #include <QObject>
 #include <QDialog>
@@ -52,6 +53,7 @@ public slots:
     void slot_create();
     void slot_change_type();
     void slot_test();
+
 private:
     void closeEvent(QCloseEvent *event);
     QDateEdit* dat_edit;
@@ -79,6 +81,5 @@ private:
     void replace_tags(std::string &arg, ask_p arg2 = ask_p::parse);
     void create_varlist();
     QString get_html();
-
 };
 #endif // PROTOCOL_CONSTRUCTOR_H

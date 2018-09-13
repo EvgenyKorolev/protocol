@@ -79,8 +79,7 @@ cp::~cp()
     up = nullptr;
     QList<obj*>::iterator start = ktp_list.begin();
     while (start != ktp_list.end()){
-        delete (*start);
-        ++start;
+        delete (*start)++;
     }
     this->ktp_list.clear();
 }
@@ -88,6 +87,11 @@ cp cp::null_cp()
 {
     cp();
     return (*this);
+}
+QString cp::get_bd_name() const
+{
+    if (up == nullptr) return "";
+    return  up->get_bd_name();
 }
 void cp::init(const cp *arg)
 {

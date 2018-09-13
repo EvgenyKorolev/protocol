@@ -115,6 +115,7 @@ bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int rol
                 return true;
         }
         if (strcmp(c_tmp, c_prot) == 0){
+            index.data(Qt::EditRole).value<tree_item*>()->create_cild(value.value<protocol*>());
             return true;
         }
     }

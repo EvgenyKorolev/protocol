@@ -21,8 +21,7 @@ public:
     obj* get_ups() const override;           // Возвращает родителя (ЦП)
     QDomElement make_xml() override;         // Создать xml из объекта
     int load_xml(QDomNode *arg) override;    // Создать объект из xml
-private:
-    obj *ups;
+    QString get_bd_name() const override;     // Сообщает имя файла БД клиента
 };
 Q_DECLARE_METATYPE(ktp*)
 #endif // KTP_H

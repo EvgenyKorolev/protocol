@@ -2,6 +2,7 @@
 #define PROTOCOL_H
 
 #include "my_function.h"
+#include "protocol_list_load.h"
 #include <QVariant>
 #include <QDomDocument>
 #include <QDate>
@@ -13,7 +14,7 @@ class obj;
 class protocol
 {
 public:
-    protocol(obj* par, const QString& arg);
+    protocol(obj* par);
     protocol(const QString& uin);
     ~protocol() = default;
     protocol(protocol& prt);
@@ -50,11 +51,10 @@ private:
     QString prt_number{""};  // Номер протокола
     QDate prt_date{0, 0, 0};  // Дата протокола
     QString prt_type{""};  // Тип протокола
-    QString prt_text{""};  // Текст протокола (адрес файла в котором он лежит)
-    QString end_text{""};  // Текст протокола без скриптов (с результатом их работы) (адрес файла в котором он лежит)
-    QString file{""};  // Название файла хранящего протокол (или папки если хранится в папке)
-    QString dr{""}; // Путь к папке в которой лежит протокол
-    QString uin{""}; // Уникальный в масштабах клиента номер (для хранения)
+    QString file{""};  // Название файла хранящего базу с протоколом
+    QString dr{""}; // Путь к папке в которой лежит файл с протоколами
+    QString uin{""}; // Уникальный в масштабах клиента (но если формировать его с помошью prt_fun::create_uin() то колизии
+                        // и у разных клиентов будут редки) номер (для хранения)
 };
 Q_DECLARE_METATYPE(protocol*)
 #endif // PROTOCOL_H

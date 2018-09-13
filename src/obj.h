@@ -103,6 +103,8 @@ public:
     virtual transformator get_tr() const;             // Возвращает ссылку на объект установленного в ЦП трансформатора
     virtual void time_ktp();                // Устанавливает у все ктп интервалы соотвествующие ЦП
 
+    virtual QString get_bd_name() const;     // Сообщает имя файла БД клиента
+
 protected:
    QString name{""};                            // Название объекта
    QList<protocol*> p_list{QList<protocol*>()};            // Список протоколов на объекте

@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
 //    //============================================
     QAction * act_add_klient = new QAction("Создать клиента", nullptr);
     QAction * act_load_klient = new QAction("Открыть файл клиента", nullptr);
+    QAction * act_save_all = new QAction("Сохранить всё", nullptr);
     QAction * act_edit_lab = new QAction("Редактировать данные лаборатории", nullptr);
     QAction * act_about = new QAction("Разработчики", nullptr);
     QAction * act_help = new QAction("Справка", nullptr);
@@ -69,8 +70,15 @@ MainWindow::MainWindow(QWidget *parent)
     act_load_klient->setToolTip("Открыть файл клиента");
     act_load_klient->setShortcut(QKeySequence("CTRL+W"));
     act_load_klient->setStatusTip("Открыть файл клиента");
-    act_load_klient->setWhatsThis("Открыть файл клиентаа");
+    act_load_klient->setWhatsThis("Открыть файл клиента");
     QObject::connect(act_load_klient, SIGNAL(triggered()), SLOT(slot_open_klient()));
+
+    act_save_all->setText("Сохранить всё");
+    act_save_all->setToolTip("Сохранить всё");
+    act_save_all->setShortcut(QKeySequence("CTRL+S"));
+    act_save_all->setStatusTip("Сохранить всё");
+    act_save_all->setWhatsThis("Сохранить всё");
+    QObject::connect(act_save_all, SIGNAL(triggered()), SLOT(slot_save_all()));
 
     act_edit_lab->setText("Редактировать данные лаборатории");
     act_edit_lab->setToolTip("Редактировать данные лаборатории");
@@ -124,6 +132,7 @@ MainWindow::MainWindow(QWidget *parent)
 //    // Добавим действия к меню
     menu_file->addAction(act_add_klient);
     menu_file->addAction(act_load_klient);
+    menu_file->addAction(act_save_all);
     menu_file->addAction(act_exit);
     menu_options->addAction(act_edit_lab);
     menu_options->addAction(act_app_direct);
@@ -145,6 +154,10 @@ void MainWindow::slot_edit_lab()
 void MainWindow::slot_add_klient()
 {
     my_tree->slot_create_klient();
+}
+void MainWindow::slot_save_all()
+{
+    my_tree->save_all_klient();
 }
 void MainWindow::slot_open_klient()
 {

@@ -136,6 +136,8 @@ protocol_constructor::~protocol_constructor()
 {
     delete varconst;
     delete dat_edit;
+    actual_prot = nullptr;
+    delete actual_prot;
 }
 void protocol_constructor::slot_change_type()
 {
@@ -278,12 +280,15 @@ void protocol_constructor::slot_test()
     create_varlist();
     prepare(html_text);
     is_tested = true;
-    QWebEngineView* tmpw = new QWebEngineView(nullptr);
-    tmpw->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
-    tmpw->setMinimumWidth(700);
-    tmpw->setWindowTitle("Тестовый вывод протокола");
-    tmpw->setHtml(html_text);
-    tmpw->show();
+//    QWebEngineView* tmpw = new QWebEngineView(nullptr);
+//    tmpw->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
+//    tmpw->setMinimumWidth(700);
+//    tmpw->setWindowTitle("Тестовый вывод протокола");
+//    tmpw->setHtml(html_text);
+//    tmpw->show();
+    actual_prot->set_date(dat_edit->date());
+    actual_prot->set_type(select_type->currentData().toString());
+    prt_fun::add_prt(actual_prot->get_dr(), actual_prot, html_text, html_text);
 
 //    QWebEnginePage* tmppage = tmpw->page();
 //    tmppage->setHtml(html_text);

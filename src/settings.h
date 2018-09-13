@@ -19,6 +19,7 @@ class settings
     QString customers_dir{"customers"};
     QString data_dir{"data"};
     QString help_dir{"help"};
+    unsigned int nm{0};
 public:
     static settings& GetInstance(){
         static settings instance;
@@ -28,6 +29,7 @@ public:
     QString get_customers_dir() const {return customers_dir;}
     QString get_data_dir() const {return data_dir;}
     QString get_help_dir() const {return help_dir;}
+    unsigned int getnum() {return nm++;}
 };
 
 #endif // SETTINGS_H

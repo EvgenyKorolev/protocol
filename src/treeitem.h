@@ -26,6 +26,7 @@ public:
      tree_item(cp *data, tree_item *parent);
      tree_item(ktp *data, tree_item *parent);
      tree_item(obj *data, tree_item *parent);
+     tree_item(protocol *data, tree_item *parent);
      tree_item();
      tree_item(QString arg);
      ~tree_item();
@@ -36,6 +37,7 @@ public:
      int create_cild(cp* arg);                              // Создаёт дочерний элимент со всей соотвествующей подветкой
      int create_cild(ktp* arg);                             // Создаёт дочерний элимент со всей соотвествующей подветкой
      int create_cild(obj* arg);                             // Создаёт дочерний элимент со всей соотвествующей подветкой
+     int create_cild(protocol* arg);
      tree_item* child(int row);                             // Возвращает ссылку на дочерний элемент под номером row в child_items
      int childCount() const;                                // Возвращает колличество дочерних элементов
      int columnCount() const;                               // Число столбцов данных в элементе

@@ -71,8 +71,8 @@ public:
     QString get_patch() const;                 // Узнать путь к файлу
     void set_fname(const QString& arg);         // Задать имя файла
     QString get_fname() const;                 // Узнать имя файла
-    void set_pdirname(const QString& arg);         // Задать имя директории с протоколами
-    QString get_pdirname() const;                 // Узнать имя директории с протоколами
+    void set_pdirname(const QString& arg);         // Задать имя файла с протоколами
+    QString get_pdirname() const;                 // Узнать имя файла с протоколами
 
 private:
     QString name{""};           // Название

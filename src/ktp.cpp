@@ -95,6 +95,13 @@ void ktp::init(const obj& arg)
 {
     this->init(&arg);
 }
+QString ktp::get_bd_name() const
+{
+    if (up == nullptr){
+       if (ups == nullptr) return "";
+       return ups->get_bd_name();
+    } else return up->get_bd_name();
+}
 QString ktp::type() const
 {
     return status;

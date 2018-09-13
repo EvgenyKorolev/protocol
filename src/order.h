@@ -54,6 +54,7 @@ public:
     order ret(){return *this;}             // Возвращает значение объекта
     void init(order arg);                      // Инициализирует объект другим объектом
     void init(order *arg);                      // Инициализирует объект другим объектом (Перегружена)
+    QString get_bd_name() const;     // Сообщает имя файла БД клиента
 
 private:
     QString uniq;               // Уникальная строка

@@ -1,9 +1,11 @@
 #include "protocol.h"
+#include "obj.h"
 
-protocol::protocol(obj *par, const QString &arg)
+protocol::protocol(obj *par)
 {
+    uin = prt_fun::create_uin();
     parent = par;
-    dr = arg;
+    dr = par->get_bd_name();
 }
 protocol::protocol(const QString& uin)
 {
@@ -16,8 +18,6 @@ protocol::protocol(protocol* prt)
     prt_number = prt->prt_number;
     prt_date = prt->prt_date;
     prt_type = prt->prt_type;
-    prt_text = prt->prt_text;
-    end_text = prt->end_text;
     file = prt->file;
     uin = prt->uin;
 }
@@ -27,8 +27,6 @@ protocol::protocol(protocol& prt)
     prt_number = prt.prt_number;
     prt_date = prt.prt_date;
     prt_type = prt.prt_type;
-    prt_text = prt.prt_text;
-    end_text = prt.end_text;
     file = prt.file;
     uin = prt.uin;
 }
@@ -38,8 +36,6 @@ protocol::protocol(protocol&& prt)
     prt_number = std::move(prt.prt_number);
     prt_date = std::move(prt.prt_date);
     prt_type = std::move(prt.prt_type);
-    prt_text = std::move(prt.prt_text);
-    end_text = std::move(prt.end_text);
     file = std::move(prt.file);
     uin = std::move(prt.uin);
 }
@@ -49,8 +45,6 @@ protocol& protocol::operator=(protocol& prt)
     prt_number = prt.prt_number;
     prt_date = prt.prt_date;
     prt_type = prt.prt_type;
-    prt_text = prt.prt_text;
-    end_text = prt.end_text;
     file = prt.file;
     uin = prt.uin;
     return *this;
@@ -61,15 +55,15 @@ protocol&& protocol::operator=(protocol&& prt)
     prt_number = std::move(prt.prt_number);
     prt_date = std::move(prt.prt_date);
     prt_type = std::move(prt.prt_type);
-    prt_text = std::move(prt.prt_text);
-    end_text = std::move(prt.end_text);
     file = std::move(prt.file);
     uin = std::move(prt.uin);
     return std::move(*this);
 }
 void protocol::set_parent(obj* par)
 {
+    uin = prt_fun::create_uin();
     parent = par;
+    dr = par->get_bd_name();
 }
 obj* protocol::get_parent() const
 {
@@ -89,19 +83,27 @@ void protocol::set_type(const QString& arg)
 }
 void protocol::set_prttxt(const QString& arg)
 {
-    prt_text = arg;
+    QSqlDatabase db;
+    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_prttxt");
+    db.setDatabaseName(parent->get_bd_name());
+     prt_fun::set_prt_text(db, uin, arg);
+    db.close();
 }
 void protocol::set_endtxt(const QString& arg)
 {
-    end_text = arg;
+    QSqlDatabase db;
+    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_endtxt");
+    db.setDatabaseName(parent->get_bd_name());
+    prt_fun::set_end_text(db, uin, arg);
+    db.close();
 }
 void protocol::set_file(const QString& arg)
 {
-    end_text = arg;
+    file = arg;
 }
 void protocol::set_uin(const QString& arg)
 {
-    end_text = arg;
+    uin = arg;
 }
 QString protocol::get_number() const
 {
@@ -115,13 +117,28 @@ QString protocol::get_type() const
 {
     return prt_type;
 }
+QString protocol::get_dr() const
+{
+    if (!(parent == nullptr)) return parent->get_bd_name();
+    return dr;
+}
 QString protocol::get_prttxt() const
 {
-    return prt_text;
+    QSqlDatabase db;
+    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_prttxt");
+    db.setDatabaseName(parent->get_bd_name());
+    QString ret = prt_fun::get_prt_text(db, uin);
+    db.close();
+    return ret;
 }
 QString protocol::get_endtxt() const
 {
-    return end_text;
+    QSqlDatabase db;
+    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_endtxt");
+    db.setDatabaseName(parent->get_bd_name());
+    QString ret = prt_fun::get_end_text(db, uin);
+    db.close();
+    return ret;
 }
 QString protocol::get_file() const
 {
@@ -130,14 +147,6 @@ QString protocol::get_file() const
 QString protocol::get_uin() const
 {
     return uin;
-}
-QString protocol::ret_srctxt() const
-{
-
-}
-QString protocol::ret_endtxt() const
-{
-
 }
 QDomElement protocol::make_xml() const
 {
@@ -165,21 +174,6 @@ QDomElement protocol::make_xml() const
           root.appendChild(xml_type);
            xml_type.appendChild(xml_type_text);
 
-     QDomElement xml_prt_text = ret_xml.createElement("prt_text");
-       QDomText xml_prt_text_text = ret_xml.createTextNode(prt_text);
-          root.appendChild(xml_prt_text);
-          xml_prt_text.appendChild(xml_prt_text_text);
-
-     QDomElement xml_end_text = ret_xml.createElement("end_text");
-       QDomText xml_end_text_text = ret_xml.createTextNode(end_text);
-          root.appendChild(xml_end_text);
-          xml_end_text.appendChild(xml_end_text_text);
-
-     QDomElement xml_dr = ret_xml.createElement("dr");
-       QDomText xml_dr_text = ret_xml.createTextNode(dr);
-          root.appendChild(xml_dr);
-          xml_dr.appendChild(xml_dr_text);
-
      root.appendChild(my_fnc::date_to_xml(prt_date));
 
     return root;
@@ -190,10 +184,7 @@ int protocol::load_xml(QDomDocument *arg)
     prt_number = root.firstChildElement("prt_number").text();
     my_fnc::xml_to_date(root.firstChildElement("date"), prt_date);
     prt_type = root.firstChildElement("prt_type").text();
-    prt_text = root.firstChildElement("prt_text").text();
-    end_text = root.firstChildElement("end_text").text();
     file = root.firstChildElement("file").text();
     uin = root.firstChildElement("uin").text();
-    dr = root.firstChildElement("dr").text();
     return 0;
 }

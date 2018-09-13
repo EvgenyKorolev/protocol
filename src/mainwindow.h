@@ -50,6 +50,7 @@ public slots:
     void slot_edit_lab();
     void slot_add_klient();
     void slot_open_klient();
+    void slot_save_all();
     void slot_about();
     void slot_app_direct();
     void slot_edit_const();

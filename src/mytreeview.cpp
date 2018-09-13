@@ -10,7 +10,7 @@ void MyTreeView::mousePressEvent(QMouseEvent *arg)
         QMenu *mnu = new QMenu(this);
         mnu->setEnabled(true);
         QAction *make_klient = new QAction(trUtf8("&Создать клиента"), this);
-        QAction *load_klient = new QAction(trUtf8("&Загрузить клиента"), this);
+        QAction *load_klient = new QAction(trUtf8("&Открыть файл клиента"), this);
         mnu->addAction(make_klient);
         mnu->addAction(load_klient);
         QObject::connect(make_klient, SIGNAL(triggered()), this, SLOT(slot_create_klient()));
@@ -27,13 +27,16 @@ void MyTreeView::mousePressEvent(QMouseEvent *arg)
              QAction *add_order = new QAction(trUtf8("Добавить заявку"), this);
              QObject::connect(add_order, SIGNAL(triggered()), this, SLOT(slot_create_order()));
              mnu->addAction(add_order);
-             QAction *save_as = new QAction(trUtf8("Сохранить клиента"), this);
+             QAction *save_as = new QAction(trUtf8("Экспортировать клиента"), this);
              QObject::connect(save_as, SIGNAL(triggered()), this, SLOT(slot_save_klient()));
              mnu->addAction(save_as);
              QAction *del_kli = new QAction(trUtf8("Удалить клиента"), this);
              QObject::connect(del_kli, SIGNAL(triggered()), this, SLOT(slot_del_klient()));
              mnu->addAction(del_kli);
              delete_item->setText("Убрать из списка");
+             QAction *move_kli = new QAction(trUtf8("Выгрузить клиента"), this);
+             QObject::connect(move_kli, SIGNAL(triggered()), this, SLOT(slot_exp_klient()));
+             mnu->addAction(move_kli);
             }
          if (temp_v == "ord"){
              QAction *edit_ord = new QAction(trUtf8("Редактировать заявку"), this);
@@ -258,13 +261,23 @@ void MyTreeView::slot_edit_order()
 void MyTreeView::slot_save_klient()
 {
     save_klient sv;
-    QString my_file = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_patch();
+    QString my_file = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_patch() + "/" + this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_fname();
     do{
     my_file = QFileDialog::getSaveFileName(this->parent, tr("Сохранить как"), my_file);
     } while ((!sv.save_xml(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k(), my_file) && (my_file == "")));
-
-
-    // !!!!!!!!!!!!!!!!!!!!! Тут нужен код который переносит и папку с протоколами с её содержимым
+    if (my_file != ""){
+        QString my_patch = my_file.left(my_file.lastIndexOf("/"));
+        QString my_name = my_file.right(my_file.size() - my_file.lastIndexOf("/") - 1);
+        this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->set_fname(my_name);
+        if (my_name.right(4) == ".ppk"){
+            my_name = my_name.left(my_name.size() - 3) + "db3";
+        } else if (my_name.right(3) == ".pk"){
+            my_name = my_name.left(my_name.size() - 2) + "db3";
+        } else my_name += ".db3";
+        sv.save_db(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k(), my_patch + "/" + my_name);
+        this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->set_pdirname(my_name);
+        this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->set_patch(my_patch);
+    }
 }
 void MyTreeView::slot_load_klient()
 {
@@ -275,15 +288,12 @@ void MyTreeView::slot_load_klient()
         open_klient opn;
         klient *ret = fabr_kli.create();
         ret->init(opn.load(my_file));
-        ret->set_patch(my_file);
-        int i = 0;
+        ret->set_patch(my_file.left(my_file.lastIndexOf("/")));
+        int i{0};
         i = model()->rowCount();
        model()->setData(model()->index(i, 0, QModelIndex()), QVariant::fromValue(ret), Qt::EditRole);
        model()->layoutChanged();
     }
-
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 }
 void MyTreeView::load_klient(std::vector<QString>& arg)
 {
@@ -291,19 +301,10 @@ void MyTreeView::load_klient(std::vector<QString>& arg)
     int i{model()->rowCount()};
     for (auto it : arg) {
         klient *ret = opn.load(it);
-        ret->set_patch(it);
-
-
-
+        ret->set_patch(it.left(it.lastIndexOf("/")));
         model()->setData(model()->index(i, 0, QModelIndex()), QVariant::fromValue(ret), Qt::EditRole);
         ++i;
     }
-
-//  Вот тут я затра должен написать правильную загрузку клиентов вместе с бд протоколов
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-
 }
 void MyTreeView::save_all_klient()
 {
@@ -317,7 +318,7 @@ void MyTreeView::save_all_klient()
     gen.seed(gensc());
     int n{model()->rowCount()};
     for (int i{0}; i < n; ++i){
-       my_file = model()->data(model()->index(i, 0, QModelIndex()), Qt::EditRole).value<tree_item*>()->ret_k()->get_patch();
+       my_file = model()->data(model()->index(i, 0, QModelIndex()), Qt::EditRole).value<tree_item*>()->ret_k()->get_patch() + "/" + model()->data(model()->index(i, 0, QModelIndex()), Qt::EditRole).value<tree_item*>()->ret_k()->get_fname();
        if (my_file == ""){
            my_file = abs_path + "/autoname_" + QString::number(gen()) + "_" +
                    model()->data(model()->index(i, 0, QModelIndex()), Qt::EditRole).value<tree_item*>()->ret_k()->get_name() + ".ppk";
@@ -325,9 +326,32 @@ void MyTreeView::save_all_klient()
        sv.save_xml(model()->data(model()->index(i, 0, QModelIndex()), Qt::EditRole).value<tree_item*>()->ret_k(), my_file);
 
     }
-
-
-    // !!!!!!!!!!!!!!!!!!!!!!!!! И сюда сохранение протоколов
+}
+void MyTreeView::slot_exp_klient()
+{
+    save_klient sv;
+    QString my_file = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_patch() + "/" + this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_fname();
+    do{
+    my_file = QFileDialog::getSaveFileName(this->parent, tr("Выгрузить(переместить) в:"), my_file);
+    } while ((!sv.save_xml(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k(), my_file) && (my_file == "")));
+    if (my_file != ""){
+        QString my_patch = my_file.left(my_file.lastIndexOf("/"));
+        QString my_name = my_file.right(my_file.size() - my_file.lastIndexOf("/") - 1);
+        QString tmp_name = my_name;
+        if (my_name.right(4) == ".ppk"){
+            my_name = my_name.left(my_name.size() - 3) + "db3";
+        } else if (my_name.right(3) == ".pk"){
+            my_name = my_name.left(my_name.size() - 2) + "db3";
+        } else my_name += ".db3";
+        sv.save_db(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k(), my_patch + "/" + my_name);
+        QString del_patch = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_patch() + "/" + this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_fname();
+        QString del_dpatch = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_patch() + "/" + this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->get_pdirname();
+        QFile(del_patch).remove();
+        QFile(del_dpatch).remove();
+        this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->set_fname(tmp_name);
+        this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->set_pdirname(my_name);
+        this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->set_patch(my_patch);
+    }
 }
 void MyTreeView::slot_edit_cp()
 {
@@ -358,10 +382,18 @@ void MyTreeView::slot_create_prot(){
        tmpo = nullptr; // tmpo = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot();
     } else tmpo = nullptr;
     if (tmpo != nullptr){
-        protocol* prt = new protocol(tmpo, "/");
+        protocol* prt = new protocol(tmpo);
         protocol_constructor *prtconst = new protocol_constructor(prt);
         if (prtconst->exec() == QDialog::Accepted){
-         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            model()->setData(this->indexAt(curs), QVariant::fromValue(prt), Qt::EditRole);
+            model()->layoutChanged();
+
+
+
+
 
         }
         delete prtconst;

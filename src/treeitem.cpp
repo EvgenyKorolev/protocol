@@ -36,6 +36,13 @@ tree_item::tree_item(cp *data, tree_item *parent)
     this->parent_item = parent;
     if (!this->parent_item->is_child(this)) {this->parent_item->add_chaild(this);}
 }
+tree_item::tree_item(protocol *data, tree_item *parent)
+{
+    child_items = QList<tree_item*>();
+    this->set_prot(data);
+    this->parent_item = parent;
+    if (!this->parent_item->is_child(this)) {this->parent_item->add_chaild(this);}
+}
 tree_item::tree_item(ktp *data, tree_item *parent)
 {
     child_items = QList<tree_item*>();
@@ -74,8 +81,7 @@ tree_item::~tree_item()
 {
         QList<tree_item*>::iterator start = this->child_items.begin();
     while (start != this->child_items.end()) {
-        (*start)->~tree_item();
-        start++;
+         delete (*start)++;
     }
     while (this->child_items.size() > 0){
         this->child_items.removeLast();
@@ -98,13 +104,13 @@ tree_item::~tree_item()
         this->type = "NULL";
     }
     if (this->type == "prot") {
-       // item_data_prot->~protocol();
+       delete this->item_data_prot;
         this->type = "NULL";
     }
 }
 int tree_item::appendChild(tree_item *item)
 {
-    if (!(this->child_items.contains(item)) || (item->get_status() != "ktp") || (item->parent() == this)){
+    if (!(this->child_items.contains(item)) || (item->get_status() != "ktp") || (item->parent() == this) || (item->get_status() != "prot")){
     this->child_items.append(item);
     item->set_parent(this);
     return 0;
@@ -132,7 +138,7 @@ int tree_item::row() const
 int tree_item::columnCount() const
 {
    // Количество колонок
-    return 2;
+    return 3;
 }
 QVariant tree_item::data(int section, int role)
 {
@@ -191,12 +197,11 @@ QVariant tree_item::data(int section, int role)
     if (this->type == "prot") {
         switch (section) {
         case 0:
-            return QVariant("Тип");
+            return QVariant(this->item_data_prot->get_type());
         case 1:
-            return QVariant("Дата");
+            return QVariant(this->item_data_prot->get_date());
         case 2:
-            return QVariant("Номер");
-
+            return QVariant(this->item_data_prot->get_number());
         }
     }
     return QVariant("errX");
@@ -261,6 +266,9 @@ int tree_item::add_chaild(tree_item *item)
                 this->child_items.append(item);
             }
             if (item->get_status() == "prot" && ((get_status() == "ktp") || (item->get_status() == "cp"))){
+                if (get_status() == "ktp"){
+                    this->ret_c()->add_pro(item->ret_prot());
+                } else this->ret_ktp()->add_pro(item->ret_prot());
                 this->child_items.append(item);
             }
         return 0;
@@ -301,6 +309,12 @@ int tree_item::create_cild(obj* arg)
     Q_UNUSED(itm)
     return 0;
 }
+int tree_item::create_cild(protocol* arg)
+{
+    tree_item * itm = new tree_item(arg, this);
+    Q_UNUSED(itm)
+    return 0;
+}
 bool tree_item::is_child(tree_item *item)
 {
     return this->child_items.contains(item);
@@ -331,6 +345,8 @@ bool tree_item::setData(QVariant &value)
             return true;
         }
         if (strcmp(c_tmp, c_prot) == 0){
+            this->set_prot(value.value<protocol*>());
+            return true;
         }
         return false;
 }
@@ -439,7 +455,12 @@ void tree_item::set_obj(obj* data)
     if (data->type() == "ktp"){
         this->set_ktp(data);
     }
-
+}
+void tree_item::set_prot(protocol *data)
+{
+    this->item_data_prot = data;
+    if (this->type == "NULL" || this->type == "") {this->type = "prot";}
+    else {this->type = "err4";}
 }
 bool tree_item::is_child_at(int row)
 {
@@ -449,10 +470,6 @@ bool tree_item::is_child_at(int row)
 int tree_item::chaild_nom(tree_item *item)
 {
     return this->child_items.indexOf(item);
-}
-void tree_item::set_prot(protocol *data)
-{
-    Q_UNUSED(data)
 }
 klient* tree_item::ret_k()
 {

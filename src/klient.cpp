@@ -62,8 +62,6 @@ klient::~klient()
     QList<order*>::iterator start = orders.begin();
     while (start != orders.end()){
         delete *(start++);
-        // (*start)->~order();
-        //++start;
     }
     this->orders.clear();
 }

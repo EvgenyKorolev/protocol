@@ -34,6 +34,7 @@ public:
     void init(const cp *arg);           // Инициализирует объект другим объектом
     void init(const obj& arg) override;           // Перегруженная функция инициализирует объект другим объектом
     void init(const obj *arg) override;           // Перегруженная функция инициализирует объект другим объектом
+    QString get_bd_name() const override;     // Сообщает имя файла БД клиента
 
 private:
     QList<obj*> ktp_list;                // Относящиеся к центру питания КТП

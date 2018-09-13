@@ -1,4 +1,5 @@
 #include "obj.h"
+#include "order.h"
 
 obj::obj()
 {
@@ -40,8 +41,7 @@ obj::~obj()
     this->ups = nullptr;
     QList<protocol*>::iterator start = this->p_list.begin();
     while (start != this->p_list.end()){
-        (*start)->~protocol();
-        start++;
+        delete (*start)++;
     }
     while (this->p_list.size() > 0){
         this->p_list.removeLast();
@@ -119,6 +119,13 @@ void obj::set_up(order *arg)
     this->up = arg;
     this->ups = nullptr;
 }
+QString obj::get_bd_name() const
+{
+    if (up == nullptr){
+       if (ups == nullptr) return "";
+       return ups->get_bd_name();
+    } else return up->get_bd_name();
+}
 void obj::set_up(obj *arg)
 {
     this->up = nullptr;
@@ -157,6 +164,7 @@ int obj::get_voltage() const
 }
 int obj::add_pro(protocol *arg)
 {
+    arg->set_parent(this);
     this->p_list.append(arg);
     return 0;
 }

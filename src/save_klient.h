@@ -12,9 +12,9 @@ class save_klient
 {
 public:
     save_klient() = default;
-    static bool save_xml(klient* arg, QString p);
-    static bool save_db(klient* arg, QString p);
-    static bool save_all(klient* arg, QString p);
+    static bool save_xml(klient* arg, const QString &p);
+    static bool save_db(klient* arg, const QString& p);
+    static bool save_all(klient* arg, const QString& p_xml, const QString& p_db);
 };
 
 #endif // SAVE_KLIENT_H
