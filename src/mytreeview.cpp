@@ -96,7 +96,9 @@ void MyTreeView::slot_clone_order()
 {
     fab_order fabord;
     order *cre_order = fabord.create();
-    cre_order->init(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_o());
+    if (this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_o() != nullptr){
+        cre_order->init(*(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_o()));
+    }
     this->indexAt(curs).parent().data(Qt::EditRole).value<tree_item*>()->create_cild(cre_order);
     model()->layoutChanged();
 }

@@ -16,7 +16,7 @@ klient::klient(const klient &arg)
     QList<order*>::const_iterator it = arg.orders.begin();
     while (it != arg.orders.end()){
         order *tmpord = fabo.create();
-        tmpord->init(*it);
+        tmpord->init(*(*it));
         this->add_orders(tmpord);
         ++it;
     }
@@ -44,7 +44,7 @@ klient& klient::operator=(const klient &arg)
     QList<order*>::const_iterator it = arg.orders.begin();
     while (it != arg.orders.end()){
         order *tmpord = fabo.create();
-        tmpord->init(*it);
+        tmpord->init(*(*it));
         this->add_orders(tmpord);
         ++it;
     }
@@ -75,7 +75,7 @@ void klient::init(klient *arg)
     QList<order*>::iterator it = tmpo.begin();
     while (it != tmpo.end()){
         order* tmpo_2 = fabord.create();
-        tmpo_2->init(*it);
+        tmpo_2->init(*(*it));
         this->add_orders(tmpo_2);
         ++it;
     }

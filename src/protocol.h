@@ -16,7 +16,8 @@ class protocol
 public:
     protocol(obj* par);
     protocol(const QString& uin);
-    ~protocol() = default;
+    protocol(QDomNode *arg);
+    ~protocol();
     protocol(protocol& prt);
     protocol(protocol* prt);
     protocol(protocol&& prt);
@@ -45,7 +46,7 @@ public:
     QString ret_endtxt() const;  // Возвращает текст протокола с выполненными скриптами
 
     QDomElement make_xml() const;
-    int load_xml(QDomDocument *arg);
+    int load_xml(QDomNode *arg);
 private:
     obj* parent;
     QString prt_number{""};  // Номер протокола

@@ -362,7 +362,7 @@ QDomElement obj::make_xml_1()
         QList<protocol*>::iterator it1 = this->p_list.begin();
         int i = 0;
         while (it1 != this->p_list.end()){
-            QDomElement wr = ret_xml.createElement(QString::number(i));
+            QDomElement wr = ret_xml.createElement("prt" + QString::number(i));
             xml_prol.appendChild(wr);
             wr.appendChild(it1[0]->make_xml());
             it1++;
@@ -443,20 +443,16 @@ int obj::load_xml_1(QDomNode *arg)
     voltage = root.firstChildElement("volt").text().toInt();
     auto lx = root.firstChildElement("address");
     adr.load_xml(&lx);
+    QDomNode *lxmp = new QDomNode;
+    lxmp->appendChild(root.firstChildElement("protocols"));
 
-//    lxml->appendChild(root.firstChildElement("protocols"));
-//    QDomDocument* tmpd = new QDomDocument;
-//    main_protocol tmpo(this);
     int i = 0;
-//    while (!lxml->firstChildElement("protocols").firstChildElement(QString::number(i)).isNull()) {
-//        tmpd->appendChild(lxml->firstChildElement("objects").firstChildElement(QString::number(i)).firstChildElement("obj"));
-//        tmpo.load_xml(tmpd, this);
-//        this->p_list.append(&tmpo);
-//        i++;
-//    }
-//    lxml->removeChild(lxml->firstChildElement("protocols"));
-//    delete tmpd;
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    while (!root.firstChildElement("protocols").firstChildElement("prt" + QString::number(i)).isNull()){
+        QDomNode tmpn = root.firstChildElement("protocols").firstChildElement("prt" + QString::number(i)).firstChildElement("protocol");
+        this->add_pro(new protocol(&tmpn));
+        i++;
+    }
+    delete lxmp;
     QDomNode *lxml = new QDomNode;
     lxml->appendChild(root.firstChildElement("max_time_list"));
     QPair<QTime, QTime> tmppr;

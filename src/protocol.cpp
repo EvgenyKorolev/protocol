@@ -59,6 +59,18 @@ protocol&& protocol::operator=(protocol&& prt)
     uin = std::move(prt.uin);
     return std::move(*this);
 }
+protocol::protocol(QDomNode *arg)
+{
+    this->load_xml(arg);
+}
+protocol::~protocol()
+{
+    QList<protocol*> tmp = parent->get_pro_list();
+    int z = tmp.indexOf(this);
+    if (z != -1){
+        parent->remove_n_pro(z);
+    }
+}
 void protocol::set_parent(obj* par)
 {
     uin = prt_fun::create_uin();
@@ -178,7 +190,7 @@ QDomElement protocol::make_xml() const
 
     return root;
 }
-int protocol::load_xml(QDomDocument *arg)
+int protocol::load_xml(QDomNode *arg)
 {
     QDomNode root = *arg;
     prt_number = root.firstChildElement("prt_number").text();

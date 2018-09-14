@@ -71,7 +71,7 @@ order& order::operator = (const order &arg)
     this->init(arg);
     return (*this);
 }
-void order::init(order arg)
+void order::init(const order& arg)
 {
     this->uniq = arg.get_uniq();
     this->date = arg.get_date();
@@ -92,10 +92,6 @@ void order::init(order arg)
         }
         ++it;
     }
-}
-void order::init(order *arg)
-{
-    this->init(*arg);
 }
 order order::null_order()
 {
@@ -122,7 +118,7 @@ int order::set_uniq(QString arg)
     }
     return 1;
 }
-QString order::get_uniq()
+QString order::get_uniq() const
 {
     return this->uniq;
 }
@@ -131,7 +127,7 @@ int order::set_date(QDate arg)
     this->date = arg;
     return 0;
 }
-QDate order::get_date()
+QDate order::get_date() const
 {
     return this->date;
 }
@@ -175,7 +171,7 @@ int order::set_num(unsigned int arg)
     this->number = arg;
     return 0;
 }
-unsigned int order::get_num()
+unsigned int order::get_num() const
 {
     return this->number;
 }

@@ -35,11 +35,11 @@ public:
     klient* get_up();                               // Узнать родителя (клиента)
 
     int set_num(unsigned int arg);                  // Установить уникальный номенр
-    unsigned int get_num();                         // Получить уникальный номер
+    unsigned int get_num() const;                         // Получить уникальный номер
     int set_uniq(QString arg);                      // Установить уникальную строку
-    QString get_uniq();                             // Получить уникальную строку
+    QString get_uniq() const;                             // Получить уникальную строку
     int set_date(QDate arg);                        // Установить дату
-    QDate get_date();                               // Получить дату
+    QDate get_date() const;                               // Получить дату
 
     int add_obj(obj *arg);                          // Добавить объект к списку
     int set_obj_list(QList<obj*>* arg);             // Установить список объектов
@@ -52,8 +52,7 @@ public:
     int load_xml(QDomNode *arg, klient *ups);   // Создать объект их xml
     QString type() {return "ord";}     // Возвращает тип записи
     order ret(){return *this;}             // Возвращает значение объекта
-    void init(order arg);                      // Инициализирует объект другим объектом
-    void init(order *arg);                      // Инициализирует объект другим объектом (Перегружена)
+    void init(const order &arg);                      // Инициализирует объект другим объектом
     QString get_bd_name() const;     // Сообщает имя файла БД клиента
 
 private:

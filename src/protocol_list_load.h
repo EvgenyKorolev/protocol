@@ -17,6 +17,8 @@ namespace prt_fun {
     QString add_prt(const QString& path, const protocol& prt, const QString &prttxt, const QString &endtxt);
     bool save_p_list(const QString& path, const QList<protocol*>& arg);
     bool create_base(const QString& path, const QString& name);
+    QString update_prt(const QString& path, const protocol& prt, const QString& prttxt, const QString& endtxt);
+    bool delete_prt(const QString& pathname, const QString& uin);
     QString create_uin();
 
     QString get_prt_text(QSqlDatabase& db, const QString& uin);
@@ -27,5 +29,9 @@ namespace prt_fun {
     QString add_prt_l(QSqlDatabase& db, const protocol& prt, const QString &prttxt, const QString &endtxt);
     QString get_prt_l(QSqlDatabase& db, const QString& uin, const QString& arg);
     bool set_prt_l(QSqlDatabase& db, const QString& uin, const QString& text, const QString& arg);
+    QString update_prt_l(QSqlDatabase& db, const protocol& prt, const QString &prttxt, const QString &endtxt);
+    bool delete_prt(QSqlDatabase& db, const QString& uin);
+    QString base64_plus(const QString &arg);
+    QString base64_minus(const QString& argx);
 }
 #endif // PROTOCOL_LIST_LOAD_H

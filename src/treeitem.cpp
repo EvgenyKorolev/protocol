@@ -2,6 +2,10 @@
 // -=-=-=-=-=-=-=-=-=-=-=- Вопрос с добавлением родителей в разные заявки и ЦП КТП при их добавлении как дочерних элиментов открыт.
 tree_item::tree_item(klient *data, tree_item *parent)
 {
+    this->item_data_o = nullptr;
+    this->item_data_c = nullptr;
+    this->item_data_ktp = nullptr;
+    this->item_data_prot = nullptr;
     child_items = QList<tree_item*>();
     this->set_kli(data);
     this->parent_item = parent;
@@ -9,6 +13,10 @@ tree_item::tree_item(klient *data, tree_item *parent)
 }
 tree_item::tree_item(order *data, tree_item *parent)
 {
+    this->item_data_k = nullptr;
+    this->item_data_c = nullptr;
+    this->item_data_ktp = nullptr;
+    this->item_data_prot = nullptr;
     child_items = QList<tree_item*>();
     this->set_ord(data);
     this->parent_item = parent;
@@ -31,6 +39,10 @@ tree_item::tree_item(obj *data, tree_item *parent)
 }
 tree_item::tree_item(cp *data, tree_item *parent)
 {
+    this->item_data_k = nullptr;
+    this->item_data_o = nullptr;
+    this->item_data_ktp = nullptr;
+    this->item_data_prot = nullptr;
     child_items = QList<tree_item*>();
     this->set_cp(data);
     this->parent_item = parent;
@@ -38,6 +50,10 @@ tree_item::tree_item(cp *data, tree_item *parent)
 }
 tree_item::tree_item(protocol *data, tree_item *parent)
 {
+    this->item_data_k = nullptr;
+    this->item_data_o = nullptr;
+    this->item_data_c = nullptr;
+    this->item_data_ktp = nullptr;
     child_items = QList<tree_item*>();
     this->set_prot(data);
     this->parent_item = parent;
@@ -45,6 +61,10 @@ tree_item::tree_item(protocol *data, tree_item *parent)
 }
 tree_item::tree_item(ktp *data, tree_item *parent)
 {
+    this->item_data_k = nullptr;
+    this->item_data_o = nullptr;
+    this->item_data_c = nullptr;
+    this->item_data_prot = nullptr;
     child_items = QList<tree_item*>();
     this->set_ktp(data);
     this->parent_item = parent;
@@ -81,30 +101,31 @@ tree_item::~tree_item()
 {
         QList<tree_item*>::iterator start = this->child_items.begin();
     while (start != this->child_items.end()) {
-         delete (*start)++;
+         delete (*start);
+                start++;
     }
     while (this->child_items.size() > 0){
         this->child_items.removeLast();
     }
     child_items.clear();
     if (this->type == "kli") {
-        delete this->item_data_k;
+        delete item_data_k;
         this->type = "NULL";
     }
     if (this->type == "ord") {
-        delete this->item_data_o;
+        delete item_data_o;
         this->type = "NULL";
     }
     if (this->type == "cp") {
-        delete this->item_data_c;
+        delete item_data_c;
         this->type = "NULL";
     }
     if (this->type == "ktp") {
-        delete this->item_data_ktp;
+        delete item_data_ktp;
         this->type = "NULL";
     }
     if (this->type == "prot") {
-       delete this->item_data_prot;
+       delete item_data_prot;
         this->type = "NULL";
     }
 }
@@ -265,10 +286,10 @@ int tree_item::add_chaild(tree_item *item)
                 this->ret_c()->add_ktp(item->ret_ktp());
                 this->child_items.append(item);
             }
-            if (item->get_status() == "prot" && ((get_status() == "ktp") || (item->get_status() == "cp"))){
+            if (item->get_status() == "prot" && ((get_status() == "ktp") || (get_status() == "cp"))){
                 if (get_status() == "ktp"){
-                    this->ret_c()->add_pro(item->ret_prot());
-                } else this->ret_ktp()->add_pro(item->ret_prot());
+                    this->ret_ktp()->add_pro(item->ret_prot());
+                } else this->ret_c()->add_pro(item->ret_prot());
                 this->child_items.append(item);
             }
         return 0;
@@ -403,6 +424,18 @@ void tree_item::set_cp(cp *data)
             ++it;
         }
     }
+    QList<protocol*> tmpp = data->get_pro_list();
+    if (tmpp.size() > 0) {
+        fab_item fabit;
+        QList<protocol*>::iterator it2 = tmpp.begin();
+        while (it2 != tmpp.end()) {
+            tree_item* tmp = fabit.create();
+            tmp->set_prot(&(*it2[0]));
+            tmp->set_parent(this);
+            this->child_items.append(tmp);
+            ++it2;
+        }
+    }
 }
 void tree_item::set_ktp(ktp *data)
 {
@@ -411,6 +444,18 @@ void tree_item::set_ktp(ktp *data)
     if (data->get_ups() != nullptr) {this->item_data_ktp->set_up(data->get_ups());}
     if (this->type == "NULL" || this->type == "ktp" || this->type == "") {this->type = "ktp";}
     else {this->type = "err4";}
+    QList<protocol*> tmpp = data->get_pro_list();
+    if (tmpp.size() > 0) {
+        fab_item fabit;
+        QList<protocol*>::iterator it2 = tmpp.begin();
+        while (it2 != tmpp.end()) {
+            tree_item* tmp = fabit.create();
+            tmp->set_prot(&(*it2[0]));
+            tmp->set_parent(this);
+            this->child_items.append(tmp);
+            ++it2;
+        }
+    }
 }
 bool tree_item::remove_child(int row)
 {
@@ -425,6 +470,7 @@ bool tree_item::remove_child(int row)
 }
 void tree_item::set_cp(obj *data)
 {
+    if (data->type() != "cp") return;
     this->item_data_c = data;
     if (this->type == "NULL" || this->type == "cp" || this->type == "") {this->type = "cp";}
     else {this->type = "err3";}
@@ -438,6 +484,18 @@ void tree_item::set_cp(obj *data)
             tmp->set_parent(this);
             this->child_items.append(tmp);
             ++it;
+        }
+    }
+    QList<protocol*> tmpp = data->get_pro_list();
+    if (tmpp.size() > 0) {
+        fab_item fabit;
+        QList<protocol*>::iterator it2 = tmpp.begin();
+        while (it2 != tmpp.end()) {
+            tree_item* tmp = fabit.create();
+            tmp->set_prot(&(*it2[0]));
+            tmp->set_parent(this);
+            this->child_items.append(tmp);
+            ++it2;
         }
     }
 }
