@@ -71,6 +71,10 @@ protocol::~protocol()
         parent->remove_n_pro(z);
     }
 }
+bool protocol::erase()
+{
+    return prt_fun::delete_prt(dr + file, uin);
+}
 void protocol::set_parent(obj* par)
 {
     uin = prt_fun::create_uin();

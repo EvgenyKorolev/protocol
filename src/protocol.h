@@ -45,6 +45,8 @@ public:
     QString ret_srctxt() const;  // Возвращает текст протокола как есть
     QString ret_endtxt() const;  // Возвращает текст протокола с выполненными скриптами
 
+    bool erase();   // Удаляет запись протокола из базы данных. Её надо вызывать перед полным удаления протокола.
+
     QDomElement make_xml() const;
     int load_xml(QDomNode *arg);
 private:

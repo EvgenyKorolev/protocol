@@ -179,6 +179,7 @@ int obj::clear_pro_list()
 }
 int obj::del_top_pro()
 {
+    p_list.last()->erase();
     this->p_list.removeLast();
     return 0;
 }

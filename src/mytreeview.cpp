@@ -140,6 +140,9 @@ void MyTreeView::slot_delete()
     yes_no* pmbx = new yes_no(txxt + "?</b>");
     if (pmbx->exec() == QDialog::Accepted)
     {
+        if (temp_v == "prot"){
+ asdfasf           this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->erase();
+        }
         model()->removeRow(this->indexAt(curs).row(),this->indexAt(curs).parent());
         model()->layoutChanged();
     }
