@@ -502,6 +502,14 @@ QString obj::type() const
 {
     return status;
 }
+QList<QString> obj::ret_uids() const
+{
+    QList<QString> ret{QList<QString>()};
+    for ( auto it : p_list){
+        ret.append(it->get_uin());
+    }
+    return ret;
+}
 int obj::add_ktp(obj *arg){Q_UNUSED(arg); return 666;}
 QList<obj*> obj::get_ktp_list() const {return QList<obj*>();}
 int obj::clear_ktp_list(){return 666;}

@@ -100,7 +100,7 @@ void protocol::set_type(const QString& arg)
 void protocol::set_prttxt(const QString& arg)
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_prttxt");
+    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_prttxt" + prt_fun::create_uin());
     db.setDatabaseName(parent->get_bd_name());
      prt_fun::set_prt_text(db, uin, arg);
     db.close();
@@ -108,7 +108,7 @@ void protocol::set_prttxt(const QString& arg)
 void protocol::set_endtxt(const QString& arg)
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_endtxt");
+    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_endtxt" + prt_fun::create_uin());
     db.setDatabaseName(parent->get_bd_name());
     prt_fun::set_end_text(db, uin, arg);
     db.close();
@@ -141,7 +141,7 @@ QString protocol::get_dr() const
 QString protocol::get_prttxt() const
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_prttxt");
+    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_prttxt" + prt_fun::create_uin());
     db.setDatabaseName(parent->get_bd_name());
     QString ret = prt_fun::get_prt_text(db, uin);
     db.close();
@@ -150,7 +150,7 @@ QString protocol::get_prttxt() const
 QString protocol::get_endtxt() const
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_endtxt");
+    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_endtxt" + prt_fun::create_uin());
     db.setDatabaseName(parent->get_bd_name());
     QString ret = prt_fun::get_end_text(db, uin);
     db.close();

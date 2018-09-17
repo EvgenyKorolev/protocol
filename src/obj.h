@@ -104,6 +104,7 @@ public:
     virtual void time_ktp();                // Устанавливает у все ктп интервалы соотвествующие ЦП
 
     virtual QString get_bd_name() const;     // Сообщает имя файла БД клиента
+    virtual QList<QString> ret_uids() const;               // Возвращает список существующих протоколов
 
 protected:
    QString name{""};                            // Название объекта

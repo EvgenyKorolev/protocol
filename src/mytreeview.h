@@ -26,6 +26,7 @@
 #include "protocol_constructor.h"
 #include "protocol.h"
 #include "settings.h"
+#include "protocol_list_load.h"
 #include <QWidget>
 #include <QErrorMessage>
 #include <QTreeView>

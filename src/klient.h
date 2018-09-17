@@ -73,6 +73,7 @@ public:
     QString get_fname() const;                 // Узнать имя файла
     void set_pdirname(const QString& arg);         // Задать имя файла с протоколами
     QString get_pdirname() const;                 // Узнать имя файла с протоколами
+    QList<QString> ret_uids() const;       // Возвращает список существующих протоколов
 
 private:
     QString name{""};           // Название

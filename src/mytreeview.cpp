@@ -141,7 +141,7 @@ void MyTreeView::slot_delete()
     if (pmbx->exec() == QDialog::Accepted)
     {
         if (temp_v == "prot"){
- asdfasf           this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->erase();
+            this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->erase();
         }
         model()->removeRow(this->indexAt(curs).row(),this->indexAt(curs).parent());
         model()->layoutChanged();
@@ -397,7 +397,7 @@ void MyTreeView::slot_create_prot(){
             model()->layoutChanged();
 
 
-
+   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
         }
@@ -420,5 +420,25 @@ void MyTreeView::slot_del_klient()
         QFile(dpatch).remove();
     }
 };
-void MyTreeView::slot_edit_prot(){;}
-void MyTreeView::slot_clone_prot(){;}
+void MyTreeView::slot_edit_prot()
+{
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+   // model()->setData(this->indexAt(curs), QVariant::fromValue(prt), Qt::EditRole);
+    model()->layoutChanged();
+
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+}
+void MyTreeView::slot_clone_prot()
+{
+    protocol* prt = new protocol(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->get_parent());
+    prt->set_number(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->get_number());
+    prt->set_date(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->get_date());
+    prt->set_type(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->get_type());
+    prt_fun::add_prt(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->get_dr(), prt,
+                     this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->get_prttxt(),
+                     this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->get_endtxt());
+    model()->setData(this->indexAt(curs), QVariant::fromValue(prt), Qt::EditRole);
+    model()->layoutChanged();
+}

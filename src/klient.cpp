@@ -282,6 +282,16 @@ QString klient::get_pdirname() const
 {
     return pdirname;
 }
+QList<QString> klient::ret_uids() const
+{
+    QList<QString> ret{QList<QString>()};
+    if (orders.size() > 0){
+        for (auto it0 : orders){
+            ret += it0->ret_uids();
+        }
+    }
+    return ret;
+}
 int klient::load_db(){return 0;}
 int klient::save_db(){return 0;}
 

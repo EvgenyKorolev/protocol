@@ -254,3 +254,16 @@ void cp::time_ktp()
         ++it;
     }
 }
+QList<QString> cp::ret_uids() const
+{
+    QList<QString> ret{QList<QString>()};
+    if (ktp_list.size() > 0){
+        for (auto it0 : ktp_list){
+            ret += it0->ret_uids();
+        }
+    }
+    for ( auto it : p_list){
+        ret.append(it->get_uin());
+    }
+    return ret;
+}

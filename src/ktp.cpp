@@ -136,6 +136,14 @@ obj* ktp::get_ups() const
 {
     return this->ups;
 }
+QList<QString> ktp::ret_uids() const
+{
+    QList<QString> ret{QList<QString>()};
+    for ( auto it : p_list){
+        ret.append(it->get_uin());
+    }
+    return ret;
+}
 QDomElement ktp::make_xml()
 {
     QDomDocument ret_xml;

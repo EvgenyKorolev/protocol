@@ -248,4 +248,14 @@ int order::load_xml(QDomNode *arg, klient *ups)
 
     return 0;
 }
+QList<QString> order::ret_uids() const
+{
+    QList<QString> ret{QList<QString>()};
+    if (obj_list.size() > 0){
+        for (auto it0 : obj_list){
+            ret += it0->ret_uids();
+        }
+    }
+    return ret;
+}
 

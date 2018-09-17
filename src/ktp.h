@@ -22,6 +22,7 @@ public:
     QDomElement make_xml() override;         // Создать xml из объекта
     int load_xml(QDomNode *arg) override;    // Создать объект из xml
     QString get_bd_name() const override;     // Сообщает имя файла БД клиента
+    QList<QString> ret_uids() const override;       // Возвращает список существующих протоколов
 };
 Q_DECLARE_METATYPE(ktp*)
 #endif // KTP_H

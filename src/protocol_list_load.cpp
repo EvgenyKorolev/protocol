@@ -1,4 +1,5 @@
 #include "protocol_list_load.h"
+#include "klient.h"
 
 QList<protocol*> prt_fun::loap_p_list(const QString& path)
 {
@@ -66,7 +67,7 @@ QString prt_fun::add_prt(const QString& path, const protocol& prt, const QString
     db.close();
     return ret;
 }
-QString prt_fun::add_prt_l(QSqlDatabase& db, const protocol& prt, const QString &prttxt, const QString &endtxt)
+QString prt_fun::add_prt_l(const QSqlDatabase& db, const protocol& prt, const QString &prttxt, const QString &endtxt)
 {
     QSqlQuery prt_query(db);
     QString query_str{""};
@@ -92,7 +93,7 @@ QString prt_fun::update_prt(const QString& path, const protocol& prt, const QStr
     db.close();
     return ret;
 }
-QString prt_fun::update_prt_l(QSqlDatabase& db, const protocol& prt, const QString &prttxt, const QString &endtxt)
+QString prt_fun::update_prt_l(const QSqlDatabase& db, const protocol& prt, const QString &prttxt, const QString &endtxt)
 {
     QSqlQuery prt_query(db);
     QString query_str{""};
@@ -134,10 +135,13 @@ QString prt_fun::create_uin()
     _hash_label.append(QString::number(gen()));
     return  _hash_label;
 }
-QString prt_fun::get_prt_l(QSqlDatabase& db, const QString& uin, const QString& arg)
+QString prt_fun::get_prt_l(const QSqlDatabase& db, const QString& uin, const QString& arg)
 {
     QSqlQuery prt_query(db);
     QSqlRecord rec;
+
+    bool inh = prt_query.exec("SELECT * FROM prot;");  // Удалить строку, она бесполезна
+
     if (!prt_query.exec("SELECT * FROM prot WHERE uin = '" + uin + "';")) {
         QMessageBox::information(nullptr, "Отладка", "Нет такого протокола");
         return "";
@@ -146,7 +150,7 @@ QString prt_fun::get_prt_l(QSqlDatabase& db, const QString& uin, const QString& 
     prt_query.first();
     return prt_query.value(rec.indexOf(arg)).toString();
 }
-bool prt_fun::set_prt_l(QSqlDatabase& db, const QString& uin, const QString& text, const QString& arg)
+bool prt_fun::set_prt_l(const QSqlDatabase& db, const QString& uin, const QString& text, const QString& arg)
 {
     QSqlQuery prt_query(db);
     QSqlRecord rec;
@@ -156,7 +160,7 @@ bool prt_fun::set_prt_l(QSqlDatabase& db, const QString& uin, const QString& tex
     }
     return true;
 }
-bool prt_fun::delete_prt(QSqlDatabase& db, const QString& uin)
+bool prt_fun::delete_prt(const QSqlDatabase &db, const QString& uin)
 {
 
     QSqlQuery prt_query(db);
@@ -178,21 +182,50 @@ bool prt_fun::delete_prt(const QString& pathname, const QString& uin)
     db.close();
     return ret;
 }
-QString prt_fun::get_prt_text(QSqlDatabase& db, const QString& uin)
+QString prt_fun::get_prt_text(const QSqlDatabase& db, const QString& uin)
 {
     return prt_fun::get_prt_l(db, uin, "prt_text");
 }
-QString prt_fun::get_end_text(QSqlDatabase& db, const QString& uin)
+QString prt_fun::get_end_text(const QSqlDatabase& db, const QString& uin)
 {
     return prt_fun::get_prt_l(db, uin, "end_text");
 }
-bool prt_fun::set_prt_text(QSqlDatabase& db, const QString& uin, const QString& text)
+bool prt_fun::set_prt_text(const QSqlDatabase& db, const QString& uin, const QString& text)
 {
     return prt_fun::set_prt_l(db, uin, text, "prt_text");
 }
-bool prt_fun::set_end_text(QSqlDatabase& db, const QString& uin, const QString& text)
+bool prt_fun::set_end_text(const QSqlDatabase& db, const QString& uin, const QString& text)
 {
     return prt_fun::set_prt_l(db, uin, text, "end_text");
+}
+void prt_fun::erase_lost_protocols(klient* arg)
+{
+    QSqlDatabase db;
+    db = QSqlDatabase::addDatabase("QSQLITE", "Seconderase_lost_protocols");
+    db.setDatabaseName(arg->get_patch() + "/" + arg->get_pdirname());
+    if (!db.open()){
+        QMessageBox::information(nullptr, "Отладка", "Не открывается база протоколов клиента: <br>" + arg->get_patch() + "/" + arg->get_pdirname());
+    }
+    QSqlQuery prt_query(db);
+    QSqlRecord rec;
+    if (prt_query.exec("SELECT * FROM prot;")) {
+        QList<QString> dirty_list{QList<QString>()};
+        QList<QString> klient_list{arg->ret_uids()};
+        while (prt_query.next()){
+            rec = prt_query.record();
+            dirty_list.append(prt_query.value(rec.indexOf("uin")).toString());
+        }
+        dirty_list.sort();
+        klient_list.sort();
+        std::list<QString> result_list{std::list<QString>()};
+        std::set_difference(dirty_list.begin(), dirty_list.end(), klient_list.begin(), klient_list.end(), std::insert_iterator<std::list<QString>>(result_list, result_list.begin()));
+        if (result_list.size() > 0){
+            for (auto itz : result_list){
+                prt_fun::delete_prt(db, itz);
+            }
+        }
+    }
+    db.close();
 }
 QString prt_fun::base64_plus(const QString& arg)
 {
