@@ -1,6 +1,41 @@
 #include "mainwindow.h"
-
-
+#include "address.h"
+#include "worker.h"
+#include "laboratory.h"
+#include "details.h"
+#include "klient.h"
+#include "order.h"
+#include "cp.h"
+#include "ktp.h"
+#include "editor_address.h"
+#include "editor_cp.h"
+#include "editor_klient.h"
+#include "editor_ktp.h"
+#include "editor_laboratory.h"
+#include "editor_order.h"
+#include "editor_worker.h"
+#include "direct_app_listing.h"
+#include "const_data_listing.h"
+#include "type_data_listing.h"
+#include "close_class.h"
+#include "settings.h"
+#include <QLabel>
+#include <QDockWidget>
+#include <QWidget>
+#include <QMenu>
+#include <QMenuBar>
+#include <QBoxLayout>
+#include <QTreeView>
+#include <QDir>
+#include <algorithm>
+#include "treemodel.h"
+#include "treeitem.h"
+#include "logger.h"
+#include "mytreeview.h"
+#include <QKeySequence>
+#include <QMessageBox>
+#include <QHeaderView>
+#include <QWebEngineView>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -23,9 +58,9 @@ MainWindow::MainWindow(QWidget *parent)
     my_tree->setModel(my_tree_model);
     addDockWidget(Qt::LeftDockWidgetArea, my_tree_area);
 
-    my_tree_area->setMinimumWidth(300);
-    my_tree->setColumnWidth(0, 220);
-    my_tree->setColumnWidth(1, 80);
+    my_tree_area->setMinimumWidth(450);
+    my_tree->setColumnWidth(0, 250);
+    my_tree->setColumnWidth(1, 100);
     QWidget *main_l = new QWidget;
     QMainWindow::setCentralWidget(main_l);
 // Загрузим клиентов из директории по умолчанию.

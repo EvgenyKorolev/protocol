@@ -1,45 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "address.h"
-#include "worker.h"
-#include "laboratory.h"
-#include "details.h"
-#include "klient.h"
-#include "order.h"
-#include "cp.h"
-#include "ktp.h"
-#include "editor_address.h"
-#include "editor_cp.h"
-#include "editor_klient.h"
-#include "editor_ktp.h"
-#include "editor_laboratory.h"
-#include "editor_order.h"
-#include "editor_worker.h"
-#include "direct_app_listing.h"
-#include "const_data_listing.h"
-#include "type_data_listing.h"
-#include "close_class.h"
-#include "settings.h"
-#include <QLabel>
-#include <QDockWidget>
-#include <QWidget>
-#include <QMenu>
-#include <QMenuBar>
 #include <QMainWindow>
-#include <QBoxLayout>
-#include <QTreeView>
-#include <QDir>
-#include <algorithm>
-#include "treemodel.h"
-#include "treeitem.h"
-#include "logger.h"
-#include "mytreeview.h"
-#include <QKeySequence>
-#include <QMessageBox>
-#include <QHeaderView>
-#include <QWebEngineView>
-
+class MyTreeView;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

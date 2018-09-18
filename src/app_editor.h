@@ -1,24 +1,11 @@
 #ifndef APP_EDITOR_H
 #define APP_EDITOR_H
 
-#include "fstring_edit.h"
-#include "string_edit.h"
-#include "my_date_edit.h"
-#include "apparaturs.h"
 #include "ver_data_model.h"
 #include "ver_data_view.h"
-#include "int_editor.h"
-#include "directory_app.h"
-#include "app_in_direct.h"
+#include "apparaturs.h"
 #include <QObject>
-#include <QWidget>
 #include <QDialog>
-#include <QLabel>
-#include <QBoxLayout>
-#include <QPushButton>
-#include <QMessageBox>
-#include <QDateEdit>
-#include <QHeaderView>
 //Виджет - редактор данных прибора
 class app_editor : public QDialog
 {

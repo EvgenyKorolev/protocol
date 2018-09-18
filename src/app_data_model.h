@@ -1,9 +1,8 @@
 #ifndef APP_DATA_MODEL_H
 #define APP_DATA_MODEL_H
 
-#include <QAbstractTableModel>
-#include <QList>
 #include "apparaturs.h"
+#include <QAbstractTableModel>
 // Модель для отображения списка приборов
 class app_data_model : public QAbstractTableModel
 {

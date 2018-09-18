@@ -25,7 +25,7 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
     dat_lab->setText("Дата формирования: ");
     dat_edit = new QDateEdit();
     dat_edit->setDate(QDate::currentDate());
-// Дата
+// Номер
    QLabel* ent_num_lab = new QLabel();
    ent_num_lab->setText("Номер протокола: ");
    enter_number = new QLineEdit();
@@ -288,6 +288,7 @@ void protocol_constructor::slot_test()
 //    tmpw->show();
     actual_prot->set_date(dat_edit->date());
     actual_prot->set_type(select_type->currentData().toString());
+    actual_prot->set_number(enter_number->text());
     prt_fun::add_prt(actual_prot->get_dr(), actual_prot, html_text, html_text);
 
 //    QWebEnginePage* tmppage = tmpw->page();

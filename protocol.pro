@@ -105,7 +105,9 @@ SOURCES += src/address.cpp \
     src/ask_delegat.cpp \
     src/create_klent_menu.cpp \
     src/settings.cpp \
-    src/protocol_list_load.cpp
+    src/protocol_list_load.cpp \
+    src/textedit.cpp \
+    src/protocol_editor.cpp
 
 HEADERS  += src/address.h \
     src/app_data_model.h \
@@ -201,10 +203,13 @@ HEADERS  += src/address.h \
     src/ask_delegat.h \
     src/create_klent_menu.h \
     src/settings.h \
-    src/protocol_list_load.h
+    src/protocol_list_load.h \
+    src/textedit.h \
+    src/protocol_editor.h
 
 RESOURCES += \
     icons.qrc \
+    textedit.qrc \
     data.qrc
 
 DISTFILES += \

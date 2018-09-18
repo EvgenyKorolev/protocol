@@ -1,20 +1,12 @@
 #ifndef APP_IN_DIRECT_H
 #define APP_IN_DIRECT_H
 
-#include "direct_app_model.h"
-#include "app_in_view.h"
-#include "filter_maker.h"
+#include "apparaturs.h"
 #include <QObject>
 #include <QDialog>
-#include <QBoxLayout>
-#include <QPushButton>
-#include <QHeaderView>
-#include <QComboBox>
-#include <QLineEdit>
-#include <QSortFilterProxyModel>
-#include <QRegExp>
-#include <QVariant>
-
+class direct_app_model;
+class QComboBox;
+class QLineEdit;
 class app_in_view;
 class app_in_direct : public QDialog
 {

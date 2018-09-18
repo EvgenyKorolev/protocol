@@ -1,5 +1,15 @@
 #include "app_in_direct.h"
-
+#include "direct_app_model.h"
+#include "app_in_view.h"
+#include "filter_maker.h"
+#include <QComboBox>
+#include <QLineEdit>
+#include <QBoxLayout>
+#include <QPushButton>
+#include <QHeaderView>
+#include <QSortFilterProxyModel>
+#include <QRegExp>
+#include <QVariant>
 app_in_direct::app_in_direct()
 {
     this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));

@@ -1,3 +1,8 @@
+#include "app_editor.h"
+#include <QMenu>
+#include <QVariant>
+#include "app_data_view.h"
+#include "app_in_direct.h"
 #include "app_in_view.h"
 
 app_in_view::app_in_view(QWidget *par) : QTableView(par){}

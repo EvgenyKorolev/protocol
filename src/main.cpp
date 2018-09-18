@@ -2,6 +2,7 @@
 #include "laboratory.h"
 #include "directory_app.h"
 #include "logger.h"
+#include "type_const_loader.h"
 #include "const_loader.h"
 #include "settings.h"
 #include <QApplication>

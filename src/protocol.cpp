@@ -77,7 +77,6 @@ bool protocol::erase()
 }
 void protocol::set_parent(obj* par)
 {
-    uin = prt_fun::create_uin();
     parent = par;
     dr = par->get_bd_name();
 }
@@ -140,11 +139,11 @@ QString protocol::get_dr() const
 }
 QString protocol::get_prttxt() const
 {
-    QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_prttxt" + prt_fun::create_uin());
-    db.setDatabaseName(parent->get_bd_name());
-    QString ret = prt_fun::get_prt_text(db, uin);
-    db.close();
+//    QSqlDatabase db;
+//    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDB_prttxt" + prt_fun::create_uin());
+   // db.setDatabaseName(parent->get_bd_name());
+    QString ret = prt_fun::get_prt_text(parent->get_bd_name(), uin);
+  //  db.close();
     return ret;
 }
 QString protocol::get_endtxt() const

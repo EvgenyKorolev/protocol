@@ -2,12 +2,8 @@
 #define APP_DATA_VIEW_H
 
 #include <QObject>
-#include <QWidget>
 #include <QTableView>
 #include <QMouseEvent>
-#include <QMenu>
-#include "app_in_direct.h"
-#include "app_editor.h"
 //Вид для отображения списка приборов
 class app_data_view : public QTableView
 {

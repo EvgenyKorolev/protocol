@@ -1,4 +1,7 @@
 #include "address.h"
+#include <QDomElement>
+#include <QDomDocument>
+#include <QDomText>
 
 address::address(const address &arg)
 {

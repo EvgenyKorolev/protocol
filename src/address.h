@@ -4,9 +4,6 @@
 #include <QString>
 #include <QPair>
 #include <QDomNode>
-#include <QDomElement>
-#include <QDomDocument>
-#include <QDomText>
 
 // Этот класс хранит компоненты адреса
 

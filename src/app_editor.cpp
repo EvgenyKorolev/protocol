@@ -1,5 +1,16 @@
 #include "app_editor.h"
-
+#include "fstring_edit.h"
+#include "string_edit.h"
+#include "my_date_edit.h"
+#include "int_editor.h"
+#include "directory_app.h"
+#include "app_in_direct.h"
+#include <QBoxLayout>
+#include <QPushButton>
+#include <QLabel>
+#include <QMessageBox>
+#include <QDateEdit>
+#include <QHeaderView>
 app_editor::~app_editor()
 {
     delete name_label;       // Название прибора

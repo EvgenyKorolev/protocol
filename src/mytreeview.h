@@ -1,44 +1,13 @@
 #ifndef MYTREEVIEW_H
 #define MYTREEVIEW_H
-#include "treeitem.h"
-#include "treemodel.h"
-#include "address.h"
-#include "worker.h"
-#include "laboratory.h"
-#include "details.h"
-#include "klient.h"
-#include "order.h"
-#include "cp.h"
-#include "ktp.h"
-#include "protocol_list_load.h"
-#include "editor_address.h"
-#include "editor_cp.h"
-#include "editor_klient.h"
-#include "editor_ktp.h"
-#include "editor_laboratory.h"
-#include "editor_order.h"
-#include "editor_worker.h"
-#include "save_klient.h"
-#include "open_klient.h"
-#include "fab_klient.h"
-#include "fab_order.h"
-#include "yes_no.h"
-#include "protocol_constructor.h"
-#include "protocol.h"
-#include "settings.h"
-#include "protocol_list_load.h"
-#include <QWidget>
-#include <QErrorMessage>
+
+#include <QObject>
 #include <QTreeView>
 #include <QMouseEvent>
-#include <QMenu>
-#include <QObject>
-#include <QDialog>
-#include <QFileDialog>
-#include <QString>
-#include <QMessageBox>
-#include <vector>
-#include <random>
+class klient;
+class order;
+class cp;
+class ktp;
 // Представление для отображения главного дерева
 class MyTreeView : public QTreeView
 {

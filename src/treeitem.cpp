@@ -1,5 +1,4 @@
 #include "treeitem.h"
-// -=-=-=-=-=-=-=-=-=-=-=- Вопрос с добавлением родителей в разные заявки и ЦП КТП при их добавлении как дочерних элиментов открыт.
 tree_item::tree_item(klient *data, tree_item *parent)
 {
     this->item_data_o = nullptr;
@@ -179,9 +178,9 @@ QVariant tree_item::data(int section, int role)
         case 0:
             return QVariant(this->item_data_o->get_uniq());
         case 1:
-            return QVariant(this->item_data_o->get_date().toString("dd.MM.yyyy"));
-        case 2:
             return QVariant(QString::number(this->item_data_o->get_num()));
+        case 2:
+            return QVariant(this->item_data_o->get_date().toString("dd.MM.yyyy"));
         }
     }
     if (this->type == "cp") {
@@ -210,9 +209,9 @@ QVariant tree_item::data(int section, int role)
         case 0:
             return QVariant("Наименование");
         case 1:
-            return QVariant("Дата");
-        case 2:
             return QVariant("Статус");
+        case 2:
+            return QVariant("Дата");
       }
     }
     if (this->type == "prot") {
@@ -220,9 +219,9 @@ QVariant tree_item::data(int section, int role)
         case 0:
             return QVariant(this->item_data_prot->get_type());
         case 1:
-            return QVariant(this->item_data_prot->get_date());
-        case 2:
             return QVariant(this->item_data_prot->get_number());
+        case 2:
+            return QVariant(this->item_data_prot->get_date());
         }
     }
     return QVariant("errX");

@@ -1,14 +1,10 @@
 #ifndef APP_IN_VIEW_H
 #define APP_IN_VIEW_H
 
+#include "apparaturs.h"
+#include <QTableView>
 #include <QObject>
 #include <QMouseEvent>
-#include <QMenu>
-#include <QTableView>
-#include <QVariant>
-#include "apparaturs.h"
-#include "app_data_view.h"
-#include "app_in_direct.h"
 // Класс представления для выбора прибора из справочника
 class app_in_direct;
 class app_in_view : public QTableView

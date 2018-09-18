@@ -135,39 +135,38 @@ QString prt_fun::create_uin()
     _hash_label.append(QString::number(gen()));
     return  _hash_label;
 }
+// -------------------------------------------
 QString prt_fun::get_prt_l(const QSqlDatabase& db, const QString& uin, const QString& arg)
 {
     QSqlQuery prt_query(db);
     QSqlRecord rec;
-
-    bool inh = prt_query.exec("SELECT * FROM prot;");  // Удалить строку, она бесполезна
-
     if (!prt_query.exec("SELECT * FROM prot WHERE uin = '" + uin + "';")) {
-        QMessageBox::information(nullptr, "Отладка", "Нет такого протокола");
+        QMessageBox::information(nullptr, "Отладка", "Нет такого протокола (1)");
         return "";
     }
     rec = prt_query.record();
     prt_query.first();
     return prt_query.value(rec.indexOf(arg)).toString();
 }
+// -------------------------------------------
 bool prt_fun::set_prt_l(const QSqlDatabase& db, const QString& uin, const QString& text, const QString& arg)
 {
     QSqlQuery prt_query(db);
     QSqlRecord rec;
     if (!prt_query.exec("UPDATE prot SET " + arg+  "= '" + text + "' WHERE uin ='" + uin + "';")) {
-        QMessageBox::information(nullptr, "Отладка", "Нет такого протокола");
+        QMessageBox::information(nullptr, "Отладка", "Нет такого протокола (2)");
         return false;
     }
     return true;
 }
 bool prt_fun::delete_prt(const QSqlDatabase &db, const QString& uin)
 {
-
     QSqlQuery prt_query(db);
-    if (prt_query.exec("DELETE FROM prot WHERE uin = '" + uin + "';")) {
-        return true;
+    if (!prt_query.exec("DELETE FROM prot WHERE uin = '" + uin + "';")) {
+        QMessageBox::information(nullptr, "Отладка", "Не могу удалить текст протокола");
+        return false;
     }
-    return false;
+    return true;
 }
 bool prt_fun::delete_prt(const QString& pathname, const QString& uin)
 {
@@ -182,6 +181,30 @@ bool prt_fun::delete_prt(const QString& pathname, const QString& uin)
     db.close();
     return ret;
 }
+
+
+QString prt_fun::get_prt_text(const QString& path, const QString& uin)
+{
+    QSqlDatabase db;
+    db = QSqlDatabase::addDatabase("QSQLITE", "SecondDBprttxlhkjhjk");
+    db.setDatabaseName(path);
+    QSqlQuery prt_query(db);
+    QSqlRecord rec;
+
+    QString qw = "SELECT * FROM prot WHERE uin = '" + uin + "';";
+
+    if (!prt_query.exec(qw)) {
+        QMessageBox::information(nullptr, "Отладка", "Нет такого протокола (XXX)");
+        return "";
+    }
+    rec = prt_query.record();
+    prt_query.first();
+    db.close();
+    return prt_query.value(rec.indexOf("prt_text")).toString();
+}
+
+
+
 QString prt_fun::get_prt_text(const QSqlDatabase& db, const QString& uin)
 {
     return prt_fun::get_prt_l(db, uin, "prt_text");

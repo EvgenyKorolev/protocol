@@ -1,4 +1,8 @@
 #include "app_data_view.h"
+#include <QWidget>
+#include <QMenu>
+#include "app_in_direct.h"
+#include "app_editor.h"
 
 app_data_view::app_data_view(bool *arg, QWidget *par) : QTableView(par)
 {

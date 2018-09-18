@@ -1,5 +1,41 @@
 #include "mytreeview.h"
-
+#include "treeitem.h"
+#include "treemodel.h"
+#include "address.h"
+#include "worker.h"
+#include "laboratory.h"
+#include "details.h"
+#include "klient.h"
+#include "order.h"
+#include "cp.h"
+#include "ktp.h"
+#include "protocol_list_load.h"
+#include "editor_address.h"
+#include "editor_cp.h"
+#include "editor_klient.h"
+#include "editor_ktp.h"
+#include "editor_laboratory.h"
+#include "editor_order.h"
+#include "editor_worker.h"
+#include "save_klient.h"
+#include "open_klient.h"
+#include "fab_klient.h"
+#include "fab_order.h"
+#include "yes_no.h"
+#include "protocol_constructor.h"
+#include "protocol_editor.h"
+#include "protocol.h"
+#include "settings.h"
+#include "protocol_list_load.h"
+#include <QWidget>
+#include <QErrorMessage>
+#include <QMenu>
+#include <QDialog>
+#include <QFileDialog>
+#include <QString>
+#include <QMessageBox>
+#include <vector>
+#include <random>
 MyTreeView::MyTreeView(QWidget *par)
 {
     this->parent = par;
@@ -248,6 +284,7 @@ void MyTreeView::slot_create_ktp_ord()
 void MyTreeView::slot_edit_klient()
 {
    klient *edkli = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k();
+   if (edkli == nullptr) return;
    editor_klient *editor = new editor_klient(edkli);
    if (editor->exec() == QDialog::Accepted && editor->is_edit()){
        model()->layoutChanged();
@@ -257,6 +294,7 @@ void MyTreeView::slot_edit_klient()
 void MyTreeView::slot_edit_order()
 {
     order *edord = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_o();
+    if (edord == nullptr) return;
     editor_order *editor = new editor_order(edord);
     if (editor->exec() == QDialog::Accepted){
         model()->layoutChanged();
@@ -423,7 +461,13 @@ void MyTreeView::slot_del_klient()
 void MyTreeView::slot_edit_prot()
 {
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+    protocol* edprt = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot();
+    if (edprt == nullptr) return;
+    protocol_editor *editor = new protocol_editor(edprt);
+    if (editor->exec() == QDialog::Accepted){
+        model()->layoutChanged();
+    }
+    delete editor;
    // model()->setData(this->indexAt(curs), QVariant::fromValue(prt), Qt::EditRole);
     model()->layoutChanged();
 

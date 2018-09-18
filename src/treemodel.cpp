@@ -119,7 +119,6 @@ bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int rol
             return true;
         }
     }
-    // -=-=-=-=-=-=-=-=-=-=-=++========0-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     return false;
 }
 bool TreeModel::removeRows( int row, int count, const QModelIndex &parent)
