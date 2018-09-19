@@ -50,7 +50,7 @@ public:
     QDomElement make_xml() const;
     int load_xml(QDomNode *arg);
 private:
-    obj* parent;
+    obj* parent = nullptr;
     QString prt_number{""};  // Номер протокола
     QDate prt_date{0, 0, 0};  // Дата протокола
     QString prt_type{""};  // Тип протокола

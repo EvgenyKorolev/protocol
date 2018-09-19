@@ -176,7 +176,7 @@ void MyTreeView::slot_delete()
     yes_no* pmbx = new yes_no(txxt + "?</b>");
     if (pmbx->exec() == QDialog::Accepted)
     {
-        if (temp_v == "prot"){
+        if(temp_v == "prot"){
             this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->erase();
         }
         model()->removeRow(this->indexAt(curs).row(),this->indexAt(curs).parent());
@@ -320,6 +320,7 @@ void MyTreeView::slot_save_klient()
         sv.save_db(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k(), my_patch + "/" + my_name);
         this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->set_pdirname(my_name);
         this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k()->set_patch(my_patch);
+        prt_fun::erase_lost_protocols(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_k());
     }
 }
 void MyTreeView::slot_load_klient()
@@ -367,7 +368,7 @@ void MyTreeView::save_all_klient()
                    model()->data(model()->index(i, 0, QModelIndex()), Qt::EditRole).value<tree_item*>()->ret_k()->get_name() + ".ppk";
        }
        sv.save_xml(model()->data(model()->index(i, 0, QModelIndex()), Qt::EditRole).value<tree_item*>()->ret_k(), my_file);
-
+       prt_fun::erase_lost_protocols(model()->data(model()->index(i, 0, QModelIndex()), Qt::EditRole).value<tree_item*>()->ret_k());
     }
 }
 void MyTreeView::slot_exp_klient()
@@ -428,16 +429,8 @@ void MyTreeView::slot_create_prot(){
         protocol* prt = new protocol(tmpo);
         protocol_constructor *prtconst = new protocol_constructor(prt);
         if (prtconst->exec() == QDialog::Accepted){
-
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
             model()->setData(this->indexAt(curs), QVariant::fromValue(prt), Qt::EditRole);
             model()->layoutChanged();
-
-
-   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
         }
         delete prtconst;
     } else {
@@ -460,19 +453,13 @@ void MyTreeView::slot_del_klient()
 };
 void MyTreeView::slot_edit_prot()
 {
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     protocol* edprt = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot();
     if (edprt == nullptr) return;
     protocol_editor *editor = new protocol_editor(edprt);
     if (editor->exec() == QDialog::Accepted){
-        model()->layoutChanged();
     }
     delete editor;
-   // model()->setData(this->indexAt(curs), QVariant::fromValue(prt), Qt::EditRole);
     model()->layoutChanged();
-
-
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
 void MyTreeView::slot_clone_prot()
 {
@@ -483,6 +470,6 @@ void MyTreeView::slot_clone_prot()
     prt_fun::add_prt(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->get_dr(), prt,
                      this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->get_prttxt(),
                      this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->get_endtxt());
-    model()->setData(this->indexAt(curs), QVariant::fromValue(prt), Qt::EditRole);
+    model()->setData(this->indexAt(curs).parent(), QVariant::fromValue(prt), Qt::EditRole);
     model()->layoutChanged();
 }

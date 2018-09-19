@@ -296,8 +296,8 @@ void protocol_constructor::slot_test()
 //    QWebEngineScriptCollection tmpscr = tmppage->scripts();
 //    tmppage->printToPdf(QString("result/test.pdf"));
 
-//    QTextDocument tdd;
-//    tdd.setHtml(html_text);
+    QTextDocument tdd;
+    tdd.setHtml(html_text);
 
 //    QPrinter* print = new QPrinter();
 //    print->setOutputFormat(QPrinter::PdfFormat);
@@ -307,9 +307,9 @@ void protocol_constructor::slot_test()
 
 
 //    QTextDocumentWriter  writer("result/test.odt", "odf");
-//    QTextDocumentWriter  writer1("result/test3.odt", "html");
+    QTextDocumentWriter  writer("result/test3.html", "html");
 //    QTextDocumentWriter  writer2("result/test2.odt", "plaintext");
-//    writer.write(&tdd);
+    writer.write(&tdd);
 //    writer2.write(&tdd);
    // int f = tdd.blockCount();
 

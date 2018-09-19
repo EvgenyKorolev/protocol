@@ -73,6 +73,7 @@ public:
     TextEdit(QWidget *parent = nullptr);
 
     bool load(const QString &f);
+    bool load_html(const QString &h);
 
 public slots:
     void fileNew();
@@ -101,7 +102,6 @@ private slots:
     void cursorPositionChanged();
 
     void clipboardDataChanged();
-    void about();
     void printPreview(QPrinter *);
 
 private:

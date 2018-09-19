@@ -112,12 +112,6 @@ TextEdit::TextEdit(QWidget *parent)
     setupEditActions();
     setupTextActions();
 
-    {
-        QMenu *helpMenu = menuBar()->addMenu(tr("Help"));
-        helpMenu->addAction(tr("About"), this, &TextEdit::about);
-        helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
-    }
-
     QFont textFont("Helvetica");
     textFont.setStyleHint(QFont::SansSerif);
     textEdit->setFont(textFont);
@@ -387,6 +381,23 @@ bool TextEdit::load(const QString &f)
     }
 
     setCurrentFileName(f);
+    return true;
+}
+
+bool TextEdit::load_html(const QString &h)
+{
+    QByteArray data;
+    data.append(h);
+    QTextCodec *codec = Qt::codecForHtml(data);
+    QString str = codec->toUnicode(data);
+    if (Qt::mightBeRichText(str)) {
+        textEdit->setHtml(str);
+    } else {
+        str = QString::fromLocal8Bit(data);
+        textEdit->setPlainText(str);
+    }
+
+    setCurrentFileName("");
     return true;
 }
 
@@ -676,12 +687,6 @@ void TextEdit::clipboardDataChanged()
 #endif
 }
 
-void TextEdit::about()
-{
-    QMessageBox::about(this, tr("About"), tr("This example demonstrates Qt's "
-        "rich text editing facilities in action, providing an example "
-        "document for you to experiment with."));
-}
 
 void TextEdit::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
 {

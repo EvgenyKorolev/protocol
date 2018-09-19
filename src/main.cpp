@@ -15,6 +15,9 @@
 int main(int argc, char *argv[])
 {    
     QApplication a(argc, argv);
+    QCoreApplication::setOrganizationName("Evgeny Korolev");
+    QCoreApplication::setApplicationName("Protocol");
+    QCoreApplication::setApplicationVersion("0.5");
     QSplashScreen splash(QPixmap(":/pic/images/st0.png"));
     splash.show();
 // ----------------------------------------------------------------
