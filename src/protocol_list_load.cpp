@@ -1,11 +1,19 @@
 #include "protocol_list_load.h"
 #include "klient.h"
+#include "protocol.h"
+#include <QMessageBox>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QDateTime>
+#include <random>
+#include <memory>
+#include <algorithm>
 
 QList<protocol*> prt_fun::loap_p_list(const QString& path)
 {
     QList<protocol*> ret = QList<protocol*>();
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "RSecondDBloap");
+    db = QSqlDatabase::addDatabase("QSQLITE", prt_fun::create_uin().right(5) + "RSecondDBloap");
     db.setDatabaseName(path);
     if (!db.open()){
         QMessageBox::information(nullptr, "Отладка", "Не открывается база протоколов клиента: <br>"
@@ -30,7 +38,7 @@ QList<protocol*> prt_fun::loap_p_list(const QString& path)
 std::unique_ptr<protocol> loap_prot(const QString& path, const QString& uin)
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "TSecondDB_prot");
+    db = QSqlDatabase::addDatabase("QSQLITE", prt_fun::create_uin().right(5) + "TSecondDB_prot");
     db.setDatabaseName(path);
     if (!db.open()){
         QMessageBox::information(nullptr, "Отладка", "Не открывается база протоколов клиента: <br>"
@@ -55,7 +63,7 @@ std::unique_ptr<protocol> loap_prot(const QString& path, const QString& uin)
 QString prt_fun::add_prt(const QString& path, const protocol& prt, const QString& prttxt, const QString& endtxt)
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "FSecondDBadd_prt");
+    db = QSqlDatabase::addDatabase("QSQLITE", prt_fun::create_uin().right(5) + "FSecondDBadd_prt");
     db.setDatabaseName(path);
     if (!db.open()){
         QMessageBox::information(nullptr, "Отладка", "Не открывается база протоколов клиента: <br>"
@@ -83,7 +91,7 @@ QString prt_fun::add_prt_l(const QSqlDatabase& db, const protocol& prt, const QS
 QString prt_fun::update_prt(const QString& path, const protocol& prt, const QString& prttxt, const QString& endtxt)
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "GSecondDBadd_prt");
+    db = QSqlDatabase::addDatabase("QSQLITE", prt_fun::create_uin().right(5) + "GSecondDBadd_prt");
     db.setDatabaseName(path);
     if (!db.open()){
         QMessageBox::information(nullptr, "Отладка", "Не открывается база протоколов клиента: <br>"
@@ -109,7 +117,7 @@ QString prt_fun::update_prt_l(const QSqlDatabase& db, const protocol& prt, const
 bool prt_fun::create_base(const QString& path, const QString& name)
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "HSecondDB_base");
+    db = QSqlDatabase::addDatabase("QSQLITE", prt_fun::create_uin().right(5) + "HSecondDB_base");
     db.setDatabaseName(path + "/" + name);
     if (!db.open()){
         QMessageBox::information(nullptr, "Отладка", "Не открывается база протоколов клиента");
@@ -140,7 +148,7 @@ QString prt_fun::create_uin()
 QString prt_fun::get_prt_l(const QString& path, const QString& uin, const QString& arg)
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "BSecondDB_get_prt_l");
+    db = QSqlDatabase::addDatabase("QSQLITE", prt_fun::create_uin().right(5) + "BSecondDB_get_prt_l");
     db.setDatabaseName(path);
     QSqlQuery prt_query(db);
     QSqlRecord rec;
@@ -162,7 +170,7 @@ QString prt_fun::get_prt_l(const QString& path, const QString& uin, const QStrin
 bool prt_fun::set_prt_l(const QString &path, const QString& uin, const QString& text, const QString& arg)
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "CSecondDB_set_prt_l");
+    db = QSqlDatabase::addDatabase("QSQLITE", prt_fun::create_uin().right(5) + "CSecondDB_set_prt_l");
     db.setDatabaseName(path);
     if (!db.open()){
         QMessageBox::information(nullptr, "Отладка", "Не открывается база протоколов клиента");
@@ -181,7 +189,7 @@ bool prt_fun::set_prt_l(const QString &path, const QString& uin, const QString& 
 bool prt_fun::delete_prt(const QString& pathname, const QString& uin)
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "XSecondDBdelete_prtX");
+    db = QSqlDatabase::addDatabase("QSQLITE", prt_fun::create_uin().right(5) + "XSecondDBdelete_prtX");
     db.setDatabaseName(pathname);
     if (!db.open()){
         QMessageBox::information(nullptr, "Отладка", "Не открывается база протоколов клиента");
@@ -199,7 +207,7 @@ bool prt_fun::delete_prt(const QString& pathname, const QString& uin)
 bool prt_fun::del_prt_list(const QString& path, QList<QString> uins)
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "XFSecondDBdeletelist");
+    db = QSqlDatabase::addDatabase("QSQLITE", prt_fun::create_uin().right(5) + "XFSecondDBdeletelist");
     db.setDatabaseName(path);
     if (!db.open()){
         QMessageBox::information(nullptr, "Отладка", "Не открывается база протоколов клиента");
@@ -231,7 +239,7 @@ bool prt_fun::set_end_text(const QString& path, const QString& uin, const QStrin
 void prt_fun::erase_lost_protocols(klient* arg)
 {
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE", "LSeconderase_lost_protocols");
+    db = QSqlDatabase::addDatabase("QSQLITE", prt_fun::create_uin().right(5) + "LSeconderase_lost_protocols");
     db.setDatabaseName(arg->get_patch() + "/" + arg->get_pdirname());
     if (!db.open()){
         QMessageBox::information(nullptr, "Отладка", "Не открывается база протоколов клиента: <br>" + arg->get_patch() + "/" + arg->get_pdirname());

@@ -47,26 +47,48 @@ obj::~obj()
         this->p_list.removeLast();
     }
 }
-void obj::init(const obj &arg)
+void obj::init(const obj& arg)
 {
-    this->init(&arg);
-}
-void obj::init(const obj *arg)
-{
-    this->name = arg->get_name();
-    QList<protocol*>tmp_prt = arg->get_pro_list();
+    this->name = arg.get_name();
+    QList<protocol*>tmp_prt = arg.get_pro_list();
     QList<protocol*>::iterator it1 = tmp_prt.begin();
     while (!(it1 == tmp_prt.end())){
         this->p_list.append(*it1);
         it1++;
     }
-    this->adr = arg->get_adr();
-    this->sh = arg->get_sh();
-    this->status = arg->get_status();
-    this->max_time = arg->get_maxt_list();
-    this->min_time = arg->get_mint_list();
-    this->voltage = arg->get_voltage();
-    QList<apparaturs*> tmp_app = arg->get_app_list();
+    this->adr = arg.get_adr();
+    this->sh = arg.get_sh();
+    this->status = arg.get_status();
+    this->max_time = arg.get_maxt_list();
+    this->min_time = arg.get_mint_list();
+    this->voltage = arg.get_voltage();
+    QList<apparaturs*> tmp_app = arg.get_app_list();
+    QList<apparaturs*>::iterator it3 = tmp_app.begin();
+    while (it3 != tmp_app.end()){
+        this->appr.append(*it3);
+        it3++;
+    }
+    this->up = nullptr;
+    this->ups = nullptr;
+}
+void obj::init_new(const obj& arg)
+{
+    this->name = arg.get_name();
+    QList<protocol*>tmp_prt = arg.get_pro_list();
+    QList<protocol*>::iterator it1 = tmp_prt.begin();
+    while (!(it1 == tmp_prt.end())){
+        protocol* tmp = new protocol(this);
+        tmp->set_data(*it1);
+        this->p_list.append(tmp);
+        it1++;
+    }
+    this->adr = arg.get_adr();
+    this->sh = arg.get_sh();
+    this->status = arg.get_status();
+    this->max_time = arg.get_maxt_list();
+    this->min_time = arg.get_mint_list();
+    this->voltage = arg.get_voltage();
+    QList<apparaturs*> tmp_app = arg.get_app_list();
     QList<apparaturs*>::iterator it3 = tmp_app.begin();
     while (it3 != tmp_app.end()){
         this->appr.append(*it3);
@@ -85,11 +107,6 @@ bool obj::operator ==(const obj &arg)
     this->voltage == arg.get_voltage()
           ) {return true;}
   return false;
-}
-obj obj::null_obj_1()
-{
-    obj(this->up);
-    return *this;
 }
 bool obj::operator != (const obj &arg)
 {

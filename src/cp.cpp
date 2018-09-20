@@ -1,7 +1,5 @@
 #include "order.h"
-#include "ktp.h"
-#include "cp.h"
-
+#include "fab_obj.h"
 cp::cp()
 {
     this->name = "";
@@ -42,7 +40,7 @@ cp::cp(obj *arg)
     QList<obj*>::iterator it2 = tmp_ktp.begin();
     while (it2 != tmp_ktp.end()){
         obj *tmpo = fabob.create_ktp();
-        tmpo->init(*it2);
+        tmpo->init(*(*it2));
         this->add_ktp(tmpo);
         ++it2;
     }
@@ -61,7 +59,7 @@ cp::cp(const cp &arg) : obj(arg)
     QList<obj*>::iterator it2 = tmp_ktp.begin();
     while (it2 != tmp_ktp.end()){
         obj *tmpo = fabob.create_ktp();
-        tmpo->init(*it2);
+        tmpo->init(*(*it2));
         this->add_ktp(tmpo);
         ++it2;
     }
@@ -82,11 +80,6 @@ cp::~cp()
         delete (*start)++;
     }
     this->ktp_list.clear();
-}
-cp cp::null_cp()
-{
-    cp();
-    return (*this);
 }
 QString cp::get_bd_name() const
 {
@@ -110,10 +103,10 @@ void cp::init(const cp *arg)
     this->voltage = arg->get_voltage();
     fab_obj fabob;
     QList<obj*> tmp_ktp = arg->get_ktp_list();
-    QList<obj*>::iterator it2 = tmp_ktp.begin();
+    QList<obj*>::const_iterator it2 = tmp_ktp.begin();
     while (it2 != tmp_ktp.end()){
         obj *tmpo = fabob.create_ktp();
-        tmpo->init(*it2);
+        tmpo->init(*(*it2));
         this->add_ktp(tmpo);
         ++it2;
     }
@@ -125,41 +118,71 @@ void cp::init(const cp *arg)
     }
    _tr = arg->get_tr();
 }
-void cp::init(const obj &arg)
+void cp::init(const obj& arg)
 {
-    this->init(&arg);
-}
-void cp::init(const obj *arg)
-{
-    this->name = arg->get_name();
-    QList<protocol*>tmp_prt = arg->get_pro_list();
+    this->name = arg.get_name();
+    QList<protocol*>tmp_prt = arg.get_pro_list();
     QList<protocol*>::iterator it1 = tmp_prt.begin();
     while (it1 != tmp_prt.end()){
         this->p_list.append(*it1);
         ++it1;
     }
-    this->adr = arg->get_adr();
-    this->sh = arg->get_sh();
-    this->status = arg->get_status();
-    this->max_time = arg->get_maxt_list();
-    this->min_time = arg->get_mint_list();
-    this->voltage = arg->get_voltage();
+    this->adr = arg.get_adr();
+    this->sh = arg.get_sh();
+    this->status = arg.get_status();
+    this->max_time = arg.get_maxt_list();
+    this->min_time = arg.get_mint_list();
+    this->voltage = arg.get_voltage();
     fab_obj fabob;
-    QList<obj*> tmp_ktp = arg->get_ktp_list();
+    QList<obj*> tmp_ktp = arg.get_ktp_list();
     QList<obj*>::iterator it2 = tmp_ktp.begin();
     while (it2 != tmp_ktp.end()){
         obj *tmpo = fabob.create_ktp();
-        tmpo->init(*it2);
+        tmpo->init(*(*it2));
         this->add_ktp(tmpo);
         ++it2;
     }
-    QList<apparaturs*> tmp_app = arg->get_app_list();
+    QList<apparaturs*> tmp_app = arg.get_app_list();
     QList<apparaturs*>::iterator it3 = tmp_app.begin();
     while (it3 != tmp_app.end()){
         this->appr.append(*it3);
         ++it3;
     }
-    _tr = arg->get_tr();
+    _tr = arg.get_tr();
+}
+void cp::init_new(const obj& arg)
+{
+    this->name = arg.get_name();
+    QList<protocol*>tmp_prt = arg.get_pro_list();
+    QList<protocol*>::iterator it1 = tmp_prt.begin();
+    while (it1 != tmp_prt.end()){
+        protocol* tmp = new protocol(this);
+        tmp->set_data(*it1);
+        this->p_list.append(tmp);
+        it1++;
+    }
+    this->adr = arg.get_adr();
+    this->sh = arg.get_sh();
+    this->status = arg.get_status();
+    this->max_time = arg.get_maxt_list();
+    this->min_time = arg.get_mint_list();
+    this->voltage = arg.get_voltage();
+    fab_obj fabob;
+    QList<obj*> tmp_ktp = arg.get_ktp_list();
+    QList<obj*>::iterator it2 = tmp_ktp.begin();
+    while (it2 != tmp_ktp.end()){
+        obj *tmpo = fabob.create_ktp();
+        tmpo->init_new(*(*it2));
+        this->add_ktp(tmpo);
+        ++it2;
+    }
+    QList<apparaturs*> tmp_app = arg.get_app_list();
+    QList<apparaturs*>::iterator it3 = tmp_app.begin();
+    while (it3 != tmp_app.end()){
+        this->appr.append(*it3);
+        ++it3;
+    }
+    _tr = arg.get_tr();
 }
 int cp::add_ktp(obj *arg)
 {

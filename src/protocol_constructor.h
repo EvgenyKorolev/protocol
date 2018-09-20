@@ -1,47 +1,23 @@
 #ifndef PROTOCOL_CONSTRUCTOR_H
 #define PROTOCOL_CONSTRUCTOR_H
+#include <QQuickWebEngineScript>
 
-#include "p_types_model.h"
-#include "p_types_view.h"
-#include "const_loader.h"
-#include "var_adapter.h"
-#include "const_adapter.h"
 #include "type_adapter.h"
-#include "protocol.h"
-#include "type_in_direct.h"
-#include "my_function.h"
-#include "app_data_model.h"
-#include "app_data_view.h"
 #include "prot_act_adapter.h"
-#include "protocol_list_load.h"
-#include "ask_editor.h"
-#include <QObject>
 #include <QDialog>
-#include <QString>
-#include <QIcon>
-#include <QBoxLayout>
-#include <QComboBox>
-#include <QLabel>
-#include <QPushButton>
-#include <QHeaderView>
-#include <QPair>
-#include <QTextDocument>
-#include <QRegExp>
-#include <QWebEngineView>
-#include <QWebEnginePage>
-#include <QDateEdit>
-#include <QGridLayout>
-#include <QLineEdit>
-
-#include <QWebEngineScriptCollection>
-#include <QTextDocumentWriter>
-#include <QPrinter>
-
-
 #include <tuple>
-#include <algorithm>
-#include <utility>
 #include <memory>
+class QDateEdit;
+class app_data_view;
+class apparaturs;
+class obj;
+class var_adapter;
+class const_adapter;
+class protocol;
+class QComboBox;
+class QLineEdit;
+class p_types_model;
+class p_types_view;
 enum class ask_p{parse, ask}; // указывает парсеру из каких адаптеров брать значения для замены
 class protocol_constructor : public QDialog
 {

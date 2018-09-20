@@ -1,5 +1,11 @@
 #include "order.h"
-
+#include <QDomNode>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomText>
+#include <QList>
+#include "fab_obj.h"
+#include "klient.h"
 order::order()
 {
     this->uniq = "";
@@ -26,12 +32,12 @@ order::order(const order &arg)
     while (it != tmpo.end()){
         if ((*it)->get_status() == "cp"){
             obj* tmpo1 = fab_obj::create_cp();
-            tmpo1->init(*it);
+            tmpo1->init(*(*it));
             this->add_obj(tmpo1);
         }
         if ((*it)->get_status() == "ktp"){
             obj* tmpo2 = fab_obj::create_ktp();
-            tmpo2->init(*it);
+            tmpo2->init(*(*it));
             this->add_obj(tmpo2);
         }
         ++it;
@@ -82,23 +88,39 @@ void order::init(const order& arg)
     while (it != tmpo.end()){
         if ((*it)->get_status() == "cp"){
             obj* tmpo1 = fabob.create_cp();
-            tmpo1->init(*it);
+            tmpo1->init(*(*it));
             this->add_obj(tmpo1);
         }
         if ((*it)->get_status() == "ktp"){
             obj* tmpo2 = fabob.create_ktp();
-            tmpo2->init(*it);
+            tmpo2->init(*(*it));
             this->add_obj(tmpo2);
         }
         ++it;
     }
 }
-order order::null_order()
+void order::init_new(const order& arg)
 {
-    order(this->up);
-    return *this;
+    this->uniq = arg.get_uniq();
+    this->date = arg.get_date();
+    this->number = arg.get_num();
+    fab_obj fabob;
+    QList<obj*> tmpo = arg.get_obj_list();
+    QList<obj*>::iterator it = tmpo.begin();
+    while (it != tmpo.end()){
+        if ((*it)->get_status() == "cp"){
+            obj* tmpo1 = fabob.create_cp();
+            tmpo1->init_new(*(*it));
+            this->add_obj(tmpo1);
+        }
+        if ((*it)->get_status() == "ktp"){
+            obj* tmpo2 = fabob.create_ktp();
+            tmpo2->init_new(*(*it));
+            this->add_obj(tmpo2);
+        }
+        ++it;
+    }
 }
-
 int order::set_up(klient *arg)
 {
     this->up = arg;
@@ -108,7 +130,6 @@ klient* order::get_up()
 {
     return this->up;
 }
-
 int order::set_uniq(QString arg)
 {
     if (arg.size() < 1000)
@@ -131,7 +152,6 @@ QDate order::get_date() const
 {
     return this->date;
 }
-
 int order::add_obj(obj *arg)
 {
     this->obj_list.append(arg);

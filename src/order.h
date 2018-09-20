@@ -1,18 +1,11 @@
 #ifndef ORDER_H
 #define ORDER_H
-
-#include <QVariant>
-#include <QDate>
-#include <QDomNode>
-#include <QDomDocument>
-#include <QDomElement>
-#include <QDomText>
-#include <QList>
-#include <QString>
 #include "my_function.h"
-#include "fab_obj.h"
-#include "klient.h"
-
+#include <QString>
+#include <QDate>
+#include <QVariant>
+class QDomNode;
+class QDomElement;
 class obj;
 class klient;
 
@@ -28,8 +21,6 @@ public:
     bool operator == (const order &arg);            // Равенство
     bool operator != (const order &arg);            // Неравенство
     order &operator =(const order &arg);            // Присваивание
-
-    order null_order();                             // Обнуляет объект и возвращает его по значению
 
     int set_up(klient *arg);                        // Установить родителья (клиента)
     klient* get_up();                               // Узнать родителя (клиента)
@@ -53,6 +44,7 @@ public:
     QString type() {return "ord";}     // Возвращает тип записи
     order ret(){return *this;}             // Возвращает значение объекта
     void init(const order &arg);                      // Инициализирует объект другим объектом
+    void init_new(const order &arg);   // Инициализирует объект другим объектом меняя уникальные номера протоколов
     QString get_bd_name() const;     // Сообщает имя файла БД клиента
     QList<QString> ret_uids() const;       // Возвращает список существующих протоколов
 

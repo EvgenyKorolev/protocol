@@ -16,7 +16,6 @@ public:
     cp(const cp &arg);                  // Конструтор копировщик
     cp(obj *arg);                       // Конструтор перегруженный
     ~cp() override;                     // Деструктор
-    cp null_cp();                       // Очищает объект от данных и возвращает пустой объект
 
     int add_ktp(obj *arg) override;              // Добавить КТП
     QList<obj*> get_ktp_list() const override;   // Возвращает список содержащий КТП
@@ -33,7 +32,7 @@ public:
     QString type() const override;               // Возвращает тип записи
     void init(const cp *arg);           // Инициализирует объект другим объектом
     void init(const obj& arg) override;           // Перегруженная функция инициализирует объект другим объектом
-    void init(const obj *arg) override;           // Перегруженная функция инициализирует объект другим объектом
+    void init_new(const obj& arg) override;  // Перегруженная функция инициализирует объект другим объектом заменяя уникальные номера протоколов и копируя их данные
     QString get_bd_name() const override;     // Сообщает имя файла БД клиента
     QList<QString> ret_uids() const override;       // Возвращает список существующих протоколов
 

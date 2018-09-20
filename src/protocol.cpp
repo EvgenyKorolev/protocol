@@ -59,6 +59,19 @@ protocol&& protocol::operator=(protocol&& prt)
     uin = std::move(prt.uin);
     return std::move(*this);
 }
+bool protocol::set_data(const protocol& arg)
+{
+    if (parent == nullptr && uin == "") return false;
+    prt_number = arg.prt_number;
+    prt_date = arg.prt_date;
+    prt_type = arg.prt_type;
+    file = arg.file;
+    dr = arg.file;
+    QString tmp1 = arg.get_prttxt();
+    QString tmp2 = arg.get_endtxt();
+    prt_fun::add_prt(arg.get_dr(), this, tmp1, tmp2);
+    return true;
+}
 protocol::protocol(QDomNode *arg)
 {
     this->load_xml(arg);

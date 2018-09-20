@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 CONFIG += c++14
-QT += core gui xml sql webenginewidgets
+QT += core gui xml sql webenginewidgets webengine
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

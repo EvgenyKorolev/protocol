@@ -1,5 +1,36 @@
 #include "protocol_constructor.h"
-
+#include "p_types_model.h"
+#include "p_types_view.h"
+#include "const_loader.h"
+#include "var_adapter.h"
+#include "const_adapter.h"
+#include "protocol.h"
+#include "type_in_direct.h"
+#include "my_function.h"
+#include "app_data_model.h"
+#include "app_data_view.h"
+#include "protocol_list_load.h"
+#include "ask_editor.h"
+#include "textedit.h"
+#include <QObject>
+#include <QString>
+#include <QIcon>
+#include <QBoxLayout>
+#include <QComboBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QHeaderView>
+#include <QPair>
+#include <QTextDocument>
+#include <QRegExp>
+#include <QWebEngineView>
+#include <QWebEnginePage>
+#include <QDateEdit>
+#include <QGridLayout>
+#include <QLineEdit>
+#include <QEventLoop>
+#include <algorithm>
+#include <utility>
 protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : QDialog(par)
 {
     this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
@@ -111,18 +142,18 @@ protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : Q
     combo_type_lay->addWidget(ent_num_lab, 2, 1);
     combo_type_lay->addWidget(enter_number, 2, 2);
     QBoxLayout* buttons_lay = new QBoxLayout(QBoxLayout::LeftToRight);
-    QPushButton* but_test = new QPushButton("Проверить");
+    QPushButton* but_test = new QPushButton("Сформировать протокол");
     QObject::connect(but_test, SIGNAL(clicked()), this, SLOT(slot_test()));
-    QPushButton* but_create = new QPushButton("Сформировать");
+    QPushButton* but_create = new QPushButton("Сохранить");
     QObject::connect(but_create, SIGNAL(clicked()), this, SLOT(slot_create()));
     QPushButton* but_cancel = new QPushButton("Отмена");
     QObject::connect(but_cancel, SIGNAL(clicked()), this, SLOT(reject()));
     buttons_lay->addWidget(but_create);
     buttons_lay->addWidget(but_cancel);
+
     main_lay->addLayout(combo_type_lay);
     main_lay->addLayout(table_lay);
     main_lay->addWidget(but_test);
-
 
     main_lay->addLayout(buttons_lay);
     this->setLayout(main_lay);
@@ -280,44 +311,24 @@ void protocol_constructor::slot_test()
     create_varlist();
     prepare(html_text);
     is_tested = true;
-//    QWebEngineView* tmpw = new QWebEngineView(nullptr);
-//    tmpw->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
-//    tmpw->setMinimumWidth(700);
-//    tmpw->setWindowTitle("Тестовый вывод протокола");
-//    tmpw->setHtml(html_text);
-//    tmpw->show();
+
+    QQuickWebEngineScript wjs;
+    wjs.setSourceCode(html_text);
+    html_text = wjs.toString();
+
     actual_prot->set_date(dat_edit->date());
     actual_prot->set_type(select_type->currentData().toString());
     actual_prot->set_number(enter_number->text());
     prt_fun::add_prt(actual_prot->get_dr(), actual_prot, html_text, html_text);
 
-//    QWebEnginePage* tmppage = tmpw->page();
-//    tmppage->setHtml(html_text);
-//    QWebEngineScriptCollection tmpscr = tmppage->scripts();
-//    tmppage->printToPdf(QString("result/test.pdf"));
-
-    QTextDocument tdd;
-    tdd.setHtml(html_text);
-
-//    QPrinter* print = new QPrinter();
-//    print->setOutputFormat(QPrinter::PdfFormat);
-//    print->setOutputFileName("/result.testx.pdf");
-
-//    QPainter* tmppaint = new QPainter();
-
-
-//    QTextDocumentWriter  writer("result/test.odt", "odf");
-    QTextDocumentWriter  writer("result/test3.html", "html");
-//    QTextDocumentWriter  writer2("result/test2.odt", "plaintext");
-    writer.write(&tdd);
-//    writer2.write(&tdd);
-   // int f = tdd.blockCount();
-
-    // var_adapter* varad;     // Адаптер для получения данных у родителей протокола
-    // ++const_adapter* varconst;// Адаптер для получения констант зависящих от типа протокола
-    //++ type_adapter* vartype;  // Адаптер для получения констант зависящих от выбранных коллекций типов
-    // ++std::unique_ptr<prot_act_adapter> padapt{new prot_act_adapter()}; // Адаптер для объектов настриваемых в конструкторе
-  //
+    ret_str ret;
+    TextEdit *prtedit = new TextEdit(&ret, this);
+    prtedit->load_html(html_text);
+    prtedit->show();
+    QEventLoop loop;
+    connect(prtedit, SIGNAL(svexit()), &loop, SLOT(quit()));
+    loop.exec();
+    delete prtedit;
 }
 void protocol_constructor::create_varlist()
 {

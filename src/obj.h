@@ -28,8 +28,6 @@ public:
     bool operator != (const obj &arg);            // Неравенство
     obj &operator =(const obj &arg);              // Присваивание
 
-    virtual obj null_obj_1();                               // Обнуляет объект и возвращает пустой объект
-
     virtual void set_up(order *arg);                         // Устанавливает ссылку на родителя (заказ)
     virtual void set_up(obj *arg);                          // Устанавливает ссылку на родителя (ЦП) Перегруженнная.
     virtual order* get_up() const;                           // Возвращает ссылку на родителя (заказ)
@@ -90,7 +88,7 @@ public:
     virtual int load_xml(QDomNode *arg);             // Предидущие методы для работы с xml используются как раз для упрощения их реализации
     virtual QString type() const;                           // Возвращает тип записи
     virtual void init(const obj& arg);                      // Инициализирует объект другим объектом
-    virtual void init(const obj *arg);                    // Перегруженная функция инициализирует объект другим объектом
+    virtual void init_new(const obj& arg);      // Инициализирует объект другим объектом меняя уникальные номера протоколов
 
     // Это функции для солвместимости интерфейса, они реализованны только в центре питания.
     virtual int add_ktp(obj *arg);              // Добавить КТП

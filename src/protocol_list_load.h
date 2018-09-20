@@ -1,15 +1,7 @@
 #ifndef PROTOCOL_LIST_LOAD_H
 #define PROTOCOL_LIST_LOAD_H
-#include "protocol.h"
 #include <QList>
 #include <QSqlDatabase>
-#include <QMessageBox>
-#include <QSqlQuery>
-#include <QSqlRecord>
-#include <QDateTime>
-#include <random>
-#include <memory>
-#include <algorithm>
 class klient;
 class protocol;
 namespace prt_fun {

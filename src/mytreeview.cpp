@@ -138,7 +138,7 @@ void MyTreeView::slot_clone_order()
     fab_order fabord;
     order *cre_order = fabord.create();
     if (this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_o() != nullptr){
-        cre_order->init(*(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_o()));
+        cre_order->init_new(*(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_o()));
     }
     this->indexAt(curs).parent().data(Qt::EditRole).value<tree_item*>()->create_cild(cre_order);
     model()->layoutChanged();
@@ -147,7 +147,7 @@ void MyTreeView::slot_clone_cp()
 {
     fab_obj fabcp;
     obj *cre_cp = fabcp.create_cp();
-    cre_cp->init(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_c());
+    cre_cp->init_new(*(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_c()));
     this->indexAt(curs).parent().data(Qt::EditRole).value<tree_item*>()->create_cild(cre_cp);
     model()->layoutChanged();
 }
@@ -155,7 +155,7 @@ void MyTreeView::slot_clone_ktp()
 {
     fab_obj fabcp;
     obj *cre_ktp = fabcp.create_ktp();
-    cre_ktp->init(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_ktp());
+    cre_ktp->init_new(*(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_ktp()));
     this->indexAt(curs).parent().data(Qt::EditRole).value<tree_item*>()->create_cild(cre_ktp);
     model()->layoutChanged();
 }
