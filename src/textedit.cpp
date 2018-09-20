@@ -157,32 +157,32 @@ void TextEdit::closeEvent(QCloseEvent *e)
 void TextEdit::setupFileActions()
 {
     QToolBar *tb = addToolBar(tr("File Actions"));
-    QMenu *menu = menuBar()->addMenu(tr("&File"));
+    QMenu *menu = menuBar()->addMenu(tr("&Файл"));
 
     menu->addSeparator();
 
     const QIcon saveIcon = QIcon::fromTheme("document-save", QIcon(rsrcPath + "/filesave.png"));
-    actionSave = menu->addAction(saveIcon, tr("&Save"), this, &TextEdit::fileSave);
+    actionSave = menu->addAction(saveIcon, tr("&Сохранить"), this, &TextEdit::fileSave);
     actionSave->setShortcut(QKeySequence::Save);
     actionSave->setEnabled(false);
     tb->addAction(actionSave);
 
-    QAction *a = menu->addAction(tr("Save &As..."), this, &TextEdit::fileSaveAs);
+    QAction *a = menu->addAction(tr("Сохранить &как..."), this, &TextEdit::fileSaveAs);
     a->setPriority(QAction::LowPriority);
     menu->addSeparator();
 
 #ifndef QT_NO_PRINTER
     const QIcon printIcon = QIcon::fromTheme("document-print", QIcon(rsrcPath + "/fileprint.png"));
-    a = menu->addAction(printIcon, tr("&Print..."), this, &TextEdit::filePrint);
+    a = menu->addAction(printIcon, tr("&Печать..."), this, &TextEdit::filePrint);
     a->setPriority(QAction::LowPriority);
     a->setShortcut(QKeySequence::Print);
     tb->addAction(a);
 
     const QIcon filePrintIcon = QIcon::fromTheme("fileprint", QIcon(rsrcPath + "/fileprint.png"));
-    menu->addAction(filePrintIcon, tr("Print Preview..."), this, &TextEdit::filePrintPreview);
+    menu->addAction(filePrintIcon, tr("Предварительный просмотр..."), this, &TextEdit::filePrintPreview);
 
     const QIcon exportPdfIcon = QIcon::fromTheme("exportpdf", QIcon(rsrcPath + "/exportpdf.png"));
-    a = menu->addAction(exportPdfIcon, tr("&Export PDF..."), this, &TextEdit::filePrintPdf);
+    a = menu->addAction(exportPdfIcon, tr("&Экспорт в PDF..."), this, &TextEdit::filePrintPdf);
     a->setPriority(QAction::LowPriority);
     a->setShortcut(Qt::CTRL + Qt::Key_D);
     tb->addAction(a);
@@ -190,22 +190,22 @@ void TextEdit::setupFileActions()
     menu->addSeparator();
 #endif
 
-    a = menu->addAction(tr("&Quit"), this, &QWidget::close);
+    a = menu->addAction(tr("&Выход"), this, &QWidget::close);
     a->setShortcut(Qt::CTRL + Qt::Key_Q);
 }
 
 void TextEdit::setupEditActions()
 {
     QToolBar *tb = addToolBar(tr("Edit Actions"));
-    QMenu *menu = menuBar()->addMenu(tr("&Edit"));
+    QMenu *menu = menuBar()->addMenu(tr("&Редактирование"));
 
     const QIcon undoIcon = QIcon::fromTheme("edit-undo", QIcon(rsrcPath + "/editundo.png"));
-    actionUndo = menu->addAction(undoIcon, tr("&Undo"), textEdit, &QTextEdit::undo);
+    actionUndo = menu->addAction(undoIcon, tr("&Назад"), textEdit, &QTextEdit::undo);
     actionUndo->setShortcut(QKeySequence::Undo);
     tb->addAction(actionUndo);
 
     const QIcon redoIcon = QIcon::fromTheme("edit-redo", QIcon(rsrcPath + "/editredo.png"));
-    actionRedo = menu->addAction(redoIcon, tr("&Redo"), textEdit, &QTextEdit::redo);
+    actionRedo = menu->addAction(redoIcon, tr("&Вперёд"), textEdit, &QTextEdit::redo);
     actionRedo->setPriority(QAction::LowPriority);
     actionRedo->setShortcut(QKeySequence::Redo);
     tb->addAction(actionRedo);
@@ -213,19 +213,19 @@ void TextEdit::setupEditActions()
 
 #ifndef QT_NO_CLIPBOARD
     const QIcon cutIcon = QIcon::fromTheme("edit-cut", QIcon(rsrcPath + "/editcut.png"));
-    actionCut = menu->addAction(cutIcon, tr("Cu&t"), textEdit, &QTextEdit::cut);
+    actionCut = menu->addAction(cutIcon, tr("Вы&резать"), textEdit, &QTextEdit::cut);
     actionCut->setPriority(QAction::LowPriority);
     actionCut->setShortcut(QKeySequence::Cut);
     tb->addAction(actionCut);
 
     const QIcon copyIcon = QIcon::fromTheme("edit-copy", QIcon(rsrcPath + "/editcopy.png"));
-    actionCopy = menu->addAction(copyIcon, tr("&Copy"), textEdit, &QTextEdit::copy);
+    actionCopy = menu->addAction(copyIcon, tr("&Копировать"), textEdit, &QTextEdit::copy);
     actionCopy->setPriority(QAction::LowPriority);
     actionCopy->setShortcut(QKeySequence::Copy);
     tb->addAction(actionCopy);
 
     const QIcon pasteIcon = QIcon::fromTheme("edit-paste", QIcon(rsrcPath + "/editpaste.png"));
-    actionPaste = menu->addAction(pasteIcon, tr("&Paste"), textEdit, &QTextEdit::paste);
+    actionPaste = menu->addAction(pasteIcon, tr("Вс&тавить"), textEdit, &QTextEdit::paste);
     actionPaste->setPriority(QAction::LowPriority);
     actionPaste->setShortcut(QKeySequence::Paste);
     tb->addAction(actionPaste);
@@ -237,10 +237,10 @@ void TextEdit::setupEditActions()
 void TextEdit::setupTextActions()
 {
     QToolBar *tb = addToolBar(tr("Format Actions"));
-    QMenu *menu = menuBar()->addMenu(tr("F&ormat"));
+    QMenu *menu = menuBar()->addMenu(tr("&Форматирование"));
 
     const QIcon boldIcon = QIcon::fromTheme("format-text-bold", QIcon(rsrcPath + "/textbold.png"));
-    actionTextBold = menu->addAction(boldIcon, tr("&Bold"), this, &TextEdit::textBold);
+    actionTextBold = menu->addAction(boldIcon, tr("&Выделение"), this, &TextEdit::textBold);
     actionTextBold->setShortcut(Qt::CTRL + Qt::Key_B);
     actionTextBold->setPriority(QAction::LowPriority);
     QFont bold;
@@ -250,7 +250,7 @@ void TextEdit::setupTextActions()
     actionTextBold->setCheckable(true);
 
     const QIcon italicIcon = QIcon::fromTheme("format-text-italic", QIcon(rsrcPath + "/textitalic.png"));
-    actionTextItalic = menu->addAction(italicIcon, tr("&Italic"), this, &TextEdit::textItalic);
+    actionTextItalic = menu->addAction(italicIcon, tr("&Курсив"), this, &TextEdit::textItalic);
     actionTextItalic->setPriority(QAction::LowPriority);
     actionTextItalic->setShortcut(Qt::CTRL + Qt::Key_I);
     QFont italic;
@@ -260,7 +260,7 @@ void TextEdit::setupTextActions()
     actionTextItalic->setCheckable(true);
 
     const QIcon underlineIcon = QIcon::fromTheme("format-text-underline", QIcon(rsrcPath + "/textunder.png"));
-    actionTextUnderline = menu->addAction(underlineIcon, tr("&Underline"), this, &TextEdit::textUnderline);
+    actionTextUnderline = menu->addAction(underlineIcon, tr("П&одчёркивание"), this, &TextEdit::textUnderline);
     actionTextUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
     actionTextUnderline->setPriority(QAction::LowPriority);
     QFont underline;
@@ -272,22 +272,22 @@ void TextEdit::setupTextActions()
     menu->addSeparator();
 
     const QIcon leftIcon = QIcon::fromTheme("format-justify-left", QIcon(rsrcPath + "/textleft.png"));
-    actionAlignLeft = new QAction(leftIcon, tr("&Left"), this);
+    actionAlignLeft = new QAction(leftIcon, tr("&Слева"), this);
     actionAlignLeft->setShortcut(Qt::CTRL + Qt::Key_L);
     actionAlignLeft->setCheckable(true);
     actionAlignLeft->setPriority(QAction::LowPriority);
     const QIcon centerIcon = QIcon::fromTheme("format-justify-center", QIcon(rsrcPath + "/textcenter.png"));
-    actionAlignCenter = new QAction(centerIcon, tr("C&enter"), this);
+    actionAlignCenter = new QAction(centerIcon, tr("&По центру"), this);
     actionAlignCenter->setShortcut(Qt::CTRL + Qt::Key_E);
     actionAlignCenter->setCheckable(true);
     actionAlignCenter->setPriority(QAction::LowPriority);
     const QIcon rightIcon = QIcon::fromTheme("format-justify-right", QIcon(rsrcPath + "/textright.png"));
-    actionAlignRight = new QAction(rightIcon, tr("&Right"), this);
+    actionAlignRight = new QAction(rightIcon, tr("Сп&рава"), this);
     actionAlignRight->setShortcut(Qt::CTRL + Qt::Key_R);
     actionAlignRight->setCheckable(true);
     actionAlignRight->setPriority(QAction::LowPriority);
     const QIcon fillIcon = QIcon::fromTheme("format-justify-fill", QIcon(rsrcPath + "/textjustify.png"));
-    actionAlignJustify = new QAction(fillIcon, tr("&Justify"), this);
+    actionAlignJustify = new QAction(fillIcon, tr("&Равномерно"), this);
     actionAlignJustify->setShortcut(Qt::CTRL + Qt::Key_J);
     actionAlignJustify->setCheckable(true);
     actionAlignJustify->setPriority(QAction::LowPriority);
@@ -314,7 +314,7 @@ void TextEdit::setupTextActions()
 
     QPixmap pix(16, 16);
     pix.fill(Qt::black);
-    actionTextColor = menu->addAction(pix, tr("&Color..."), this, &TextEdit::textColor);
+    actionTextColor = menu->addAction(pix, tr("&Цвет..."), this, &TextEdit::textColor);
     tb->addAction(actionTextColor);
 
     tb = addToolBar(tr("Format Actions"));
