@@ -27,6 +27,7 @@
 #include "protocol.h"
 #include "settings.h"
 #include "protocol_list_load.h"
+#include "textedit.h"
 #include <QWidget>
 #include <QErrorMessage>
 #include <QMenu>
@@ -34,6 +35,7 @@
 #include <QFileDialog>
 #include <QString>
 #include <QMessageBox>
+#include <QEventLoop>
 #include <vector>
 #include <random>
 MyTreeView::MyTreeView(QWidget *par)
@@ -120,6 +122,9 @@ void MyTreeView::mousePressEvent(QMouseEvent *arg)
              QAction *double_prot = new QAction(trUtf8("Дублировать протокол"), this);
              QObject::connect(double_prot, SIGNAL(triggered()), this, SLOT(slot_clone_prot()));
              mnu->addAction(double_prot);
+             QAction *txt_prot = new QAction(trUtf8("Текст Протокола"), this);
+             QObject::connect(txt_prot, SIGNAL(triggered()), this, SLOT(slot_open_txt()));
+             mnu->addAction(txt_prot);
          }
             mnu->addAction(delete_item);
     }
@@ -423,7 +428,7 @@ void MyTreeView::slot_create_prot(){
     } else if (temp_v == "ktp"){
         tmpo = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_ktp();
     } else if(temp_v == "prot"){
-       tmpo = nullptr; // tmpo = this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot();
+       tmpo = nullptr;
     } else tmpo = nullptr;
     if (tmpo != nullptr){
         protocol* prt = new protocol(tmpo);
@@ -472,4 +477,16 @@ void MyTreeView::slot_clone_prot()
                      this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->get_endtxt());
     model()->setData(this->indexAt(curs).parent(), QVariant::fromValue(prt), Qt::EditRole);
     model()->layoutChanged();
+}
+void MyTreeView::slot_open_txt()
+{
+    ret_str ret;
+    TextEdit *prtedit = new TextEdit(&ret, this);
+    prtedit->load_html(this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->get_endtxt());
+    prtedit->show();
+    QEventLoop loop;
+    connect(prtedit, SIGNAL(svexit()), &loop, SLOT(quit()));
+    loop.exec();
+    this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->set_endtxt(ret.result());
+    delete prtedit;
 }

@@ -3,6 +3,7 @@
 #include <QBoxLayout>
 #include <QLineEdit>
 #include <QDateEdit>
+#include <QEventLoop>
 #include "textedit.h"
 
 protocol_editor::protocol_editor(protocol* prt, QWidget *par) : QDialog(par)
@@ -54,6 +55,7 @@ void protocol_editor::save_protocol()
 {
     prot->set_date(tmp_dat);
     prot->set_number(tmp_num);
+    prot->set_endtxt(end_txt);
     emit accept();
 }
 void protocol_editor::edit_var()
@@ -72,9 +74,20 @@ void protocol_editor::edit_var()
 }
 void protocol_editor::edit_text()
 {
-    TextEdit *prtedit = new TextEdit(this);
+    ret_str ret;
+    TextEdit *prtedit = new TextEdit(&ret, this);
     prtedit->load_html(end_txt);
     prtedit->show();
+    QEventLoop loop;
+    connect(prtedit, SIGNAL(svexit()), &loop, SLOT(quit()));
+    loop.exec();
+    end_txt = ret.result();
+    delete prtedit;
+}
+bool protocol_editor::set_t(const QString& arg)
+{
+    end_txt = arg;
+    return true;
 }
 // ---------=============== Функции класса редактора =====================----------------
 edit_prt_xml::edit_prt_xml(const QString& num, const QDate& dt, QWidget *par) : QDialog(par)

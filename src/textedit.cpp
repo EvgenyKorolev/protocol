@@ -92,14 +92,14 @@ const QString rsrcPath = ":/images/mac";
 const QString rsrcPath = ":/images/win";
 #endif
 
-TextEdit::TextEdit(QWidget *parent)
+TextEdit::TextEdit(ret_str *arg, QWidget *parent)
     : QMainWindow(parent)
 {
 #ifdef Q_OS_OSX
     setUnifiedTitleAndToolBarOnMac(true);
 #endif
     setWindowTitle(QCoreApplication::applicationName());
-
+    sv = arg;
     textEdit = new QTextEdit(this);
     connect(textEdit, &QTextEdit::currentCharFormatChanged,
             this, &TextEdit::currentCharFormatChanged);
@@ -146,8 +146,10 @@ TextEdit::TextEdit(QWidget *parent)
 
 void TextEdit::closeEvent(QCloseEvent *e)
 {
-    if (maybeSave())
+    if (maybeSave()){
+        emit svexit();
         e->accept();
+    }
     else
         e->ignore();
 }
@@ -157,17 +159,6 @@ void TextEdit::setupFileActions()
     QToolBar *tb = addToolBar(tr("File Actions"));
     QMenu *menu = menuBar()->addMenu(tr("&File"));
 
-    const QIcon newIcon = QIcon::fromTheme("document-new", QIcon(rsrcPath + "/filenew.png"));
-    QAction *a = menu->addAction(newIcon,  tr("&New"), this, &TextEdit::fileNew);
-    tb->addAction(a);
-    a->setPriority(QAction::LowPriority);
-    a->setShortcut(QKeySequence::New);
-
-    const QIcon openIcon = QIcon::fromTheme("document-open", QIcon(rsrcPath + "/fileopen.png"));
-    a = menu->addAction(openIcon, tr("&Open..."), this, &TextEdit::fileOpen);
-    a->setShortcut(QKeySequence::Open);
-    tb->addAction(a);
-
     menu->addSeparator();
 
     const QIcon saveIcon = QIcon::fromTheme("document-save", QIcon(rsrcPath + "/filesave.png"));
@@ -176,7 +167,7 @@ void TextEdit::setupFileActions()
     actionSave->setEnabled(false);
     tb->addAction(actionSave);
 
-    a = menu->addAction(tr("Save &As..."), this, &TextEdit::fileSaveAs);
+    QAction *a = menu->addAction(tr("Save &As..."), this, &TextEdit::fileSaveAs);
     a->setPriority(QAction::LowPriority);
     menu->addSeparator();
 
@@ -362,45 +353,17 @@ void TextEdit::setupTextActions()
     connect(comboSize, QOverload<const QString &>::of(&QComboBox::activated), this, &TextEdit::textSize);
 }
 
-bool TextEdit::load(const QString &f)
-{
-    if (!QFile::exists(f))
-        return false;
-    QFile file(f);
-    if (!file.open(QFile::ReadOnly))
-        return false;
-
-    QByteArray data = file.readAll();
-    QTextCodec *codec = Qt::codecForHtml(data);
-    QString str = codec->toUnicode(data);
-    if (Qt::mightBeRichText(str)) {
-        textEdit->setHtml(str);
-    } else {
-        str = QString::fromLocal8Bit(data);
-        textEdit->setPlainText(str);
-    }
-
-    setCurrentFileName(f);
-    return true;
-}
-
 bool TextEdit::load_html(const QString &h)
 {
-    QByteArray data;
-    data.append(h);
-    QTextCodec *codec = Qt::codecForHtml(data);
-    QString str = codec->toUnicode(data);
-    if (Qt::mightBeRichText(str)) {
-        textEdit->setHtml(str);
-    } else {
-        str = QString::fromLocal8Bit(data);
-        textEdit->setPlainText(str);
-    }
-
+    textEdit->setHtml(h);
+    sv->operator()(textEdit->toHtml());
     setCurrentFileName("");
     return true;
 }
-
+void TextEdit::set_callback(ret_str *arg)
+{
+    sv = arg;
+}
 bool TextEdit::maybeSave()
 {
     if (!textEdit->document()->isModified())
@@ -441,36 +404,11 @@ void TextEdit::fileNew()
     }
 }
 
-void TextEdit::fileOpen()
-{
-    QFileDialog fileDialog(this, tr("Open File..."));
-    fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
-    fileDialog.setFileMode(QFileDialog::ExistingFile);
-    fileDialog.setMimeTypeFilters(QStringList() << "text/html" << "text/plain");
-    if (fileDialog.exec() != QDialog::Accepted)
-        return;
-    const QString fn = fileDialog.selectedFiles().first();
-    if (load(fn))
-        statusBar()->showMessage(tr("Opened \"%1\"").arg(QDir::toNativeSeparators(fn)));
-    else
-        statusBar()->showMessage(tr("Could not open \"%1\"").arg(QDir::toNativeSeparators(fn)));
-}
-
 bool TextEdit::fileSave()
 {
-    if (fileName.isEmpty())
-        return fileSaveAs();
-    if (fileName.startsWith(QStringLiteral(":/")))
-        return fileSaveAs();
-
-    QTextDocumentWriter writer(fileName);
-    bool success = writer.write(textEdit->document());
+    bool success = sv->operator()(textEdit->document()->toHtml());
     if (success) {
         textEdit->document()->setModified(false);
-        statusBar()->showMessage(tr("Wrote \"%1\"").arg(QDir::toNativeSeparators(fileName)));
-    } else {
-        statusBar()->showMessage(tr("Could not write to file \"%1\"")
-                                 .arg(QDir::toNativeSeparators(fileName)));
     }
     return success;
 }
@@ -724,4 +662,17 @@ void TextEdit::alignmentChanged(Qt::Alignment a)
     else if (a & Qt::AlignJustify)
         actionAlignJustify->setChecked(true);
 }
+// --------------------========================== Функциональный объект для калбэка ======================================------------------------------
+
+const QString& ret_str::result() const
+{
+    return rx;
+}
+bool ret_str::operator()(const QString& arg)
+{
+    rx = arg;
+    return true;
+}
+
+
 

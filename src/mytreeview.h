@@ -48,6 +48,7 @@ public slots:
     void slot_clone_prot();
 
     void slot_exp_klient();
+    void slot_open_txt();
 private:
     QWidget * parent;
     QPoint curs;

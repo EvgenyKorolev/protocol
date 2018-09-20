@@ -13,6 +13,7 @@ class protocol_editor : public QDialog
 public:
     protocol_editor(protocol *prt, QWidget *par = nullptr);
     ~protocol_editor();
+    bool set_t(const QString& arg);
 public slots:
     void save_protocol();
     void edit_var();

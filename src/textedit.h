@@ -54,6 +54,7 @@
 #include <QMainWindow>
 #include <QMap>
 #include <QPointer>
+#include <QDialog>
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -63,6 +64,7 @@ class QTextEdit;
 class QTextCharFormat;
 class QMenu;
 class QPrinter;
+class ret_str;
 QT_END_NAMESPACE
 
 class TextEdit : public QMainWindow
@@ -70,11 +72,12 @@ class TextEdit : public QMainWindow
     Q_OBJECT
 
 public:
-    TextEdit(QWidget *parent = nullptr);
+    TextEdit(ret_str *arg, QWidget *parent = nullptr);
 
-    bool load(const QString &f);
     bool load_html(const QString &h);
-
+    void set_callback(ret_str* arg);
+signals:
+    void svexit();
 public slots:
     void fileNew();
 
@@ -82,7 +85,6 @@ protected:
     void closeEvent(QCloseEvent *e) override;
 
 private slots:
-    void fileOpen();
     bool fileSave();
     bool fileSaveAs();
     void filePrint();
@@ -116,6 +118,7 @@ private:
     void colorChanged(const QColor &c);
     void alignmentChanged(Qt::Alignment a);
 
+    ret_str* sv;
     QAction *actionSave;
     QAction *actionTextBold;
     QAction *actionTextUnderline;
@@ -140,6 +143,21 @@ private:
     QToolBar *tb;
     QString fileName;
     QTextEdit *textEdit;
+};
+
+class ret_str
+{
+public:
+    ret_str() = default;
+    ~ret_str() = default;
+    ret_str(const ret_str&) = default;
+    ret_str(ret_str&&) = default;
+    ret_str& operator=(const ret_str&) = default;
+    ret_str& operator=(ret_str&&) = default;
+    const QString& result() const;
+    bool operator()(const QString&);
+private:
+    QString rx{""};
 };
 
 #endif // TEXTEDIT_H
