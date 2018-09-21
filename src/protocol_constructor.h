@@ -1,7 +1,5 @@
 #ifndef PROTOCOL_CONSTRUCTOR_H
 #define PROTOCOL_CONSTRUCTOR_H
-#include <QQuickWebEngineScript>
-
 #include "type_adapter.h"
 #include "prot_act_adapter.h"
 #include <QDialog>

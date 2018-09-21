@@ -23,14 +23,17 @@
 #include <QPair>
 #include <QTextDocument>
 #include <QRegExp>
-#include <QWebEngineView>
-#include <QWebEnginePage>
 #include <QDateEdit>
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QEventLoop>
 #include <algorithm>
 #include <utility>
+
+#include <QWebEngineScriptCollection>
+#include <QQuickWebEngineScript>
+#include <QWebEngineView>
+#include <QWebEnginePage>
 protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : QDialog(par)
 {
     this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
@@ -308,27 +311,47 @@ QString protocol_constructor::use_ask_adapt(const std::tuple<std::string, std::s
 void protocol_constructor::slot_test()
 {
     QString html_text = get_html().remove('\n');
+    QString html_text2{""};
     create_varlist();
     prepare(html_text);
     is_tested = true;
+//    QQuickWebEngineScript wjs;
+//    wjs.setSourceCode(html_text);
+//    html_text2 = wjs.toString();
+//    QWebEngineView* ww = new QWebEngineView();
+//    ww->setHtml(html_text);
+    QWebEnginePage* pg = new QWebEnginePage();
+    pg->setHtml(html_text);
+    QEventLoop loop0;
+    connect(pg, SIGNAL(loadFinished(bool)), &loop0, SLOT(quit()));
+    loop0.exec();
+    QList<QWebEngineScript> jvs(pg->scripts().toList());
+    for (auto its : jvs){
+        pg->runJavaScript(its.sourceCode());
+    }
 
-    QQuickWebEngineScript wjs;
-    wjs.setSourceCode(html_text);
-    html_text = wjs.toString();
+
+    //pg->save("result/tt.html");
+    //QWebEngineCallback<const QString&> cb(html_text2);
+    //pg->toHtml(cb);
+    //ww->show();
+    //delete ww;
+
 
     actual_prot->set_date(dat_edit->date());
     actual_prot->set_type(select_type->currentData().toString());
     actual_prot->set_number(enter_number->text());
-    prt_fun::add_prt(actual_prot->get_dr(), actual_prot, html_text, html_text);
-
+    prt_fun::add_prt(actual_prot->get_dr(), actual_prot, html_text, html_text2);
     ret_str ret;
     TextEdit *prtedit = new TextEdit(&ret, this);
-    prtedit->load_html(html_text);
+    prtedit->load_html(html_text2);
     prtedit->show();
     QEventLoop loop;
     connect(prtedit, SIGNAL(svexit()), &loop, SLOT(quit()));
     loop.exec();
     delete prtedit;
+    html_text2 = ret.result();
+    actual_prot->set_endtxt(html_text2);
 }
 void protocol_constructor::create_varlist()
 {
