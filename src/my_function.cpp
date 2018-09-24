@@ -93,6 +93,25 @@ std::pair<int, int> my_fnc::serch_teg(const std::string& arg, const std::string&
     }
     return std::make_pair(-1, -1);
 }
+std::tuple<int, int, int, int> my_fnc::serch_js(const std::string &arg, int pos)
+{
+    // <script type='text/javascript'> ..... </script>
+    if (pos >= (static_cast<int>(arg.size()) - static_cast<int>(31))) return std::make_tuple(-1, -1, -1, -1);
+    std::locale::global(std::locale(""));
+    std::string tmps{"\<{1}\\s*script{1}\\s*type{1}\\s*=\\s*[\"\']{1}text\/javascript{1}[\"\']{1}\\s*\>{1}\\s*(.|\\n|\\f)*?\\s*\<{1}\\s*\/script{1}\\s*\>{1}"};
+    std::regex reg(tmps.c_str(), std::regex::ECMAScript);
+    std::cmatch sr;
+    std::string rrt{""};
+    std::string tmp_str = arg.substr(static_cast<std::size_t>(pos), std::string::npos);
+    if (std::regex_search(tmp_str.c_str(), sr, reg)){
+        rrt = sr.str(0);
+        int fpos = static_cast<int>(rrt.find('>'));
+        int nxpos = static_cast<int>(rrt.rfind('<'));
+        int m = static_cast<int>(arg.substr(static_cast<std::size_t>(pos), std::string::npos).find(rrt));
+        return std::make_tuple(m + pos, m + pos + fpos, m + pos + nxpos, m + pos + static_cast<int>(rrt.size()) - 1);
+    }
+    return std::make_tuple(-1, -1, -1, -1);
+}
 std::vector<std::pair<std::string, std::string>> my_fnc::parse_teg(const std::string& arg, const std::vector<std::string> &lst)
 {
     std::vector<std::pair<std::string, std::string>> ret;
@@ -137,4 +156,19 @@ float my_fnc::stof(const QString& arg){
         throw "bad_data";
     }
     return std::stof(ret);
+}
+QString my_fnc::del_null(const QString& arg)
+{
+    QString ret = arg;
+    while (ret.size() > 0){
+        if (ret.front() == ' ') {
+            ret = ret.right(ret.size() - 1);
+        } else break;
+    }
+    while (ret.size() > 0){
+        if (ret.back() == ' ') {
+            ret = ret.left(ret.size() - 1);
+        } else break;
+    }
+    return ret;
 }

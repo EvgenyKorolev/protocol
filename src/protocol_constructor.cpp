@@ -211,6 +211,24 @@ void protocol_constructor::prepare(QString &argx)
     }
     argx = std::move(arg.c_str());
 }
+QPair<QString, QList<QString>> protocol_constructor::parse_js(const QString& htm)
+{
+    QPair<QString, QList<QString>> ret{"", QList<QString>()};
+    int pos_beg{0};
+    std::tuple<int, int, int, int> reg{std::make_tuple(-1, -1, -1, -1)};
+    std::string ret_str = htm.toStdString();
+    std::string tmp_js{""};
+    do{
+        reg = my_fnc::serch_js(ret_str, pos_beg);
+        if (std::get<0>(reg) == -1 || std::get<1>(reg) == -1 || std::get<2>(reg) == -1 || std::get<3>(reg) == -1) break;
+        tmp_js = ret_str.substr(static_cast<std::size_t>(std::get<1>(reg)) + 1, static_cast<std::size_t>(std::get<2>(reg) - std::get<1>(reg) - 1));
+        ret_str.erase(static_cast<std::size_t>(std::get<0>(reg)), static_cast<std::size_t>(std::get<3>(reg) - std::get<0>(reg) + 1));
+        ret.second.append(my_fnc::del_null(QString(tmp_js.c_str())));
+        pos_beg = std::get<0>(reg);
+    } while (pos_beg < static_cast<int>(ret_str.size()));
+    ret.first = QString(ret_str.c_str());
+    return ret;
+}
 void protocol_constructor::replace_tags(std::string& arg, ask_p arg2)
 {
     int pos_beg{0};
@@ -315,20 +333,28 @@ void protocol_constructor::slot_test()
     create_varlist();
     prepare(html_text);
     is_tested = true;
-//    QQuickWebEngineScript wjs;
-//    wjs.setSourceCode(html_text);
-//    html_text2 = wjs.toString();
-//    QWebEngineView* ww = new QWebEngineView();
-//    ww->setHtml(html_text);
+    QPair<QString, QList<QString>> tmpjs = this->parse_js(html_text);
+    html_text2 = tmpjs.first;
     QWebEnginePage* pg = new QWebEnginePage();
-    pg->setHtml(html_text);
+    pg->setHtml(html_text2);
     QEventLoop loop0;
     connect(pg, SIGNAL(loadFinished(bool)), &loop0, SLOT(quit()));
     loop0.exec();
-    QList<QWebEngineScript> jvs(pg->scripts().toList());
-    for (auto its : jvs){
-        pg->runJavaScript(its.sourceCode());
-    }
+        for (auto itx : tmpjs.second){
+            pg->runJavaScript(itx);
+        }
+    ret_str txt_ret;
+    pg->toHtml(txt_ret);
+    html_text2 = txt_ret.result();
+//    QList<QWebEngineScript> jvs;
+//    for (auto itx : tmpjs.second){
+//        QWebEngineScript jss;
+//        jss.setSourceCode(itx);
+//        jvs.append(jss);
+//    }
+//    for (auto its : jvs){
+//        pg->runJavaScript(its.sourceCode());
+//    }
 
 
     //pg->save("result/tt.html");
@@ -352,6 +378,7 @@ void protocol_constructor::slot_test()
     delete prtedit;
     html_text2 = ret.result();
     actual_prot->set_endtxt(html_text2);
+    delete pg;
 }
 void protocol_constructor::create_varlist()
 {

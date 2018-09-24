@@ -24,6 +24,10 @@ namespace my_fnc
    std::vector<std::pair<std::string, std::string> > parse_teg(const std::string& arg, const std::vector<std::string>& lst); //Превращает тэг вида <... a = "b", c = "d"....> в список пар a:b c:d
    float stof(const QString& arg); // Превращает строку в число флоат (удяляя буквы и прочие ненужные символы. Превращает первую найденную последовательность
    // вида [цифры(. или ,)цифры если есть] в число. Остальные символы отбрасываются)
+   std::tuple<int, int, int, int> serch_js(const std::string& arg, int pos = 0); // Функция ищет тэги <script type='text/javascript'> ..... </script> и возвращает
+   // Первый символ, первый символ поле открывающего тэга script первый символ закрывающего тэга, последний сивол закрывающего тэга для первого найденного тэга
+   // Поиск начинается с позиции pos
+   QString del_null(const QString& arg); // Удфляет пробелы в начале и конце строки
 }
 
 #endif // MY_FUNCTION_H

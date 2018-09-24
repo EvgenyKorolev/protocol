@@ -371,3 +371,104 @@ TEST(test_string_to_float_010, restsprotocol)
 QString tst = "vgrtgkjfgjcbh-0,777vfgfcb cfg";
 EXPECT_EQ(my_fnc::stof(tst), (float)-0.777);
 }
+// -----------====================Тестирование функции поиска позиции скриптов js =============================---------------------
+TEST(test_search_js_001, restsprotocol)
+{
+    std::string tst = "<script type='text/javascript'> ..... </script>";
+    EXPECT_EQ(std::get<0>(my_fnc::serch_js(tst)), 0);
+}
+TEST(test_search_js_002, restsprotocol)
+{
+    std::string tst = "";
+    EXPECT_EQ(std::get<0>(my_fnc::serch_js(tst, 1)), -1);
+}
+TEST(test_search_js_003, restsprotocol)
+{
+    std::string tst = "fd<script type='text/javascript'> ..... </script>";
+    EXPECT_EQ(std::get<0>(my_fnc::serch_js(tst, 1)), 2);
+}
+TEST(test_search_js_004, restsprotocol)
+{
+    std::string tst = "<script type='text/javascript'> ...svcdrvgd.. </script>";
+    EXPECT_EQ(std::get<0>(my_fnc::serch_js(tst)), 0);
+}
+TEST(test_search_js_005, restsprotocol)
+{
+    std::string tst = "<script  type='text/javascript'> ...svcdrvgd.. </script>";
+    EXPECT_EQ(std::get<1>(my_fnc::serch_js(tst)), 31);
+}
+TEST(test_search_js_006, restsprotocol)
+{
+    std::string tst = "</script> gthdf<script  type='text/javascript'> ...svcdrvgd.. </script>";
+    EXPECT_EQ(std::get<1>(my_fnc::serch_js(tst)), 46);
+}
+TEST(test_search_js_007, restsprotocol)
+{
+    std::string tst = "<script  type='text/javascript'> ...svcdrvgd.. </script>";
+    EXPECT_EQ(std::get<2>(my_fnc::serch_js(tst)), 47);
+}
+TEST(test_search_js_008, restsprotocol)
+{
+    std::string tst = "<script  type='text/javascript'> ...svcdrvgd.. </script>";
+    EXPECT_EQ(std::get<3>(my_fnc::serch_js(tst)), 55);
+}
+TEST(test_search_js_009, restsprotocol)
+{
+    std::string tst = "fevsfsd vytfybncvbvfgh <script fxcef </script> <script  type='text/javascript'> "
+                      "var ret = Math.round(((parseFloat('<_parent_var type = \"obj\", "
+                      "message = \"Введите_НПМНSн_трансформатора:\", vname = \"_trans_npmn\">') * 100) "
+                      "/ parseFloat('<_ask_obj type = \"tn_circs\", message = \"Введите полную мощность S, "
+                      "ВА:\", vname = \"sab\">'))*100)/100; var newpl = document.createElement('text');newpl.innerHTML = "
+                      "ret; list.insertBefore(newpl, list.children[1]);</script>";
+    EXPECT_EQ(std::get<2>(my_fnc::serch_js(tst)), 491);
+}
+TEST(test_search_js_010, restsprotocol)
+{
+    std::string tst = "fevsfsd vytfybncvbvfgh <script fxcef </script> "
+                      "<script  type='text/javascript'> var "
+                      "ret = Math.round(((parseFloat('<_parent_var type = \"obj\", message = "
+                      "\"Введите_НПМНSн_трансформатора:\", vname = \"_trans_npmn\">') * 100) / "
+                      "parseFloat('<_ask_obj type = \"tn_circs\", message = \"Введите полную мощность S, "
+                      "ВА:\", vname = \"sab\">'))*100)/100; var newpl = document.createElement('text');newpl.innerHTML ="
+                      " ret; list.insertBefore(newpl, list.children[1]);</script>";
+    EXPECT_EQ(std::get<3>(my_fnc::serch_js(tst, 8)), 499);
+}
+TEST(test_search_js_011, restsprotocol)
+{
+    std::string tst = "fevsfsd vytfybncvbvfgh <script fxcef </script> "
+                      "<script  type='text/javascript'> var ret = "
+                      "Math.round(((parseFloat('<_parent_var type = \"obj\", message = "
+                      "\"Введите_НПМНSн_трансформатора:\", vname = \"_trans_npmn\">') * 100) / parseFloat('<_ask_obj type = "
+                      "\"tn_circs\", message = \"Введите полную мощность S, ВА:\", vname = "
+                      "\"sab\">'))*100)/100; var newpl = document.createElement('text');newpl.innerHTML = "
+                      "ret; list.insertBefore(newpl, list.children[1]);</script>";
+    EXPECT_EQ(std::get<0>(my_fnc::serch_js(tst, 60)), -1);
+}
+TEST(test_search_js_012, restsprotocol)
+{
+    std::string tst = "fevsfsd vytfybncvbvfgh <script fxcef </script> <script  type='text/javascript'> var ret = "
+                      "Math.round(((parseFloat('<_parent_var type = \"obj\", message = \"Введите_НПМНSн_трансформатора:\", "
+                      "vname = \"_trans_npmn\">') * 100) / parseFloat('<_ask_obj type = \"tn_circs\", message "
+                      "= \"Введите полную мощность S, ВА:\", vname = \"sab\">'))*100)/100; var newpl = \n"
+                      "document.createElement('text');newpl.innerHTML = ret; list.insertBefore(newpl, list.children[1]);</script>";
+    EXPECT_EQ(std::get<3>(my_fnc::serch_js(tst, 9)), 500);
+}
+TEST(test_search_js_013, restsprotocol)
+{
+    std::string tst = "fevsfsd vytfybncvbvfgh <script fxcef </script> <script  type='text/javascript'> var ret = "
+                      "Math.round(\n((parseFloat('<_parent_var type = \"obj\", message = \"Введите_НПМНSн_трансформатора:\", "
+                      "vname = \"_trans_npmn\">') * 100) / \nparseFloat('<_ask_obj type = \"tn_circs\", message "
+                      "= \"Введите полную мощность S, ВА:\", vname = \"sab\">'))*100)/100; var newpl = \n"
+                      "document.create\n\n\n\n\n\nElement('text');newpl.innerHTML = ret; list.insertBefore(newpl, list.children[1]);</script>";
+    EXPECT_EQ(std::get<3>(my_fnc::serch_js(tst, 9)), 508);
+}
+TEST(test_search_js_014, restsprotocol)
+{
+    std::string tst = "fevsfsd vytfybncvbvfgh <script fxcef </script> <script  type='text/javascript'> var ret = "
+                      "Math.round(\n((parseFloat('<_parent_var type = \"obj\", message = \"Введите_НПМНSн_трансформатора:\", "
+                      "vname = \"_trans_npmn\">') * 100) / \nparseFloat('<_ask_obj type = \"tn_circs\", message "
+                      "= \"Введите полную мощность S, ВА:\", vname = \"sab\">'))*100)/100; var newpl = \n"
+                      "document.create\n\n\n\n\n\nElement('text');newpl.innerHTML = ret; list.insertBefore(newpl, list.children[1]);</script>пваирас fdvvtcfbgxdfbg"
+                      "</script> cxdesf <script  type='text/ja";
+    EXPECT_EQ(std::get<3>(my_fnc::serch_js(tst, 9)), 508);
+}
