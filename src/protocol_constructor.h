@@ -16,6 +16,7 @@ class QComboBox;
 class QLineEdit;
 class p_types_model;
 class p_types_view;
+class QWebEngineView;
 enum class ask_p{parse, ask}; // указывает парсеру из каких адаптеров брать значения для замены
 class protocol_constructor : public QDialog
 {
@@ -27,7 +28,9 @@ public slots:
     void slot_create();
     void slot_change_type();
     void slot_test();
-
+    void handleHtml(QString sHtml);
+signals:
+    void html(QString sHtml);
 private:
     void closeEvent(QCloseEvent *event);
     QDateEdit* dat_edit;
@@ -56,5 +59,7 @@ private:
     void create_varlist();
     QString get_html();
     QPair<QString, QList<QString>> parse_js(const QString& htm); // Функция должна принимать документ и возвращать пару <документ с вырезанными js, список содержащий js>
+    QWebEngineView *we;
+    QString my_html{""};
 };
 #endif // PROTOCOL_CONSTRUCTOR_H

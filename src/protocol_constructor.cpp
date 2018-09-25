@@ -30,6 +30,8 @@
 #include <algorithm>
 #include <utility>
 
+#include <QTextStream>
+#include <QByteArray>
 #include <QWebEngineScriptCollection>
 #include <QQuickWebEngineScript>
 #include <QWebEngineView>
@@ -172,6 +174,7 @@ protocol_constructor::~protocol_constructor()
     delete dat_edit;
     actual_prot = nullptr;
     delete actual_prot;
+    delete we;
 }
 void protocol_constructor::slot_change_type()
 {
@@ -328,42 +331,23 @@ QString protocol_constructor::use_ask_adapt(const std::tuple<std::string, std::s
 }
 void protocol_constructor::slot_test()
 {
+    delete we;
     QString html_text = get_html().remove('\n');
     QString html_text2{""};
     create_varlist();
     prepare(html_text);
     is_tested = true;
-    QPair<QString, QList<QString>> tmpjs = this->parse_js(html_text);
-    html_text2 = tmpjs.first;
-    QWebEnginePage* pg = new QWebEnginePage();
-    pg->setHtml(html_text2);
+    we = new QWebEngineView();
+    we->setHtml(html_text);
     QEventLoop loop0;
-    connect(pg, SIGNAL(loadFinished(bool)), &loop0, SLOT(quit()));
+        connect(we, SIGNAL(loadFinished(bool)), &loop0, SLOT(quit()));
     loop0.exec();
-        for (auto itx : tmpjs.second){
-            pg->runJavaScript(itx);
-        }
-    ret_str txt_ret;
-    pg->toHtml(txt_ret);
-    html_text2 = txt_ret.result();
-//    QList<QWebEngineScript> jvs;
-//    for (auto itx : tmpjs.second){
-//        QWebEngineScript jss;
-//        jss.setSourceCode(itx);
-//        jvs.append(jss);
-//    }
-//    for (auto its : jvs){
-//        pg->runJavaScript(its.sourceCode());
-//    }
-
-
-    //pg->save("result/tt.html");
-    //QWebEngineCallback<const QString&> cb(html_text2);
-    //pg->toHtml(cb);
-    //ww->show();
-    //delete ww;
-
-
+    connect(this, SIGNAL(html(QString)), this, SLOT(handleHtml(QString)));
+    we->page()->toHtml([this](const QString& result) mutable {emit html(result);});
+    QEventLoop loopX;
+    connect(this, SIGNAL(html(QString)), &loopX, SLOT(quit()));
+    loopX.exec();
+    html_text2 = this->parse_js(my_html).first;
     actual_prot->set_date(dat_edit->date());
     actual_prot->set_type(select_type->currentData().toString());
     actual_prot->set_number(enter_number->text());
@@ -378,7 +362,6 @@ void protocol_constructor::slot_test()
     delete prtedit;
     html_text2 = ret.result();
     actual_prot->set_endtxt(html_text2);
-    delete pg;
 }
 void protocol_constructor::create_varlist()
 {
@@ -395,4 +378,8 @@ void protocol_constructor::create_varlist()
 void protocol_constructor::slot_create()
 {
     emit accept();
+}
+void protocol_constructor::handleHtml(QString sHtml)
+{
+    my_html = sHtml;
 }
