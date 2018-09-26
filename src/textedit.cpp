@@ -143,7 +143,6 @@ TextEdit::TextEdit(ret_str *arg, QWidget *parent)
     textEdit->setFocus();
     setCurrentFileName(QString());
 }
-
 void TextEdit::closeEvent(QCloseEvent *e)
 {
     if (maybeSave()){
@@ -153,7 +152,6 @@ void TextEdit::closeEvent(QCloseEvent *e)
     else
         e->ignore();
 }
-
 void TextEdit::setupFileActions()
 {
     QToolBar *tb = addToolBar(tr("File Actions"));
@@ -193,7 +191,6 @@ void TextEdit::setupFileActions()
     a = menu->addAction(tr("&Выход"), this, &QWidget::close);
     a->setShortcut(Qt::CTRL + Qt::Key_Q);
 }
-
 void TextEdit::setupEditActions()
 {
     QToolBar *tb = addToolBar(tr("Edit Actions"));
@@ -233,7 +230,6 @@ void TextEdit::setupEditActions()
         actionPaste->setEnabled(md->hasText());
 #endif
 }
-
 void TextEdit::setupTextActions()
 {
     QToolBar *tb = addToolBar(tr("Format Actions"));
@@ -352,7 +348,6 @@ void TextEdit::setupTextActions()
 
     connect(comboSize, QOverload<const QString &>::of(&QComboBox::activated), this, &TextEdit::textSize);
 }
-
 bool TextEdit::load_html(const QString &h)
 {
     textEdit->setHtml(h);
@@ -380,7 +375,6 @@ bool TextEdit::maybeSave()
         return false;
     return true;
 }
-
 void TextEdit::setCurrentFileName(const QString &fileName)
 {
     this->fileName = fileName;
@@ -395,7 +389,6 @@ void TextEdit::setCurrentFileName(const QString &fileName)
     setWindowTitle(tr("%1[*] - %2").arg(shownName, QCoreApplication::applicationName()));
     setWindowModified(false);
 }
-
 void TextEdit::fileNew()
 {
     if (maybeSave()) {
@@ -441,7 +434,12 @@ bool TextEdit::fileSaveAs()
 void TextEdit::filePrint()
 {
 #if QT_CONFIG(printdialog)
-    QPrinter printer(QPrinter::HighResolution);
+    QPrinter printer(QPrinter::ScreenResolution);
+    printer.setPaperSize(QPrinter::A4);
+    QSizeF paperSize;
+    paperSize.setWidth(printer.width());
+    paperSize.setHeight(printer.height());
+    textEdit->document()->setPageSize(paperSize);
     QPrintDialog *dlg = new QPrintDialog(&printer, this);
     if (textEdit->textCursor().hasSelection())
         dlg->addEnabledOption(QAbstractPrintDialog::PrintSelection);
@@ -451,7 +449,6 @@ void TextEdit::filePrint()
     delete dlg;
 #endif
 }
-
 void TextEdit::filePrintPreview()
 {
 #if QT_CONFIG(printpreviewdialog)
@@ -470,8 +467,6 @@ void TextEdit::printPreview(QPrinter *printer)
     textEdit->print(printer);
 #endif
 }
-
-
 void TextEdit::filePrintPdf()
 {
 #ifndef QT_NO_PRINTER
@@ -483,7 +478,13 @@ void TextEdit::filePrintPdf()
     if (fileDialog.exec() != QDialog::Accepted)
         return;
     QString fileName = fileDialog.selectedFiles().first();
-    QPrinter printer(QPrinter::HighResolution);
+    QPrinter printer(QPrinter::ScreenResolution);
+    printer.setPaperSize(QPrinter::A4);
+    QSizeF paperSize;
+    paperSize.setWidth(printer.width());
+    paperSize.setHeight(printer.height());
+    textEdit->document()->setPageSize(paperSize);
+    textEdit->document()->print(&printer);
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(fileName);
     textEdit->document()->print(&printer);
@@ -492,35 +493,30 @@ void TextEdit::filePrintPdf()
 //! [0]
 #endif
 }
-
 void TextEdit::textBold()
 {
     QTextCharFormat fmt;
     fmt.setFontWeight(actionTextBold->isChecked() ? QFont::Bold : QFont::Normal);
     mergeFormatOnWordOrSelection(fmt);
 }
-
 void TextEdit::textUnderline()
 {
     QTextCharFormat fmt;
     fmt.setFontUnderline(actionTextUnderline->isChecked());
     mergeFormatOnWordOrSelection(fmt);
 }
-
 void TextEdit::textItalic()
 {
     QTextCharFormat fmt;
     fmt.setFontItalic(actionTextItalic->isChecked());
     mergeFormatOnWordOrSelection(fmt);
 }
-
 void TextEdit::textFamily(const QString &f)
 {
     QTextCharFormat fmt;
     fmt.setFontFamily(f);
     mergeFormatOnWordOrSelection(fmt);
 }
-
 void TextEdit::textSize(const QString &p)
 {
     qreal pointSize = static_cast<qreal>(p.toFloat());
@@ -530,7 +526,6 @@ void TextEdit::textSize(const QString &p)
         mergeFormatOnWordOrSelection(fmt);
     }
 }
-
 void TextEdit::textStyle(int styleIndex)
 {
     QTextCursor cursor = textEdit->textCursor();
