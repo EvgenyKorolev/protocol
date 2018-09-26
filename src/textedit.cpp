@@ -357,7 +357,7 @@ bool TextEdit::load_html(const QString &h)
 {
     textEdit->setHtml(h);
     sv->operator()(textEdit->toHtml());
-    setCurrentFileName("");
+    setCurrentFileName("Протокол");
     return true;
 }
 void TextEdit::set_callback(ret_str *arg)
@@ -388,7 +388,7 @@ void TextEdit::setCurrentFileName(const QString &fileName)
 
     QString shownName;
     if (fileName.isEmpty())
-        shownName = "untitled.txt";
+        shownName = "Протокол";
     else
         shownName = QFileInfo(fileName).fileName();
 
@@ -431,7 +431,7 @@ bool TextEdit::fileSaveAs()
     bool success = writer.write(textEdit->document());
     if (success) {
         textEdit->document()->setModified(false);
-        statusBar()->showMessage(tr("Wrote \"%1\"").arg(QDir::toNativeSeparators(fileName)));
+        statusBar()->showMessage(tr("Записано в \"%1\"").arg(QDir::toNativeSeparators(fileName)));
     } else {
         statusBar()->showMessage(tr("Не могу записать файл \"%1\"")
                                  .arg(QDir::toNativeSeparators(fileName)));
@@ -445,7 +445,7 @@ void TextEdit::filePrint()
     QPrintDialog *dlg = new QPrintDialog(&printer, this);
     if (textEdit->textCursor().hasSelection())
         dlg->addEnabledOption(QAbstractPrintDialog::PrintSelection);
-    dlg->setWindowTitle(tr("Print Document"));
+    dlg->setWindowTitle(tr("Печатать документ"));
     if (dlg->exec() == QDialog::Accepted)
         textEdit->print(&printer);
     delete dlg;
@@ -476,7 +476,7 @@ void TextEdit::filePrintPdf()
 {
 #ifndef QT_NO_PRINTER
 //! [0]
-    QFileDialog fileDialog(this, tr("Export PDF"));
+    QFileDialog fileDialog(this, tr("Экспорт в PDF"));
     fileDialog.setAcceptMode(QFileDialog::AcceptSave);
     fileDialog.setMimeTypeFilters(QStringList("application/pdf"));
     fileDialog.setDefaultSuffix("pdf");
@@ -487,7 +487,7 @@ void TextEdit::filePrintPdf()
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(fileName);
     textEdit->document()->print(&printer);
-    statusBar()->showMessage(tr("Exported \"%1\"")
+    statusBar()->showMessage(tr("Экспортировано в \"%1\"")
                              .arg(QDir::toNativeSeparators(fileName)));
 //! [0]
 #endif
