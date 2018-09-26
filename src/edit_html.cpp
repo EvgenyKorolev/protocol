@@ -1,5 +1,14 @@
 #include "edit_html.h"
-
+#include "settings.h"
+#include <QString>
+#include <QPushButton>
+#include <QBoxLayout>
+#include <QFile>
+#include <QMessageBox>
+#include <QTextDocumentWriter>
+#include <QByteArray>
+#include <QTextStream>
+#include <QFileDialog>
 edit_html::edit_html(QString& set_var, QString &set_name, QWidget *par) : QDialog (par)
 {
     this->setWindowTitle("Текст протокола " + set_name);
@@ -26,10 +35,13 @@ edit_html::edit_html(QString& set_var, QString &set_name, QWidget *par) : QDialo
     QBoxLayout* push_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QPushButton* push_ok = new QPushButton("Сохранить");
     QPushButton* push_cancel = new QPushButton("Отменить");
+    QPushButton* push_load = new QPushButton("Зарузить из файла");
     QObject::connect(push_ok, SIGNAL(clicked()), this, SLOT(slot_save()));
     QObject::connect(push_cancel, SIGNAL(clicked()), this, SLOT(reject()));
+    QObject::connect(push_load, SIGNAL(clicked()), this, SLOT(slot_load()));
     push_lay->addWidget(push_ok);
     push_lay->addWidget(push_cancel);
+    push_lay->addWidget(push_load);
     main_lay->addWidget(main_doc);
     main_lay->addLayout(push_lay);
     this->setLayout(main_lay);
@@ -51,4 +63,15 @@ void edit_html::slot_save()
     }
     con_f.close();
     emit accept();
+}
+void edit_html::slot_load()
+{
+    QString my_file = QFileDialog::getOpenFileName(this, tr("Выбрать файл шаблона протокола (HTML)"));
+    if (my_file != ""){
+        QFile fl(my_file);
+        if (fl.open(QIODevice::ReadOnly)){
+            QString tmp_html = fl.readAll();
+            main_doc->setPlainText(tmp_html);
+        }
+    }
 }
