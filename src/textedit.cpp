@@ -371,8 +371,8 @@ bool TextEdit::maybeSave()
 
     const QMessageBox::StandardButton ret =
         QMessageBox::warning(this, QCoreApplication::applicationName(),
-                             tr("The document has been modified.\n"
-                                "Do you want to save your changes?"),
+                             tr("Документ был изменён.\n"
+                                "Хотите сохранить изменения?"),
                              QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
     if (ret == QMessageBox::Save)
         return fileSave();
@@ -403,7 +403,6 @@ void TextEdit::fileNew()
         setCurrentFileName(QString());
     }
 }
-
 bool TextEdit::fileSave()
 {
     bool success = sv->operator()(textEdit->document()->toHtml());
@@ -412,7 +411,6 @@ bool TextEdit::fileSave()
     }
     return success;
 }
-
 bool TextEdit::fileSaveAs()
 {
     QFileDialog fileDialog(this, tr("Save as..."));
@@ -425,9 +423,21 @@ bool TextEdit::fileSaveAs()
         return false;
     const QString fn = fileDialog.selectedFiles().first();
     setCurrentFileName(fn);
-    return fileSave();
+    if (fileName.isEmpty())
+        return fileSaveAs();
+    if (fileName.startsWith(QStringLiteral(":/")))
+        return fileSaveAs();
+    QTextDocumentWriter writer(fileName);
+    bool success = writer.write(textEdit->document());
+    if (success) {
+        textEdit->document()->setModified(false);
+        statusBar()->showMessage(tr("Wrote \"%1\"").arg(QDir::toNativeSeparators(fileName)));
+    } else {
+        statusBar()->showMessage(tr("Не могу записать файл \"%1\"")
+                                 .arg(QDir::toNativeSeparators(fileName)));
+    }
+    return success;
 }
-
 void TextEdit::filePrint()
 {
 #if QT_CONFIG(printdialog)
