@@ -49,6 +49,7 @@ public slots:
 
     void slot_exp_klient();
     void slot_open_txt();
+    void slot_open_jseditor();
 private:
     QWidget * parent;
     QPoint curs;

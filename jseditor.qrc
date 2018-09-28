@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/jsedit">
+        <file>ckeditor/translations/ru.js</file>
+        <file>ckeditor/ckeditor.js</file>
+        <file>ckeditor/ckeditor.js.map</file>
+        <file>ckeditor/editor.html</file>
+    </qresource>
+</RCC>
