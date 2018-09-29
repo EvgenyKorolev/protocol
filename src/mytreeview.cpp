@@ -28,8 +28,6 @@
 #include "settings.h"
 #include "protocol_list_load.h"
 #include "textedit.h"
-#include "jstextedit.h"
-#include <QUrl>
 #include <QWidget>
 #include <QErrorMessage>
 #include <QMenu>
@@ -127,9 +125,6 @@ void MyTreeView::mousePressEvent(QMouseEvent *arg)
              QAction *txt_prot = new QAction(trUtf8("Текст Протокола"), this);
              QObject::connect(txt_prot, SIGNAL(triggered()), this, SLOT(slot_open_txt()));
              mnu->addAction(txt_prot);
-             QAction *js_prot = new QAction(trUtf8("JS редактор протокола"), this);
-             QObject::connect(js_prot, SIGNAL(triggered()), this, SLOT(slot_open_jseditor()));
-             mnu->addAction(js_prot);
          }
             mnu->addAction(delete_item);
     }
@@ -495,12 +490,4 @@ void MyTreeView::slot_open_txt()
     loop.exec();
     this->indexAt(curs).data(Qt::EditRole).value<tree_item*>()->ret_prot()->set_endtxt(ret.result());
     delete prtedit;
-}
-void MyTreeView::slot_open_jseditor()
-{
-            QUrl url;
-            url = QUrl("/ckeditor/editor.html");
-            JStextedit *browser = new JStextedit(url);
-            browser->resize(1024, 768);
-            browser->show();
 }

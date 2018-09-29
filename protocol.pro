@@ -107,8 +107,7 @@ SOURCES += src/address.cpp \
     src/settings.cpp \
     src/protocol_list_load.cpp \
     src/textedit.cpp \
-    src/protocol_editor.cpp \
-    src/jstextedit.cpp
+    src/protocol_editor.cpp
 
 HEADERS  += src/address.h \
     src/app_data_model.h \
@@ -206,14 +205,12 @@ HEADERS  += src/address.h \
     src/settings.h \
     src/protocol_list_load.h \
     src/textedit.h \
-    src/protocol_editor.h \
-    src/jstextedit.h
+    src/protocol_editor.h
 
 RESOURCES += \
     icons.qrc \
     textedit.qrc \
-    data.qrc \
-    jseditor.qrc
+    data.qrc
 
 DISTFILES += \
     data/app.db3 \
