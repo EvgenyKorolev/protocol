@@ -94,7 +94,6 @@ SOURCES += src/address.cpp \
     src/p_types_view.cpp \
     src/p_types_model.cpp \
     src/pair_plus_editor.cpp \
-    src/p_type_select.cpp \
     src/type_in_direct.cpp \
     src/type_in_view.cpp \
     src/lab_adapter.cpp \
@@ -192,7 +191,6 @@ HEADERS  += src/address.h \
     src/p_types_view.h \
     src/p_types_model.h \
     src/pair_plus_editor.h \
-    src/p_type_select.h \
     src/type_in_direct.h \
     src/type_in_view.h \
     src/lab_adapter.h \
