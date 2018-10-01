@@ -58,7 +58,6 @@ private:
     void replace_tags(std::string &arg, ask_p arg2 = ask_p::parse);
     void create_varlist();
     QString get_html();
-    QPair<QString, QList<QString>> parse_js(const QString& htm); // Функция должна принимать документ и возвращать пару <документ с вырезанными js, список содержащий js>
     QWebEngineView *we;
     QString my_html{""};
 };

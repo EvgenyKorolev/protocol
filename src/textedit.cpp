@@ -360,10 +360,10 @@ void TextEdit::setupTextActions()
 }
 bool TextEdit::load_html(const QString &h)
 {
-    textEdit->setHtml(h);
-    sv->operator()(textEdit->toHtml());
-    setCurrentFileName("Протокол");
-    return true;
+        textEdit->setHtml(h);
+        sv->operator()(textEdit->toHtml());
+        setCurrentFileName("Протокол");
+        return true;
 }
 void TextEdit::set_callback(ret_str *arg)
 {
@@ -410,6 +410,7 @@ bool TextEdit::fileSave()
 {
     bool success = sv->operator()(textEdit->document()->toHtml());
     if (success) {
+        sv->save();
         textEdit->document()->setModified(false);
     }
     return success;
@@ -703,24 +704,12 @@ bool TextEdit::load(const QString &f)
     QTextCodec *codec = Qt::codecForHtml(data);
     QString str = codec->toUnicode(data);
     if (Qt::mightBeRichText(str)) {
-        textEdit->setHtml(str);
+        load_html(str);
     } else {
         str = QString::fromLocal8Bit(data);
         textEdit->setPlainText(str);
     }
-
     setCurrentFileName(f);
-    return true;
-}
-// --------------------========================== Функциональный объект для калбэка ======================================------------------------------
-
-const QString& ret_str::result() const
-{
-    return rx;
-}
-bool ret_str::operator()(const QString& arg)
-{
-    rx = arg;
     return true;
 }
 

@@ -29,13 +29,7 @@
 #include <QEventLoop>
 #include <algorithm>
 #include <utility>
-
-#include <QTextStream>
-#include <QByteArray>
-#include <QWebEngineScriptCollection>
-#include <QQuickWebEngineScript>
 #include <QWebEngineView>
-#include <QWebEnginePage>
 protocol_constructor::protocol_constructor(protocol* act_prot, QWidget* par) : QDialog(par)
 {
     this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
@@ -214,24 +208,6 @@ void protocol_constructor::prepare(QString &argx)
     }
     argx = std::move(arg.c_str());
 }
-QPair<QString, QList<QString>> protocol_constructor::parse_js(const QString& htm)
-{
-    QPair<QString, QList<QString>> ret{"", QList<QString>()};
-    int pos_beg{0};
-    std::tuple<int, int, int, int> reg{std::make_tuple(-1, -1, -1, -1)};
-    std::string ret_str = htm.toStdString();
-    std::string tmp_js{""};
-    do{
-        reg = my_fnc::serch_js(ret_str, pos_beg);
-        if (std::get<0>(reg) == -1 || std::get<1>(reg) == -1 || std::get<2>(reg) == -1 || std::get<3>(reg) == -1) break;
-        tmp_js = ret_str.substr(static_cast<std::size_t>(std::get<1>(reg)) + 1, static_cast<std::size_t>(std::get<2>(reg) - std::get<1>(reg) - 1));
-        ret_str.erase(static_cast<std::size_t>(std::get<0>(reg)), static_cast<std::size_t>(std::get<3>(reg) - std::get<0>(reg) + 1));
-        ret.second.append(my_fnc::del_null(QString(tmp_js.c_str())));
-        pos_beg = std::get<0>(reg);
-    } while (pos_beg < static_cast<int>(ret_str.size()));
-    ret.first = QString(ret_str.c_str());
-    return ret;
-}
 void protocol_constructor::replace_tags(std::string& arg, ask_p arg2)
 {
     int pos_beg{0};
@@ -334,6 +310,9 @@ void protocol_constructor::slot_test()
     delete we;
     QString html_text = get_html().remove('\n');
     QString html_text2{""};
+    html_text.replace("&lt;", "<");
+    html_text.replace("&quot;", "\"");
+    html_text.replace("&gt;", ">");
     create_varlist();
     prepare(html_text);
     is_tested = true;
@@ -345,9 +324,9 @@ void protocol_constructor::slot_test()
     connect(this, SIGNAL(html(QString)), this, SLOT(handleHtml(QString)));
     we->page()->toHtml([this](const QString& result) mutable {emit html(result);});
     QEventLoop loopX;
-    connect(this, SIGNAL(html(QString)), &loopX, SLOT(quit()));
+        connect(this, SIGNAL(html(QString)), &loopX, SLOT(quit()));
     loopX.exec();
-    html_text2 = this->parse_js(my_html).first;
+    html_text2 = my_fnc::parse_js(my_html).first;
     actual_prot->set_date(dat_edit->date());
     actual_prot->set_type(select_type->currentData().toString());
     actual_prot->set_number(enter_number->text());
@@ -357,7 +336,7 @@ void protocol_constructor::slot_test()
     prtedit->load_html(html_text2);
     prtedit->show();
     QEventLoop loop;
-    connect(prtedit, SIGNAL(svexit()), &loop, SLOT(quit()));
+        connect(prtedit, SIGNAL(svexit()), &loop, SLOT(quit()));
     loop.exec();
     delete prtedit;
     html_text2 = ret.result();

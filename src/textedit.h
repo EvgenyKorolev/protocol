@@ -147,7 +147,7 @@ private:
     QTextEdit *textEdit;
     TextEdit_opt opt{TextEdit_opt::prorocol};
 };
-
+// --------------------========================== Функциональный объект для калбэка ======================================------------------------------
 class ret_str
 {
 public:
@@ -157,10 +157,14 @@ public:
     ret_str(ret_str&&) = default;
     ret_str& operator=(const ret_str&) = default;
     ret_str& operator=(ret_str&&) = default;
-    const QString& result() const;
-    bool operator()(const QString&);
+    const QString& result() const{ return rx;}
+    bool is_save(){return sav;}
+    void save(){sav = true;}
+    void no_save(){sav = false;}
+    bool operator()(const QString& arg){rx = arg; return true;}
 private:
     QString rx{""};
+    bool sav{false};
 };
 
 #endif // TEXTEDIT_H

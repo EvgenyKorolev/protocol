@@ -1,10 +1,33 @@
 #include "const_data_listing.h"
-
+#include "edit_html.h"
+#include "const_data_view.h"
+#include "const_loader.h"
+#include "pair_editor.h"
+#include "yes_no.h"
+#include "settings.h"
+#include "textedit.h"
+#include "my_function.h"
+#include <QObject>
+#include <QLabel>
+#include <QBoxLayout>
+#include <QPushButton>
+#include <QHeaderView>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QSortFilterProxyModel>
+#include <QRegExp>
+#include <QVariant>
+#include <QMessageBox>
+#include <QRegExp>
+#include <QRegExpValidator>
+#include <QFile>
+#include <QEventLoop>
+#include <QWebEngineView>
 const_data_listing::const_data_listing()
 {
-    this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
-    this->setWindowTitle("Справочник текстов");
-    this->setMinimumWidth(700);
+    setWindowIcon(QIcon(":pic/images/KlogoS.png"));
+    setWindowTitle("Справочник текстов");
+    setMinimumWidth(700);
     const_loader& tmp_load = const_loader::getInstance();
     key_list = tmp_load.get_idv_list();
     QBoxLayout* main_lay = new QBoxLayout(QBoxLayout::TopToBottom);
@@ -78,11 +101,14 @@ const_data_listing::const_data_listing()
     QObject::connect(const_view, SIGNAL(signal_new()), this, SLOT(slot_new_list()));
     QPushButton* edit_html = new QPushButton("Редактировать текст");
     QObject::connect(edit_html, SIGNAL(clicked()), this, SLOT(slot_ed_html()));
+    QPushButton* w_edit_html = new QPushButton("Визуальный редактор");
+    QObject::connect(w_edit_html, SIGNAL(clicked()), this, SLOT(slot_w_ed_html()));
     QBoxLayout* end_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     end_lay->addWidget(ok);
     end_lay->addWidget(cancel_but);
     end_lay->addWidget(add_txt);
     end_lay->addWidget(edit_html);
+    end_lay->addWidget(w_edit_html);
     main_lay->addLayout(type_lay);
     main_lay->addWidget(const_view);
     main_lay->addLayout(end_lay);
@@ -92,6 +118,7 @@ const_data_listing::~const_data_listing(){
     delete const_model;
     delete const_view;
     delete select_type;
+    delete we;
 }
 void const_data_listing::set_lst(const QString &key)
 {
@@ -300,11 +327,78 @@ void const_data_listing::del()
 }
 void const_data_listing::slot_ed_html()
 {
-    QString vn{target_object.get_vname()};
-    QString pn{target_object.get_name()};
-    edit_html* hedit = new edit_html(vn, pn, nullptr);
-    if (hedit->exec() == QDialog::Accepted){
-
-    }
+    yes_no* exiter = new yes_no("Внимание, редактирование шаблонов - дело сложное. <br>"
+                                "Если вы не знаете что делаете, лучше не делайте этого. <br> "
+                                "Продолжить редактирование?", this);
+    if (exiter->exec() != QDialog::Accepted) return;
+    edit_html* hedit = new edit_html(target_object.get_vname(), target_object.get_name(), nullptr);
+    if (hedit->exec() == QDialog::Accepted){}
     delete hedit;
+}
+void const_data_listing::slot_w_ed_html()
+{
+    yes_no* exiter = new yes_no("Внимание, редактирование шаблонов - дело сложное. <br>"
+                                "Если вы не знаете что делаете, лучше не делайте этого. <br> "
+                                "Продолжить редактирование?", this);
+    if (exiter->exec() != QDialog::Accepted) return;
+    settings& tmpss = settings::GetInstance();
+    QString fname = tmpss.get_data_patch() + tmpss.get_data_dir() + "/prt_" + target_object.get_vname() +".html";
+    QFile con_f(fname);
+    if (!con_f.exists()){
+        con_f.open(QIODevice::WriteOnly);
+        con_f.close();
+    }
+    QString open_html;
+    if (con_f.open(QIODevice::ReadOnly  | QIODevice::Text)){
+        open_html = con_f.readAll();
+        con_f.close();
+    } else {
+        QMessageBox::information(nullptr, "Отладка", "Не открывается файл с основным текстом протокола в HTML для чтения");
+    }
+    QPair<QString, QList<QString>> open_tmp = my_fnc::parse_js(open_html);
+    QList<QString> open_js = open_tmp.second;
+    open_html = open_tmp.first;
+// ========================================
+    open_html = open_html.remove('\n');
+        delete we;
+        we = new QWebEngineView();
+        we->setHtml(open_html);
+        QEventLoop loop0;
+            connect(we, SIGNAL(loadFinished(bool)), &loop0, SLOT(quit()));
+        loop0.exec();
+        connect(this, SIGNAL(html(QString)), this, SLOT(handleHtml(QString)));
+        we->page()->toHtml([this](const QString& result) mutable {emit html(result);});
+        QEventLoop loopX;
+        connect(this, SIGNAL(html(QString)), &loopX, SLOT(quit()));
+        loopX.exec();
+// ========================================
+    ret_str ret;
+    TextEdit *prtedit = new TextEdit(&ret, this, TextEdit_opt::pattern);
+    open_html = end_html_tmp;
+    prtedit->load_html(open_html);
+    prtedit->show();
+    QEventLoop loop;
+    connect(prtedit, SIGNAL(svexit()), &loop, SLOT(quit()));
+    loop.exec();
+    delete prtedit;
+    if (ret.is_save()){
+        open_html = ret.result();
+        for (auto itj : open_js){
+            open_html.insert(open_html.indexOf("</body>"), "<script type='text/javascript'>" + itj + "</script>");
+        }
+        QFile con_end(fname);
+        con_end.copy(fname + ".bak");
+        if (con_end.open(QIODevice::WriteOnly)){
+            QTextStream stream(&con_end);
+            stream << open_html;
+            con_end.close();
+        } else {
+            QMessageBox::information(nullptr, "Отладка", "Не открывается файл с основным текстом протокола в HTML для записи");
+        }
+        con_end.close();
+    }
+}
+void const_data_listing::handleHtml(QString sHtml)
+{
+    end_html_tmp = sHtml;
 }

@@ -9,7 +9,7 @@
 #include <QByteArray>
 #include <QTextStream>
 #include <QFileDialog>
-edit_html::edit_html(QString& set_var, QString &set_name, QWidget *par) : QDialog (par)
+edit_html::edit_html(const QString &set_var, const QString &set_name, QWidget *par) : QDialog (par)
 {
     this->setWindowTitle("Текст протокола " + set_name);
     this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));

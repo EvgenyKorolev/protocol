@@ -77,11 +77,12 @@ std::pair<int, int> my_fnc::serch_teg(const QString& arg, const QString& substr,
     }
     return std::make_pair(-1, -1);
 }
-std::pair<int, int> my_fnc::serch_teg(const std::string& arg, const std::string& substr, int pos)
+std::pair<int, int> my_fnc::serch_teg(const std::string& arg, const std::string& substr,
+                                      int pos, const std::string &start_delimiter, const std::string &end_delimiter)
 {
     if (pos >= (static_cast<int>(arg.size()) - static_cast<int>(substr.size()) + 1)) return std::make_pair(-1, -1);
     std::locale::global(std::locale(""));
-    std::string tmps{"<\\s*" + substr + "[^>^<]*>"};
+    std::string tmps{start_delimiter + "\\s*" + substr + "[^" + end_delimiter +"^" + start_delimiter + "]*" + end_delimiter};
     std::regex reg(tmps.c_str(), std::regex::ECMAScript);
     std::cmatch sr;
     std::string rrt{""};
@@ -170,5 +171,23 @@ QString my_fnc::del_null(const QString& arg)
             ret = ret.left(ret.size() - 1);
         } else break;
     }
+    return ret;
+}
+QPair<QString, QList<QString>> my_fnc::parse_js(const QString& htm)
+{
+    QPair<QString, QList<QString>> ret{"", QList<QString>()};
+    int pos_beg{0};
+    std::tuple<int, int, int, int> reg{std::make_tuple(-1, -1, -1, -1)};
+    std::string ret_str = htm.toStdString();
+    std::string tmp_js{""};
+    do{
+        reg = my_fnc::serch_js(ret_str, pos_beg);
+        if (std::get<0>(reg) == -1 || std::get<1>(reg) == -1 || std::get<2>(reg) == -1 || std::get<3>(reg) == -1) break;
+        tmp_js = ret_str.substr(static_cast<std::size_t>(std::get<1>(reg)) + 1, static_cast<std::size_t>(std::get<2>(reg) - std::get<1>(reg) - 1));
+        ret_str.erase(static_cast<std::size_t>(std::get<0>(reg)), static_cast<std::size_t>(std::get<3>(reg) - std::get<0>(reg) + 1));
+        ret.second.append(my_fnc::del_null(QString(tmp_js.c_str())));
+        pos_beg = std::get<0>(reg);
+    } while (pos_beg < static_cast<int>(ret_str.size()));
+    ret.first = QString(ret_str.c_str());
     return ret;
 }
