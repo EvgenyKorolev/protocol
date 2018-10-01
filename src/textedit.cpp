@@ -92,8 +92,8 @@ const QString rsrcPath = ":/images/mac";
 const QString rsrcPath = ":/images/win";
 #endif
 
-TextEdit::TextEdit(ret_str *arg, QWidget *parent)
-    : QMainWindow(parent)
+TextEdit::TextEdit(ret_str *arg, QWidget *parent, TextEdit_opt pto)
+    : QMainWindow(parent), opt{pto}
 {
 #ifdef Q_OS_OSX
     setUnifiedTitleAndToolBarOnMac(true);
@@ -169,6 +169,14 @@ void TextEdit::setupFileActions()
     a->setPriority(QAction::LowPriority);
     menu->addSeparator();
 
+    if (opt == TextEdit_opt::pattern){
+        const QIcon openIcon = QIcon::fromTheme("document-open", QIcon(rsrcPath + "/fileopen.png"));
+        a = menu->addAction(openIcon, tr("&Экспортировать из..."), this, &TextEdit::fileOpen);
+        a->setShortcut(QKeySequence::Open);
+        tb->addAction(a);
+        menu->addSeparator();
+    }
+
 #ifndef QT_NO_PRINTER
     const QIcon printIcon = QIcon::fromTheme("document-print", QIcon(rsrcPath + "/fileprint.png"));
     a = menu->addAction(printIcon, tr("&Печать..."), this, &TextEdit::filePrint);
@@ -234,6 +242,8 @@ void TextEdit::setupTextActions()
 {
     QToolBar *tb = addToolBar(tr("Format Actions"));
     QMenu *menu = menuBar()->addMenu(tr("&Форматирование"));
+
+    menu->addSeparator();
 
     const QIcon boldIcon = QIcon::fromTheme("format-text-bold", QIcon(rsrcPath + "/textbold.png"));
     actionTextBold = menu->addAction(boldIcon, tr("&Выделение"), this, &TextEdit::textBold);
@@ -666,6 +676,41 @@ void TextEdit::alignmentChanged(Qt::Alignment a)
         actionAlignRight->setChecked(true);
     else if (a & Qt::AlignJustify)
         actionAlignJustify->setChecked(true);
+}
+void TextEdit::fileOpen()
+{
+    QFileDialog fileDialog(this, tr("Open File..."));
+    fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
+    fileDialog.setFileMode(QFileDialog::ExistingFile);
+    fileDialog.setMimeTypeFilters(QStringList() << "text/html" << "text/plain");
+    if (fileDialog.exec() != QDialog::Accepted)
+        return;
+    const QString fn = fileDialog.selectedFiles().first();
+    if (load(fn))
+        statusBar()->showMessage(tr("Открыт \"%1\"").arg(QDir::toNativeSeparators(fn)));
+    else
+        statusBar()->showMessage(tr("Не могу открыть \"%1\"").arg(QDir::toNativeSeparators(fn)));
+}
+bool TextEdit::load(const QString &f)
+{
+    if (!QFile::exists(f))
+        return false;
+    QFile file(f);
+    if (!file.open(QFile::ReadOnly))
+        return false;
+
+    QByteArray data = file.readAll();
+    QTextCodec *codec = Qt::codecForHtml(data);
+    QString str = codec->toUnicode(data);
+    if (Qt::mightBeRichText(str)) {
+        textEdit->setHtml(str);
+    } else {
+        str = QString::fromLocal8Bit(data);
+        textEdit->setPlainText(str);
+    }
+
+    setCurrentFileName(f);
+    return true;
 }
 // --------------------========================== Функциональный объект для калбэка ======================================------------------------------
 

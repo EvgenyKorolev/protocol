@@ -66,13 +66,13 @@ class QMenu;
 class QPrinter;
 class ret_str;
 QT_END_NAMESPACE
-
+enum class TextEdit_opt{prorocol, pattern};
 class TextEdit : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    TextEdit(ret_str *arg, QWidget *parent = nullptr);
+    TextEdit(ret_str *arg, QWidget *parent = nullptr, TextEdit_opt pto = TextEdit_opt::prorocol);
 
     bool load_html(const QString &h);
     void set_callback(ret_str* arg);
@@ -85,6 +85,7 @@ protected:
     void closeEvent(QCloseEvent *e) override;
 
 private slots:
+    void fileOpen();
     bool fileSave();
     bool fileSaveAs();
     void filePrint();
@@ -112,6 +113,7 @@ private:
     void setupTextActions();
     bool maybeSave();
     void setCurrentFileName(const QString &fileName);
+    bool load(const QString&);
 
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
     void fontChanged(const QFont &f);
@@ -143,6 +145,7 @@ private:
     QToolBar *tb;
     QString fileName;
     QTextEdit *textEdit;
+    TextEdit_opt opt{TextEdit_opt::prorocol};
 };
 
 class ret_str
