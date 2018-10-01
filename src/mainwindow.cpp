@@ -204,7 +204,7 @@ void MainWindow::slot_about()
     tmoer->setWindowTitle("О Программе");
     tmoer->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
     tmoer->setText("<table><tr><th>"
-                   "<img src=\":pic/images/KlogoSS.png\"> </th> <th>Протокол 0.1 <br>"
+                   "<img src=\":pic/images/KlogoSS.png\"> </th> <th>Протокол 0.9 <br>"
                    "<HTML>Программу разработал Евгений Королев <br>"
                    "Cайт: <a href = 'http://kyrych.ru'>kyrych.ru</a><br> "
                    "E-mail: <a href = 'mailto:root@kyrych.ru'>root@kyrych.ru</a> <br> "
