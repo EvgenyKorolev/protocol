@@ -20,5 +20,5 @@ public:
 private:
     QList<apparaturs*> *app_list;
 };
-
+Q_DECLARE_METATYPE(QList<apparaturs*>*)
 #endif // APP_DATA_MODEL_H

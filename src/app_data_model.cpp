@@ -18,6 +18,9 @@ int app_data_model::columnCount(const QModelIndex &parent) const
 }
 QVariant app_data_model::data(const QModelIndex &index, int role) const
 {
+    if (role == Qt::UserRole){
+        return QVariant::fromValue(app_list);
+    }
     if (index.isValid()){
         if (role == Qt::DisplayRole){
             switch (index.column()) {
