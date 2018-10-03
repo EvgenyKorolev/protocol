@@ -19,6 +19,7 @@ public slots:
     void slot_edit_const();
     void slot_edit_typs();
     void slot_help();
+    void slot_opt();
     void closeEvent(QCloseEvent *event);
 private:
     QWidget *main_l;

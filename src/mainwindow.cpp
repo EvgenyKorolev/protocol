@@ -18,6 +18,7 @@
 #include "const_data_listing.h"
 #include "type_data_listing.h"
 #include "close_class.h"
+#include "settings_dialog.h"
 #include "settings.h"
 #include <QLabel>
 #include <QDockWidget>
@@ -89,6 +90,7 @@ MainWindow::MainWindow(QWidget *parent)
     QAction * act_edit_lab = new QAction("Редактировать данные лаборатории", nullptr);
     QAction * act_about = new QAction("Разработчики", nullptr);
     QAction * act_help = new QAction("Справка", nullptr);
+    QAction * act_opt = new QAction("Опции", nullptr);
     QAction * act_app_direct = new QAction("Справочник приборов", nullptr);
     QAction * act_edit_const = new QAction("Редактировать текст протоколов", nullptr);
     QAction * act_edit_typs = new QAction("Редактировать константы", nullptr);
@@ -128,6 +130,13 @@ MainWindow::MainWindow(QWidget *parent)
     act_help->setStatusTip("Справка");
     act_help->setWhatsThis("Справка");
     connect(act_help, SIGNAL(triggered()), SLOT(slot_help()));
+
+    act_opt->setText("Опции");
+    act_opt->setToolTip("Опции");
+    act_opt->setShortcut(QKeySequence("CTRL+O"));
+    act_opt->setStatusTip("Опции");
+    act_opt->setWhatsThis("Опции");
+    connect(act_opt, SIGNAL(triggered()), SLOT(slot_opt()));
 
     act_about->setText("Разработчик");
     act_about->setToolTip("Разработчик");
@@ -174,11 +183,11 @@ MainWindow::MainWindow(QWidget *parent)
     menu_options->addAction(act_edit_const);
     menu_options->addAction(act_edit_typs);
     menu_about->addAction(act_help);
+    menu_about->addAction(act_opt);
     menu_about->addAction(act_about);
 }
 MainWindow::~MainWindow()
 {
-
 }
 void MainWindow::slot_edit_lab()
 {
@@ -254,4 +263,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     delete pmbx;
     event->ignore();
+}
+void MainWindow::slot_opt()
+{
+    settings_dialog* setd = new settings_dialog();
+    setd->exec();
+    delete  setd;
 }

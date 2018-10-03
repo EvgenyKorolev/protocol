@@ -28,7 +28,7 @@ const_data_listing::const_data_listing()
 {
     setWindowIcon(QIcon(":pic/images/KlogoS.png"));
     setWindowTitle("Справочник текстов");
-    setMinimumWidth(700);
+    setMinimumWidth(800);
     const_loader& tmp_load = const_loader::getInstance();
     key_list = tmp_load.get_idv_list();
     QBoxLayout* main_lay = new QBoxLayout(QBoxLayout::TopToBottom);
@@ -107,8 +107,9 @@ const_data_listing::const_data_listing()
     QPushButton* edit_js = new QPushButton("Редактор скриптов");
     QObject::connect(edit_js, SIGNAL(clicked()), this, SLOT(slot_edit_js()));
     QBoxLayout* end_lay = new QBoxLayout(QBoxLayout::LeftToRight);
-    end_lay->addWidget(ok);
-    end_lay->addWidget(cancel_but);
+    QBoxLayout* end_but_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    end_but_lay->addWidget(ok);
+    end_but_lay->addWidget(cancel_but);
     end_lay->addWidget(add_txt);
     end_lay->addWidget(edit_html);
     end_lay->addWidget(w_edit_html);
@@ -116,6 +117,7 @@ const_data_listing::const_data_listing()
     main_lay->addLayout(type_lay);
     main_lay->addWidget(const_view);
     main_lay->addLayout(end_lay);
+    main_lay->addLayout(end_but_lay);
     this->setLayout(main_lay);
     we = new QWebEngineView();
 }

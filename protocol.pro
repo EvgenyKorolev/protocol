@@ -107,7 +107,8 @@ SOURCES += src/address.cpp \
     src/protocol_list_load.cpp \
     src/textedit.cpp \
     src/protocol_editor.cpp \
-    src/edit_plain_text.cpp
+    src/edit_plain_text.cpp \
+    src/settings_dialog.cpp
 
 HEADERS  += src/address.h \
     src/app_data_model.h \
@@ -205,7 +206,8 @@ HEADERS  += src/address.h \
     src/protocol_list_load.h \
     src/textedit.h \
     src/protocol_editor.h \
-    src/edit_plain_text.h
+    src/edit_plain_text.h \
+    src/settings_dialog.h
 
 RESOURCES += \
     icons.qrc \
