@@ -25,6 +25,7 @@ public slots:
     void slot_copy_list();
     void slot_new_list();
     void slot_edit_js();
+    void slot_ext_ed_html();
     void handleHtml(QString sHtml);
 signals:
     void html(QString sHtml);

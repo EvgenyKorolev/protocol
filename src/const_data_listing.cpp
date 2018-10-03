@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QEventLoop>
 #include <QWebEngineView>
+#include <QProcess>
 const_data_listing::const_data_listing()
 {
     setWindowIcon(QIcon(":pic/images/KlogoS.png"));
@@ -104,6 +105,8 @@ const_data_listing::const_data_listing()
     QObject::connect(edit_html, SIGNAL(clicked()), this, SLOT(slot_ed_html()));
     QPushButton* w_edit_html = new QPushButton("Визуальный редактор");
     QObject::connect(w_edit_html, SIGNAL(clicked()), this, SLOT(slot_w_ed_html()));
+    QPushButton* ext_edit_html = new QPushButton("Внешний редактор");
+    QObject::connect(ext_edit_html, SIGNAL(clicked()), this, SLOT(slot_ext_ed_html()));
     QPushButton* edit_js = new QPushButton("Редактор скриптов");
     QObject::connect(edit_js, SIGNAL(clicked()), this, SLOT(slot_edit_js()));
     QBoxLayout* end_lay = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -114,6 +117,7 @@ const_data_listing::const_data_listing()
     end_lay->addWidget(edit_html);
     end_lay->addWidget(w_edit_html);
     end_lay->addWidget(edit_js);
+    end_lay->addWidget(ext_edit_html);
     main_lay->addLayout(type_lay);
     main_lay->addWidget(const_view);
     main_lay->addLayout(end_lay);
@@ -449,6 +453,20 @@ void const_data_listing::slot_edit_js()
         con_end.close();
     }
     delete hedit;
+}
+void const_data_listing::slot_ext_ed_html()
+{
+    if (settings::GetInstance().get_ext_editor() == ""){
+        QMessageBox::information(nullptr, "Отладка", "Внешний редактор не установлен.");
+        return;
+    }
+    yes_no* exiter = new yes_no("Внимание, редактирование шаблонов - дело сложное. <br>"
+                                "Если вы не знаете что делаете, лучше не делайте этого. <br> "
+                                "Продолжить редактирование?", this);
+    if (exiter->exec() != QDialog::Accepted) return;
+    QProcess *process = new QProcess(this);
+    QString file = settings::GetInstance().get_ext_editor() + " " + settings::GetInstance().get_data_patch() + settings::GetInstance().get_data_dir() + "/prt_" + target_object.get_vname() +".html";
+    process->execute(file);
 }
 void const_data_listing::handleHtml(QString sHtml)
 {
