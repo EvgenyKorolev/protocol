@@ -31,6 +31,8 @@ namespace my_fnc
    QString del_null(const QString& arg); // Удфляет пробелы в начале и конце строки
    QPair<QString, QList<QString>> parse_js(const QString& htm); // Отделяет JavaScript от остального текста
    // Функция parse_js(const QString& htm) должна принимать документ и возвращать пару <документ с вырезанными js, список содержащий js>
+   void hide_tag_text(QString &arg);  // Замняет тэги <text id="ggg"></text> на ###ggg###
+   void show_tag_text(QString &arg);  // Замняет ###ggg### на тэги <text id="ggg"></text>
 }
 
 #endif // MY_FUNCTION_H

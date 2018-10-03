@@ -1,4 +1,5 @@
 #include "my_function.h"
+#include <QRegularExpression>
 
 int my_fnc::xml_to_date(QDomElement arg, QDate &dat)
     {
@@ -190,4 +191,40 @@ QPair<QString, QList<QString>> my_fnc::parse_js(const QString& htm)
     } while (pos_beg < static_cast<int>(ret_str.size()));
     ret.first = QString(ret_str.c_str());
     return ret;
+}
+void my_fnc::hide_tag_text(QString& arg)  // Замняет тэги <text id="ggg"></text> на ###ggg###
+{
+    int st_pos{0}, fst{0}, sec0{0}, sec{0}, len{0};
+    QString tmpstr, subtmpstr;
+    QRegularExpression st("\<{1}\\s*text\\s*id=\\s*\"\\s*[a-zA-Z0-1]*\\s*\"\>{1}\\s*\<{1}\\s*\/text\\s*\>{1}");
+    fst = arg.indexOf(st);
+    while(fst != -1){
+        sec0 = arg.indexOf(">", fst + 1);
+        sec = arg.indexOf(">", sec0 + 1);
+        tmpstr = arg.mid(fst, sec - fst + 1);
+        len = tmpstr.size();
+        subtmpstr = tmpstr.split('\"')[1];
+        tmpstr = "###" + subtmpstr + "###";
+        arg.replace(fst, len, tmpstr);
+        st_pos = fst + tmpstr.size();
+        fst = arg.indexOf(st, st_pos);
+    }
+}
+void my_fnc::show_tag_text(QString &arg) // Замняет ###ggg### на тэги <text id="ggg"></text>
+{
+    int st_pos{0}, fst{0}, sec{0}, len{0};
+    QString tmpstr, subtmpstr;
+    QRegularExpression st("\#\#\#[a-zA-Z0-1]*\#\#\#");
+    fst = arg.indexOf(st);
+    while(fst != -1){
+        sec = arg.indexOf("###", fst + 3);
+        tmpstr = arg.mid(fst, sec - fst + 3);
+        len = tmpstr.size();
+        tmpstr.remove('#');
+        tmpstr = tmpstr.trimmed();
+        tmpstr = "<text id=\"" + tmpstr + "\"></text>";
+        arg.replace(fst, len, tmpstr);
+        st_pos = fst + tmpstr.size();
+        fst = arg.indexOf(st, st_pos);
+    }
 }

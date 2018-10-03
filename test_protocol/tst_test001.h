@@ -320,7 +320,7 @@ TEST(test_search_teg_2_020, restsprotocol)
     std::string teg = "_const_type";
     EXPECT_EQ(my_fnc::serch_teg(tst, teg, 1).second, 357);
 }
-// -----------====================Тестирование функции вольного превращения строки в число =============================---------------------
+// -----------==================== Тестирование функции вольного превращения строки в число =============================---------------------
 TEST(test_string_to_float_001, restsprotocol)
 {
 QString tst = "<p>11111111111111111</p><br>";
@@ -371,7 +371,7 @@ TEST(test_string_to_float_010, restsprotocol)
 QString tst = "vgrtgkjfgjcbh-0,777vfgfcb cfg";
 EXPECT_EQ(my_fnc::stof(tst), (float)-0.777);
 }
-// -----------====================Тестирование функции поиска позиции скриптов js =============================---------------------
+// -----------==================== Тестирование функции поиска позиции скриптов js =============================---------------------
 TEST(test_search_js_001, restsprotocol)
 {
     std::string tst = "<script type='text/javascript'> ..... </script>";
@@ -471,4 +471,110 @@ TEST(test_search_js_014, restsprotocol)
                       "document.create\n\n\n\n\n\nElement('text');newpl.innerHTML = ret; list.insertBefore(newpl, list.children[1]);</script>пваирас fdvvtcfbgxdfbg"
                       "</script> cxdesf <script  type='text/ja";
     EXPECT_EQ(std::get<3>(my_fnc::serch_js(tst, 9)), 508);
+}
+// -----------==================== Тестирование функции замены "тэги <text id=\"ggg\"></text> на ###ggg###" =============================---------------------
+TEST(test_hide_text_001, restsprotocol)
+{
+    QString tst = "тэги <text id=\"ggg\"></text> лопор";
+    QString et = "тэги ###ggg### лопор";
+    my_fnc::hide_tag_text(tst);
+    EXPECT_EQ(tst, et);
+}
+TEST(test_hide_text_002, restsprotocol)
+{
+    QString tst = "тэги <text id=\"ggg\"></text> лопор <ghk> ohdksj <> , << <text id=\"itmo\"></text>";
+    QString et = "тэги ###ggg### лопор <ghk> ohdksj <> , << ###itmo###";
+    my_fnc::hide_tag_text(tst);
+    EXPECT_EQ(tst, et);
+}
+TEST(test_hide_text_003, restsprotocol)
+{
+    QString tst = "тэги <text id=\"ggg\">sdf</text> лопор <ghk> ohdksj <> , << <text id=\"itmo\"></text>";
+    QString et = "тэги <text id=\"ggg\">sdf</text> лопор <ghk> ohdksj <> , << ###itmo###";
+    my_fnc::hide_tag_text(tst);
+    EXPECT_EQ(tst, et);
+}
+TEST(test_hide_text_004, restsprotocol)
+{
+    QString tst = "тэги <textw id=\"ggg\">sdf</text> лопор <ghk> ohdksj <> , << <textdwa id=\"idtmo\"d></text>";
+    QString et = "тэги <textw id=\"ggg\">sdf</text> лопор <ghk> ohdksj <> , << <textdwa id=\"idtmo\"d></text>";
+    my_fnc::hide_tag_text(tst);
+    EXPECT_EQ(tst, et);
+}
+TEST(test_hide_text_005, restsprotocol)
+{
+    QString tst = "";
+    QString et = "";
+    my_fnc::hide_tag_text(tst);
+    EXPECT_EQ(tst, et);
+}
+TEST(test_hide_text_006, restsprotocol)
+{
+    QString tst = "fevsfsd vytfybncvbvfgh <script fxcef </script> <script  type='text/javascript'> var ret = "
+                  "Math.round(\n((parseFloat('<_parent_var type = \"obj\", message = \"Введите_НПМНSн_трансформатора:\", "
+                  "vname = \"_trans_npmn\">') * 100) / \nparseFloat('<_ask_obj type = \"tn_circs\", message "
+                  "= \"Введите полную мощность S, ВА:\", <text id=\"itmo1\"></text>vname = \"sab\">'))*100)/100; var newpl = \n"
+                  "document.create\n\n\n\n\n\nElement('text');newpl.innerHTML = ret; list.insertBefore(newpl, list.children[1]);</script>пваирас fdvvtcfbgxdfbg"
+                  "</script> cxdesf <script  type='text/ja";
+    QString et = "fevsfsd vytfybncvbvfgh <script fxcef </script> <script  type='text/javascript'> var ret = "
+                 "Math.round(\n((parseFloat('<_parent_var type = \"obj\", message = \"Введите_НПМНSн_трансформатора:\", "
+                 "vname = \"_trans_npmn\">') * 100) / \nparseFloat('<_ask_obj type = \"tn_circs\", message "
+                 "= \"Введите полную мощность S, ВА:\", ###itmo1###vname = \"sab\">'))*100)/100; var newpl = \n"
+                 "document.create\n\n\n\n\n\nElement('text');newpl.innerHTML = ret; list.insertBefore(newpl, list.children[1]);</script>пваирас fdvvtcfbgxdfbg"
+                 "</script> cxdesf <script  type='text/ja";
+    my_fnc::hide_tag_text(tst);
+    EXPECT_EQ(tst, et);
+}
+// -----------==================== Тестирование функции замены ###ggg### на "тэги <text id=\"ggg\"></text>" =============================---------------------
+TEST(test_show_text_001, restsprotocol)
+{
+    QString tst = "тэги <text id=\"ggg\"></text> лопор";
+    QString et = "тэги ###ggg### лопор";
+    my_fnc::show_tag_text(et);
+    EXPECT_EQ(tst, et);
+}
+TEST(test_show_text_002, restsprotocol)
+{
+    QString tst = "тэги <text id=\"ggg\"></text> лопор <ghk> ohdksj <> , << <text id=\"itmo\"></text>";
+    QString et = "тэги ###ggg### лопор <ghk> ohdksj <> , << ###itmo###";
+    my_fnc::show_tag_text(et);
+    EXPECT_EQ(tst, et);
+}
+TEST(test_show_text_003, restsprotocol)
+{
+    QString tst = "тэги <text id=\"ggg\">sdf</text> лопор <ghk> ohdksj <> , << <text id=\"itmo\"></text>";
+    QString et = "тэги <text id=\"ggg\">sdf</text> лопор <ghk> ohdksj <> , << ###itmo###";
+    my_fnc::show_tag_text(et);
+    EXPECT_EQ(tst, et);
+}
+TEST(test_show_text_004, restsprotocol)
+{
+    QString tst = "тэги <textw id=\"ggg\">sdf</text> лопор <ghk> ohdksj <> , << <textdwa id=\"idtmo\"d></text>";
+    QString et = "тэги <textw id=\"ggg\">sdf</text> лопор <ghk> ohdksj <> , << <textdwa id=\"idtmo\"d></text>";
+    my_fnc::show_tag_text(et);
+    EXPECT_EQ(tst, et);
+}
+TEST(test_show_text_005, restsprotocol)
+{
+    QString tst = "";
+    QString et = "";
+    my_fnc::show_tag_text(et);
+    EXPECT_EQ(tst, et);
+}
+TEST(test_show_text_006, restsprotocol)
+{
+    QString tst = "fevsfsd vytfybncvbvfgh <script fxcef </script> <script  type='text/javascript'> var ret = "
+                  "Math.round(\n((parseFloat('<_parent_var type = \"obj\", message = \"Введите_НПМНSн_трансформатора:\", "
+                  "vname = \"_trans_npmn\">') * 100) / \nparseFloat('<_ask_obj type = \"tn_circs\", message "
+                  "= \"Введите полную мощность S, ВА:\", <text id=\"itmo1\"></text>vname = \"sab\">'))*100)/100; var newpl = \n"
+                  "document.create\n\n\n\n\n\nElement('text');newpl.innerHTML = ret; list.insertBefore(newpl, list.children[1]);</script>пваирас fdvvtcfbgxdfbg"
+                  "</script> cxdesf <script  type='text/ja";
+    QString et = "fevsfsd vytfybncvbvfgh <script fxcef </script> <script  type='text/javascript'> var ret = "
+                 "Math.round(\n((parseFloat('<_parent_var type = \"obj\", message = \"Введите_НПМНSн_трансформатора:\", "
+                 "vname = \"_trans_npmn\">') * 100) / \nparseFloat('<_ask_obj type = \"tn_circs\", message "
+                 "= \"Введите полную мощность S, ВА:\", ###itmo1###vname = \"sab\">'))*100)/100; var newpl = \n"
+                 "document.create\n\n\n\n\n\nElement('text');newpl.innerHTML = ret; list.insertBefore(newpl, list.children[1]);</script>пваирас fdvvtcfbgxdfbg"
+                 "</script> cxdesf <script  type='text/ja";
+    my_fnc::show_tag_text(et);
+    EXPECT_EQ(tst, et);
 }

@@ -360,6 +360,7 @@ void const_data_listing::slot_w_ed_html()
     open_html = open_tmp.first;
 // ========================================
     open_html = open_html.remove('\n');
+    my_fnc::hide_tag_text(open_html);
         delete we;
         we = new QWebEngineView();
         we->setHtml(open_html);
@@ -383,6 +384,7 @@ void const_data_listing::slot_w_ed_html()
     delete prtedit;
     if (ret.is_save()){
         open_html = ret.result();
+        my_fnc::show_tag_text(open_html);
         for (auto itj : open_js){
             open_html.insert(open_html.indexOf("</body>"), "<script type='text/javascript'>" + itj + "</script>");
         }
