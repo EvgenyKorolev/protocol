@@ -40,5 +40,15 @@
         <file>images/win/zoomout.png</file>
         <file>images/win/addtable.png</file>
         <file>images/mac/addtable.png</file>
+        <file>images/win/addrow.png</file>
+        <file>images/mac/addrow.png</file>
+        <file>images/mac/addcol.png</file>
+        <file>images/win/addcol.png</file>
+        <file>images/mac/delcol.png</file>
+        <file>images/mac/delrow.png</file>
+        <file>images/win/delcol.png</file>
+        <file>images/win/delrow.png</file>
+        <file>images/mac/mergecells.png</file>
+        <file>images/win/mergecells.png</file>
     </qresource>
 </RCC>

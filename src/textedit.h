@@ -101,6 +101,11 @@ private slots:
     void textColor();
     void textAlign(QAction *a);
     void addTable();
+    void addRow();
+    void addCol();
+    void delRow();
+    void delCol();
+    void mergeCells();
 
     void currentCharFormatChanged(const QTextCharFormat &format);
     void cursorPositionChanged();
@@ -135,6 +140,11 @@ private:
     QAction *actionUndo;
     QAction *actionRedo;
     QAction *actionAddTable;
+    QAction *actionAddRow;
+    QAction *actionAddCol;
+    QAction *actionDelRow;
+    QAction *actionDelCol;
+    QAction *actionMergeCells;
 #ifndef QT_NO_CLIPBOARD
     QAction *actionCut;
     QAction *actionCopy;
@@ -187,6 +197,5 @@ private:
     QComboBox* align;
     QRadioButton* inv;
     QTextEdit* style_t;
-
 };
 #endif // TEXTEDIT_H

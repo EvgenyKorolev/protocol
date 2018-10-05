@@ -63,6 +63,8 @@
 #include <QPushButton>
 #include <QBoxLayout>
 #include <QRadioButton>
+#include <QTextTable>
+#include <QTextTableCell>
 #include <QLabel>
 #include <QTextEdit>
 #include <QStatusBar>
@@ -211,9 +213,35 @@ void TextEdit::setupTableActions()
 
     const QIcon addTableIcon = QIcon::fromTheme("add-table", QIcon(rsrcPath + "/addtable.png"));
     actionAddTable = menu->addAction(addTableIcon , tr("&Добавить таблицу"), this, SLOT(addTable()));
-    actionAddTable->setShortcut(QKeySequence::Undo);
     tb->addAction(actionAddTable);
     menu->addSeparator();
+
+    const QIcon addRowIcon = QIcon::fromTheme("add-row", QIcon(rsrcPath + "/addrow.png"));
+    actionAddRow = menu->addAction(addRowIcon , tr("&Вставить строку"), this, SLOT(addRow()));
+    actionAddRow->setPriority(QAction::LowPriority);
+    tb->addAction(actionAddRow);
+
+    const QIcon addColIcon = QIcon::fromTheme("add-col", QIcon(rsrcPath + "/addcol.png"));
+    actionAddCol = menu->addAction(addColIcon , tr("&Вставить столбец"), this, SLOT(addCol()));
+    actionAddCol->setPriority(QAction::LowPriority);
+    tb->addAction(actionAddCol);
+    menu->addSeparator();
+
+    const QIcon DelRowIcon = QIcon::fromTheme("del-row", QIcon(rsrcPath + "/delrow.png"));
+    actionDelRow = menu->addAction(DelRowIcon , tr("&Удалить строку"), this, SLOT(delRow()));
+    actionDelRow->setPriority(QAction::LowPriority);
+    tb->addAction(actionDelRow);
+
+    const QIcon delColIcon = QIcon::fromTheme("del-col", QIcon(rsrcPath + "/delcol.png"));
+    actionDelCol = menu->addAction(delColIcon , tr("&Удалить столбец"), this, SLOT(delCol()));
+    actionDelCol->setPriority(QAction::LowPriority);
+    tb->addAction(actionDelCol);
+    menu->addSeparator();
+
+    const QIcon mergeCellsIcon = QIcon::fromTheme("mer-cel", QIcon(rsrcPath + "/mergecells.png"));
+    actionMergeCells = menu->addAction(mergeCellsIcon , tr("&Объеденить ячейки"), this, SLOT(mergeCells()));
+    actionMergeCells->setPriority(QAction::LowPriority);
+    tb->addAction(actionMergeCells);
 }
 void TextEdit::setupEditActions()
 {
@@ -614,7 +642,6 @@ void TextEdit::textStyle(int styleIndex)
         cursor.mergeBlockFormat(bfmt);
     }
 }
-
 void TextEdit::textColor()
 {
     QColor col = QColorDialog::getColor(textEdit->textColor(), this);
@@ -625,7 +652,6 @@ void TextEdit::textColor()
     mergeFormatOnWordOrSelection(fmt);
     colorChanged(col);
 }
-
 void TextEdit::textAlign(QAction *a)
 {
     if (a == actionAlignLeft)
@@ -643,12 +669,10 @@ void TextEdit::currentCharFormatChanged(const QTextCharFormat &format)
     fontChanged(format.font());
     colorChanged(format.foreground().color());
 }
-
 void TextEdit::cursorPositionChanged()
 {
     alignmentChanged(textEdit->alignment());
 }
-
 void TextEdit::clipboardDataChanged()
 {
 #ifndef QT_NO_CLIPBOARD
@@ -656,8 +680,6 @@ void TextEdit::clipboardDataChanged()
         actionPaste->setEnabled(md->hasText());
 #endif
 }
-
-
 void TextEdit::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
 {
     QTextCursor cursor = textEdit->textCursor();
@@ -666,7 +688,6 @@ void TextEdit::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
     cursor.mergeCharFormat(format);
     textEdit->mergeCurrentCharFormat(format);
 }
-
 void TextEdit::fontChanged(const QFont &f)
 {
     comboFont->setCurrentIndex(comboFont->findText(QFontInfo(f).family()));
@@ -675,7 +696,6 @@ void TextEdit::fontChanged(const QFont &f)
     actionTextItalic->setChecked(f.italic());
     actionTextUnderline->setChecked(f.underline());
 }
-
 void TextEdit::colorChanged(const QColor &c)
 {
     QPixmap pix(16, 16);
@@ -735,17 +755,54 @@ void TextEdit::addTable()
     }
     delete tad;
 }
+void TextEdit::addRow()
+{
+    QTextTable *act =  textEdit->textCursor().currentTable();
+    if (act == nullptr || act == 0) return;
+    int tmpc = act->cellAt(textEdit->textCursor()).row();
+    act->insertRows(tmpc + 1, 1);
+}
+void TextEdit::addCol()
+{
+    QTextTable *act =  textEdit->textCursor().currentTable();
+    if (act == nullptr || act == 0) return;
+    int tmpc = act->cellAt(textEdit->textCursor()).column();
+    act->insertColumns(tmpc + 1, 1);
+}
+
+void TextEdit::delRow()
+{
+    QTextTable *act =  textEdit->textCursor().currentTable();
+    if (act == nullptr || act == 0) return;
+    int tmpc = act->cellAt(textEdit->textCursor()).row();
+    act->removeRows(tmpc, 1);
+}
+void TextEdit::delCol()
+{
+    QTextTable *act =  textEdit->textCursor().currentTable();
+    if (act == nullptr || act == 0) return;
+    int tmpc = act->cellAt(textEdit->textCursor()).column();
+    act->removeColumns(tmpc, 1);
+}
+void TextEdit::mergeCells()
+{
+    QTextTable *act =  textEdit->textCursor().currentTable();
+    if (act == nullptr || act == 0) return;
+    act->mergeCells(textEdit->textCursor());
+}
 // --------------------========================== Окошко для добавления таблиц ======================================------------------------------
 add_table::add_table(QWidget *par) : QDialog(par)
 {
+    this->setWindowIcon(QIcon(":pic/images/KlogoS.png"));
+    this->setWindowTitle("Добавить таблицу");
     columns = new QSpinBox();
     columns->setMinimum(1);
     columns->setMaximumWidth(100);
     QBoxLayout* col_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* col_lab = new QLabel();
     col_lab->setText("Столбцов: ");
-    col_lab->setMinimumWidth(160);
-    col_lab->setMaximumWidth(160);
+    col_lab->setMinimumWidth(200);
+    col_lab->setMaximumWidth(200);
     col_lab->setAlignment(Qt::AlignRight);
     col_lay->addWidget(col_lab);
     col_lay->addWidget(columns);
@@ -754,8 +811,8 @@ add_table::add_table(QWidget *par) : QDialog(par)
     QBoxLayout* row_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* row_lab = new QLabel();
     row_lab->setText("Строк: ");
-    row_lab->setMinimumWidth(160);
-    row_lab->setMaximumWidth(160);
+    row_lab->setMinimumWidth(200);
+    row_lab->setMaximumWidth(200);
     row_lab->setAlignment(Qt::AlignRight);
     row_lay->addWidget(row_lab);
     row_lay->addWidget(rows);
@@ -764,8 +821,8 @@ add_table::add_table(QWidget *par) : QDialog(par)
     QBoxLayout* border_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* border_lab = new QLabel();
     border_lab->setText("Толщина рамки: ");
-    border_lab->setMinimumWidth(160);
-    border_lab->setMaximumWidth(160);
+    border_lab->setMinimumWidth(200);
+    border_lab->setMaximumWidth(200);
     border_lab->setAlignment(Qt::AlignRight);
     border_lay->addWidget(border_lab);
     border_lay->addWidget(border);
@@ -776,8 +833,8 @@ add_table::add_table(QWidget *par) : QDialog(par)
     QBoxLayout* width_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* width_lab = new QLabel();
     width_lab->setText("Ширина таблицы: ");
-    width_lab->setMinimumWidth(160);
-    width_lab->setMaximumWidth(160);
+    width_lab->setMinimumWidth(200);
+    width_lab->setMaximumWidth(200);
     width_lab->setAlignment(Qt::AlignRight);
     width_lay->addWidget(width_lab);
     width_lay->addWidget(width);
@@ -788,11 +845,26 @@ add_table::add_table(QWidget *par) : QDialog(par)
     QBoxLayout* align_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* align_lab = new QLabel();
     align_lab->setText("Выравнивание: ");
-    align_lab->setMinimumWidth(160);
-    align_lab->setMaximumWidth(160);
+    align_lab->setMinimumWidth(200);
+    align_lab->setMaximumWidth(200);
     align_lab->setAlignment(Qt::AlignRight);
     align_lay->addWidget(align_lab);
     align_lay->addWidget(align);
+    inv = new QRadioButton();
+    inv->setChecked(false);
+    QLabel* inv_lab = new QLabel();
+    QBoxLayout* inv_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    inv_lab->setText("Задать атрибуты: ");
+    inv_lab->setMinimumWidth(200);
+    inv_lab->setMaximumWidth(200);
+    inv_lab->setAlignment(Qt::AlignRight);
+    inv_lay->addWidget(inv_lab);
+    inv_lay->addWidget(inv);
+    QLabel* style_lab = new QLabel();
+    style_lab->setText("Если флажок установлен, то таблица <br>будут создана с нижеследующими атрибутами:");
+    style_t = new QTextEdit();
+    style_t->setMinimumWidth(500);
+    style_t->setPlainText("align = \"center\" width=\"100%\" bordercolor=\"black\" border=\"1\" cellspacing=\"0\"");
     QPushButton *my_ok = new QPushButton("Готово");
     QPushButton *my_cancel = new QPushButton("Отмена");
     QObject::connect(my_ok, SIGNAL(clicked()), this, SLOT(accept()));
@@ -806,6 +878,9 @@ add_table::add_table(QWidget *par) : QDialog(par)
     main_lay->addLayout(border_lay);
     main_lay->addLayout(width_lay);
     main_lay->addLayout(align_lay);
+    main_lay->addLayout(inv_lay);
+    main_lay->addWidget(style_lab);
+    main_lay->addWidget(style_t);
     main_lay->addLayout(end_lay);
     this->setLayout(main_lay);
 }
@@ -816,15 +891,21 @@ add_table::~add_table()
     delete border;
     delete width;
     delete align;
+    delete inv;
+    delete style_t;
 }
 QString add_table::result()
 {
     QString ret{""};
-    ret += "<table  align = \"" + align->currentData().toString() +
-            "\" width=\"" + QString::number(width->value()) +
-            "%\" bordercolor=\"black\" border=\"" + QString::number(border->value()) +
-            "\" cellspacing=\"0\"";
-    ret += ">";
+    if (inv->isChecked()){
+        ret += "<table " + style_t->toPlainText() + ">";
+    } else {
+        ret += "<table  align = \"" + align->currentData().toString() +
+                "\" width=\"" + QString::number(width->value()) +
+                "%\" bordercolor=\"black\" border=\"" + QString::number(border->value()) +
+                "\" cellspacing=\"0\"";
+        ret += ">";
+    }
     for (int i = 1; i <= rows->value(); ++i){
         ret += "<tr>";
         for (int j = 1; j <= columns->value(); ++j){
@@ -835,5 +916,3 @@ QString add_table::result()
     ret += "</table>";
     return ret;
 }
-
-
