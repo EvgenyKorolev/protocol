@@ -38,5 +38,7 @@
         <file>images/win/textunder.png</file>
         <file>images/win/zoomin.png</file>
         <file>images/win/zoomout.png</file>
+        <file>images/win/addtable.png</file>
+        <file>images/mac/addtable.png</file>
     </qresource>
 </RCC>

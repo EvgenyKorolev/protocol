@@ -47,7 +47,6 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
 #include <QAction>
 #include <QApplication>
 #include <QClipboard>
@@ -61,8 +60,13 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QTextCodec>
+#include <QPushButton>
+#include <QBoxLayout>
+#include <QRadioButton>
+#include <QLabel>
 #include <QTextEdit>
 #include <QStatusBar>
+#include <QSpinBox>
 #include <QToolBar>
 #include <QTextCursor>
 #include <QTextDocumentWriter>
@@ -111,6 +115,7 @@ TextEdit::TextEdit(ret_str *arg, QWidget *parent, TextEdit_opt pto)
     setupFileActions();
     setupEditActions();
     setupTextActions();
+    setupTableActions();
 
     QFont textFont("Helvetica");
     textFont.setStyleHint(QFont::SansSerif);
@@ -198,6 +203,17 @@ void TextEdit::setupFileActions()
 
     a = menu->addAction(tr("&Выход"), this, &QWidget::close);
     a->setShortcut(Qt::CTRL + Qt::Key_Q);
+}
+void TextEdit::setupTableActions()
+{
+    QToolBar *tb = addToolBar(tr("Tables Actions"));
+    QMenu *menu = menuBar()->addMenu(tr("&Таблицы"));
+
+    const QIcon addTableIcon = QIcon::fromTheme("add-table", QIcon(rsrcPath + "/addtable.png"));
+    actionAddTable = menu->addAction(addTableIcon , tr("&Добавить таблицу"), this, SLOT(addTable()));
+    actionAddTable->setShortcut(QKeySequence::Undo);
+    tb->addAction(actionAddTable);
+    menu->addSeparator();
 }
 void TextEdit::setupEditActions()
 {
@@ -666,7 +682,6 @@ void TextEdit::colorChanged(const QColor &c)
     pix.fill(c);
     actionTextColor->setIcon(pix);
 }
-
 void TextEdit::alignmentChanged(Qt::Alignment a)
 {
     if (a & Qt::AlignLeft)
@@ -712,6 +727,113 @@ bool TextEdit::load(const QString &f)
     setCurrentFileName(f);
     return true;
 }
-
+void TextEdit::addTable()
+{
+    add_table* tad = new add_table();
+    if (tad->exec() == QDialog::Accepted) {
+    textEdit->insertHtml(tad->result());
+    }
+    delete tad;
+}
+// --------------------========================== Окошко для добавления таблиц ======================================------------------------------
+add_table::add_table(QWidget *par) : QDialog(par)
+{
+    columns = new QSpinBox();
+    columns->setMinimum(1);
+    columns->setMaximumWidth(100);
+    QBoxLayout* col_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    QLabel* col_lab = new QLabel();
+    col_lab->setText("Столбцов: ");
+    col_lab->setMinimumWidth(160);
+    col_lab->setMaximumWidth(160);
+    col_lab->setAlignment(Qt::AlignRight);
+    col_lay->addWidget(col_lab);
+    col_lay->addWidget(columns);
+    rows = new QSpinBox();
+    rows->setMinimum(1);
+    QBoxLayout* row_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    QLabel* row_lab = new QLabel();
+    row_lab->setText("Строк: ");
+    row_lab->setMinimumWidth(160);
+    row_lab->setMaximumWidth(160);
+    row_lab->setAlignment(Qt::AlignRight);
+    row_lay->addWidget(row_lab);
+    row_lay->addWidget(rows);
+    border = new QSpinBox();
+    border->setMinimum(1);
+    QBoxLayout* border_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    QLabel* border_lab = new QLabel();
+    border_lab->setText("Толщина рамки: ");
+    border_lab->setMinimumWidth(160);
+    border_lab->setMaximumWidth(160);
+    border_lab->setAlignment(Qt::AlignRight);
+    border_lay->addWidget(border_lab);
+    border_lay->addWidget(border);
+    width = new QSpinBox();
+    width->setValue(100);
+    width->setRange(1, 100);
+    width->setSuffix(" %");
+    QBoxLayout* width_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    QLabel* width_lab = new QLabel();
+    width_lab->setText("Ширина таблицы: ");
+    width_lab->setMinimumWidth(160);
+    width_lab->setMaximumWidth(160);
+    width_lab->setAlignment(Qt::AlignRight);
+    width_lay->addWidget(width_lab);
+    width_lay->addWidget(width);
+    align = new QComboBox();
+    align->addItem("По центру", "center");
+    align->addItem("Слева", "left");
+    align->addItem("Справа", "right");
+    QBoxLayout* align_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    QLabel* align_lab = new QLabel();
+    align_lab->setText("Выравнивание: ");
+    align_lab->setMinimumWidth(160);
+    align_lab->setMaximumWidth(160);
+    align_lab->setAlignment(Qt::AlignRight);
+    align_lay->addWidget(align_lab);
+    align_lay->addWidget(align);
+    QPushButton *my_ok = new QPushButton("Готово");
+    QPushButton *my_cancel = new QPushButton("Отмена");
+    QObject::connect(my_ok, SIGNAL(clicked()), this, SLOT(accept()));
+    QObject::connect(my_cancel, SIGNAL(clicked()), this, SLOT(reject()));
+    QBoxLayout *end_lay = new QBoxLayout(QBoxLayout::LeftToRight);
+    end_lay->addWidget(my_ok);
+    end_lay->addWidget(my_cancel);
+    QBoxLayout* main_lay = new QBoxLayout(QBoxLayout::TopToBottom);
+    main_lay->addLayout(col_lay);
+    main_lay->addLayout(row_lay);
+    main_lay->addLayout(border_lay);
+    main_lay->addLayout(width_lay);
+    main_lay->addLayout(align_lay);
+    main_lay->addLayout(end_lay);
+    this->setLayout(main_lay);
+}
+add_table::~add_table()
+{
+    delete columns;
+    delete rows;
+    delete border;
+    delete width;
+    delete align;
+}
+QString add_table::result()
+{
+    QString ret{""};
+    ret += "<table  align = \"" + align->currentData().toString() +
+            "\" width=\"" + QString::number(width->value()) +
+            "%\" bordercolor=\"black\" border=\"" + QString::number(border->value()) +
+            "\" cellspacing=\"0\"";
+    ret += ">";
+    for (int i = 1; i <= rows->value(); ++i){
+        ret += "<tr>";
+        for (int j = 1; j <= columns->value(); ++j){
+            ret += "<td> </td>";
+        }
+        ret += "</tr>";
+    }
+    ret += "</table>";
+    return ret;
+}
 
 

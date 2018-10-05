@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 **
 ** Copyright (C) 2016 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
@@ -100,6 +100,7 @@ private slots:
     void textStyle(int styleIndex);
     void textColor();
     void textAlign(QAction *a);
+    void addTable();
 
     void currentCharFormatChanged(const QTextCharFormat &format);
     void cursorPositionChanged();
@@ -111,6 +112,7 @@ private:
     void setupFileActions();
     void setupEditActions();
     void setupTextActions();
+    void setupTableActions();
     bool maybeSave();
     void setCurrentFileName(const QString &fileName);
     bool load(const QString&);
@@ -132,6 +134,7 @@ private:
     QAction *actionAlignJustify;
     QAction *actionUndo;
     QAction *actionRedo;
+    QAction *actionAddTable;
 #ifndef QT_NO_CLIPBOARD
     QAction *actionCut;
     QAction *actionCopy;
@@ -166,5 +169,24 @@ private:
     QString rx{""};
     bool sav{false};
 };
+// --------------------========================== Окошко для добавления таблиц ======================================------------------------------
+class QSpinBox;
+class QRadioButton;
+class add_table : public QDialog
+{
+    Q_OBJECT
+public:
+    add_table(QWidget* par = nullptr);
+    ~add_table();
+    QString result();
+private:
+    QSpinBox* columns;
+    QSpinBox* rows;
+    QSpinBox* border;
+    QSpinBox* width;
+    QComboBox* align;
+    QRadioButton* inv;
+    QTextEdit* style_t;
 
+};
 #endif // TEXTEDIT_H
