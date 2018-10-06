@@ -798,6 +798,7 @@ add_table::add_table(QWidget *par) : QDialog(par)
     columns = new QSpinBox();
     columns->setMinimum(1);
     columns->setMaximumWidth(100);
+    columns->setAlignment(Qt::AlignLeft);
     QBoxLayout* col_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* col_lab = new QLabel();
     col_lab->setText("Столбцов: ");
@@ -808,6 +809,8 @@ add_table::add_table(QWidget *par) : QDialog(par)
     col_lay->addWidget(columns);
     rows = new QSpinBox();
     rows->setMinimum(1);
+    rows->setMaximumWidth(100);
+    rows->setAlignment(Qt::AlignLeft);
     QBoxLayout* row_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* row_lab = new QLabel();
     row_lab->setText("Строк: ");
@@ -818,6 +821,8 @@ add_table::add_table(QWidget *par) : QDialog(par)
     row_lay->addWidget(rows);
     border = new QSpinBox();
     border->setMinimum(1);
+    border->setMaximumWidth(100);
+    border->setAlignment(Qt::AlignLeft);
     QBoxLayout* border_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* border_lab = new QLabel();
     border_lab->setText("Толщина рамки: ");
@@ -830,6 +835,8 @@ add_table::add_table(QWidget *par) : QDialog(par)
     width->setValue(100);
     width->setRange(1, 100);
     width->setSuffix(" %");
+    width->setMaximumWidth(100);
+    width->setAlignment(Qt::AlignLeft);
     QBoxLayout* width_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* width_lab = new QLabel();
     width_lab->setText("Ширина таблицы: ");
@@ -842,6 +849,7 @@ add_table::add_table(QWidget *par) : QDialog(par)
     align->addItem("По центру", "center");
     align->addItem("Слева", "left");
     align->addItem("Справа", "right");
+    align->setMaximumWidth(100);
     QBoxLayout* align_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* align_lab = new QLabel();
     align_lab->setText("Выравнивание: ");
