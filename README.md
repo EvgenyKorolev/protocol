@@ -16,4 +16,4 @@
 
 
 ## Лицензия
-Используется лицензия GNU GENERAL PUBLIC LICENSEVersion 3 текст в LICENSE.md
+Используется лицензия GNU GENERAL PUBLIC LICENSEVersion 3 текст в файле LICENSE
