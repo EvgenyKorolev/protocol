@@ -32,12 +32,12 @@ settings::settings(){
             ext_editor = ini.mid(st, sst - st);
 
         } else {
-            QMessageBox::information(nullptr, "Отладка", "Не открывается файл с настройками");
+            QMessageBox::information(nullptr, "Отладка", "Не открывается файл с настройками, будут установлены настройки по умолчанию");
         }
     }
     QDir tmpd;
     if (!tmpd.exists(data_patch)){
-        QMessageBox::information(nullptr, "Внимание", "Невозможно найти или сохранить путь к директории с данными");
+        tmpd.mkpath(data_patch);
     }
 }
 void settings::save_ini() const
