@@ -211,8 +211,7 @@ HEADERS  += src/address.h \
 
 RESOURCES += \
     icons.qrc \
-    textedit.qrc \
-    data.qrc
+    textedit.qrc
 
 DISTFILES += \
     data/app.db3 \
