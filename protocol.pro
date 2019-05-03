@@ -3,14 +3,18 @@
 # Project created by QtCreator 2017-01-26T13:41:43
 #
 #-------------------------------------------------
-CONFIG += c++14
+CONFIG += c++17
 QT += core gui xml sql webenginewidgets webengine
 
 greaterThan(QT_MAJOR_VERSION, 5): QT += widgets
 
 TARGET = protocol
 TEMPLATE = app
-
+MOC_DIR = moc
+OBJECTS_DIR = obj
+UI_DIR = ui
+RCC_DIR = rcc
+DESTDIR = out
 
 SOURCES += src/address.cpp \
     src/app_data_model.cpp \
